@@ -1,9 +1,14 @@
-import { phoneLogin, register, sentCode, verifyCode } from '../../api/login'
+import { phoneLogin, register, sentCode, verifyCode, logoutStatus, logout } from '../../api/login'
 const state = {
   name: '',
   avatar: '',
   id: '',
-  loginState: false
+  // 是否显示登录界面
+  loginState: false,
+  // 登录状态
+  loginStatus: false,
+  // 右侧边栏是否显示
+  isUserRight: false
 }
 
 const mutations = {
@@ -17,8 +22,13 @@ const mutations = {
     state.id = id
   },
   SET_LOGIN_STATE (state, bol) {
-    console.log(bol)
-    state.loginState = bol || false
+    state.loginState = bol
+  },
+  SET_LOGIN_STATUS (state, bol) {
+    state.loginStatus = bol
+  },
+  SET_IS_USER_Right (state, bol) {
+    state.isUserRight = bol
   }
 }
 
@@ -68,55 +78,41 @@ const actions = {
         reject(error)
       })
     })
-  }
-
-  // get user info
-  //   getInfo ({ commit, state }) {
-  //     return new Promise((resolve, reject) => {
-  //       getInfo(state.token).then(response => {
-  //         const { data } = response
-
-  //         if (!data) {
-  //           reject('Verification failed, please Login again.')
-  //         }
-
-  //         const { roles, name, avatar, introduction } = data
-
-  //         // roles must be a non-empty array
-  //         if (!roles || roles.length <= 0) {
-  //           reject('getInfo: roles must be a non-null array!')
-  //         }
-
-  //         commit('SET_ROLES', roles)
-  //         commit('SET_NAME', name)
-  //         commit('SET_AVATAR', avatar)
-  //         commit('SET_INTRODUCTION', introduction)
-  //         resolve(data)
-  //       }).catch(error => {
-  //         reject(error)
-  //       })
-  //     })
-  //   },
-
+  },
+  // 登录状态验证，且返回用户基本信息
+  logoutStatus ({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      logoutStatus().then(async (data) => {
+        // // 刷新登录状态
+        // const status = await refreshLogin()
+        // console.log(status)
+        const { profile } = data
+        commit('SET_NAME', profile.nickname)
+        commit('SET_AVATAR', profile.avatarUrl)
+        commit('SET_ID', profile.userId)
+        commit('SET_LOGIN_STATUS', true)
+        resolve(data)
+      }).catch((error) => {
+        console.log(error.response)
+        commit('SET_LOGIN_STATUS', false)
+        reject(error)
+      })
+    })
+  },
   // user logout
-  //   logout ({ commit, state, dispatch }) {
-  //     return new Promise((resolve, reject) => {
-  //       logout(state.token).then(() => {
-  //         commit('SET_TOKEN', '')
-  //         commit('SET_ROLES', [])
-  //         removeToken()
-  //         resetRouter()
-
-  //         // reset visited views and cached views
-  //         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-  //         dispatch('tagsView/delAllViews', null, { root: true })
-
-//         resolve()
-//       }).catch(error => {
-//         reject(error)
-//       })
-//     })
-//   }
+  logout ({ commit, state, dispatch }) {
+    return new Promise((resolve, reject) => {
+      logout().then(() => {
+        commit('SET_NAME', '')
+        commit('SET_AVATAR', '')
+        commit('SET_ID', '')
+        commit('SET_LOGIN_STATUS', false)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
 }
 
 export default {

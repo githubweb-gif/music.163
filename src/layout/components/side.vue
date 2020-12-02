@@ -39,9 +39,13 @@
         <span>创建的歌单</span>
       </el-menu-item>
     </el-menu>
-    <div class="account-number">
-      <div class="avatar"><img :src="cover" alt="" /></div>
-      <div @click="toLogin" class="name"><span>点击登录</span></div>
+    <div :class="['account-number', { account: isCollapse }]">
+      <div @click.stop="toLogin" class="avatar">
+        <img :src="avatar ? avatar : cover" alt="" />
+      </div>
+      <div v-if="!isCollapse" @click.stop="toLogin" class="name">
+        <span>{{ name ? name : "点击登录" }}</span>
+      </div>
       <div class="position"><span class="el-icon-setting" /></div>
     </div>
   </div>
@@ -49,7 +53,7 @@
 
 <script>
 import avatar from '@/assets/img/avatar.png'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -58,12 +62,30 @@ export default {
       cover: avatar
     }
   },
+  computed: {
+    ...mapState({
+      name: state => state.user.name,
+      avatar: state => state.user.avatar,
+      loginStatus: state => state.user.loginStatus,
+      isUserRight: state => state.user.isUserRight
+    })
+  },
   methods: {
     toLogin () {
+      console.log(this.loginStatus)
+      if (this.loginStatus) {
+        if (this.isUserRight) {
+          this.setUserRight(false)
+        } else {
+          this.setUserRight(true)
+        }
+        return
+      }
       this.setLoginState(true)
     },
     ...mapMutations({
-      setLoginState: 'SET_LOGIN_STATE'
+      setLoginState: 'SET_LOGIN_STATE',
+      setUserRight: 'SET_IS_USER_Right'
     })
   }
 }
@@ -111,8 +133,9 @@ export default {
     justify-content: center;
     cursor: pointer;
     img {
-      width: 15px;
-      height: 15px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
     }
   }
   .name {
@@ -125,6 +148,13 @@ export default {
   }
   .position {
     cursor: pointer;
+  }
+}
+.account {
+  flex-direction: column;
+  justify-content: space-between;
+  .avatar {
+    margin-bottom: 15px;
   }
 }
 </style>

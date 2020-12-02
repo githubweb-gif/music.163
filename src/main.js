@@ -11,6 +11,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 // font
 import './assets/font/iconfont.css'
 import './style/transition.css'
+// 路由守卫
+import './permission'
 
 Vue.use(ElementUI)
 

@@ -138,3 +138,25 @@ export function logoutStatus (data) {
     method: 'get'
   })
 }
+
+/**
+   *获取账号信息
+   * 说明 : 登录后调用此接口 ,可获取用户账号信息
+   */
+export function accountNumberInfo (data) {
+  return request({
+    url: '/user/account',
+    method: 'get'
+  })
+}
+
+/**
+   *获取用户信息 , 歌单，收藏，mv, dj 数量
+   * 说明 : 登录后调用此接口 , 可以获取用户信息
+   */
+export function userInfo (data) {
+  return request({
+    url: '/user/subcount',
+    method: 'get'
+  })
+}

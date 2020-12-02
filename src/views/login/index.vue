@@ -95,6 +95,7 @@ export default {
         phone: '',
         password: ''
       },
+      // 验证码
       captcha: '',
       isLogin: true,
       isRegister: false,
@@ -103,6 +104,7 @@ export default {
       arr: [],
       // 验证码验证
       isVerify: false,
+      // 计时
       num: 0,
       rules: {
         phone: [
@@ -124,6 +126,7 @@ export default {
           { min: 8, max: 20, message: '请输入8到20位密码', trigger: 'false' }
         ]
       },
+      // 表单验证结果
       validResult: ''
     }
   },
@@ -131,6 +134,7 @@ export default {
     loginState: state => state.user.loginState
   }),
   watch: {
+    // 验证码验证
     captcha (value) {
       if (value.length === 4) {
         const that = this
@@ -147,21 +151,27 @@ export default {
         this.isVerify = false
       }
     },
+    // 是否显示登录界面
     loginState () {
-      this.isLogin = true
       this.loginForm = {
         phone: '',
         password: ''
       }
+      this.initData()
+    }
+  },
+  methods: {
+    // 初始化
+    initData () {
       this.captcha = ''
       this.isRegister = false
       this.inputCodes = null
       this.isVerify = false
       this.num = 0
       this.validResult = ''
-    }
-  },
-  methods: {
+      this.isLogin = true
+    },
+    // 登录
     toLogin () {
       const result = this.verifyForm()
       if (result) {
@@ -169,6 +179,8 @@ export default {
           .then((res) => {
             if (res.code === 200) {
               this.setLoginState(false)
+              // 获取账号信息
+              this.logoutStatus()
             } else {
               this.validResult = '账号或密码错误'
             }
@@ -178,21 +190,28 @@ export default {
           })
       }
     },
+    // 注册
     toRegister () {
       if (this.isVerify) {
         this.loginForm.captcha = this.captcha
         this.register(this.loginForm)
           .then(() => {
-            this.setLoginState(false)
+            this.initData()
+            this.$message({
+              message: '注册成功',
+              type: 'success'
+            })
           })
           .catch((error) => {
-            this.setLoginState(false)
+            this.initData()
+            this.$message.error('注册失败')
             console.log(error)
           })
       } else {
         this.$message.error('验证码错误')
       }
     },
+    // 表单验证
     verifyForm () {
       let result = false
       this.$refs.loginForm.validate((valid, obj) => {
@@ -216,10 +235,12 @@ export default {
       })
       return result
     },
+    // 登录注册切换
     toggle () {
       this.validResult = ''
       this.isLogin = !this.isLogin
     },
+    // 获取验证码
     getCaptcha () {
       if (!this.verifyForm()) {
         return
@@ -227,6 +248,7 @@ export default {
       this.isRegister = true
       this.sendCode()
     },
+    // 发送验证码
     sendCode () {
       if (this.loginForm.phone) {
         this.num = 60
@@ -245,6 +267,7 @@ export default {
         this.setLoginState(false)
       }
     },
+    // 输入验证码
     inputCode (num, e) {
       if (!this.inputCodes) {
         const inputCodes = document.querySelectorAll('.inputCode')
@@ -275,16 +298,16 @@ export default {
       }
       this.captcha = this.arr.join('')
     },
+    // 返回登录
     backLogin () {
-      this.isRegister = false
-      this.isLogin = true
-      this.captcha = ''
+      this.initData()
     },
     ...mapActions({
       sentCode: 'sentCode',
       verifyCode: 'verifyCode',
       register: 'register',
-      login: 'login'
+      login: 'login',
+      logoutStatus: 'logoutStatus'
     }),
     ...mapMutations({
       setLoginState: 'SET_LOGIN_STATE'
@@ -314,6 +337,7 @@ export default {
       div {
         cursor: pointer;
         font-size: 12px;
+        margin-left: 15px;
       }
     }
     .close {

@@ -1,5 +1,5 @@
 <template>
-  <div class="datas">
+  <div class="datas rigth-side">
     <div v-if="musicList" class="title">
       {{ `播放队列(共${musicList.length}首)` }}
     </div>
@@ -99,15 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.datas {
-  width: 245px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  box-shadow: -10px 0px 10px rgb(190, 190, 190);
-  display: flex;
-  flex-direction: column;
-}
 .data {
   height: 100%;
   overflow: hidden;
