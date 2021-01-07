@@ -1,9 +1,6 @@
 <template>
     <div class="head">
-        <div class="back-icon">
-            <i class="el-icon-back" />
-        </div>
-        <div class="name">网易云</div>
+        <div class="name">网易云音乐</div>
     </div>
 </template>
 
@@ -12,21 +9,12 @@
     display: flex;
     align-items: stretch;
     color: #ffffff;
-    .back-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 15px;
-        i {
-            font-size: 16px;
-        }
-    }
     .name {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
-        margin-left: 25px;
+        font-size: 12px;
+        margin-left: 10px;
     }
 }
 </style>

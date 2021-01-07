@@ -35,3 +35,19 @@ export function getAlbum (data) {
     params: data
   })
 }
+
+/**
+ * 说明 : 调用此接口 , 可获取 banner( 轮播图 ) 数据
+ * @type 可选参数默认0
+ * 0: pc
+ * 1: android
+ * 2: iphone
+ * 3: ipad 专辑 id
+ */
+export function banner (data) {
+  return request({
+    url: '/banner',
+    method: 'get',
+    params: data
+  })
+}

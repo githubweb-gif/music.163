@@ -100,7 +100,7 @@ export default {
 
 .header {
   background-color: #c20c0c;
-  height: 35px;
+  height: 30px;
 }
 
 .container {
@@ -108,11 +108,11 @@ export default {
   display: flex;
   align-items: stretch;
   .main {
-    flex: 1;
+    flex: 3;
     position: relative;
   }
   .side {
-    width: 45px;
+    flex: 0.9;
     background-color: #f6f6f7;
   }
   .right-side {

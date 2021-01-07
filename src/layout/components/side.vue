@@ -1,42 +1,30 @@
 <template>
-  <div class="side" :style="isCollapse === false ? 'width:230px;' : width">
+  <div
+    class="side"
+    :style="isCollapse === false ? 'flex:0.9;' : `flex:${flex};`"
+  >
     <el-menu
       background-color="#f6f6f7"
       :collapse="isCollapse"
       class="el-menu-vertical-demo"
       :collapse-transition="false"
       active-text-color="#c20c0c"
+      :router="true"
     >
       <div class="menu el-icon-s-fold" @click="isCollapse = !isCollapse" />
-      <div v-if="!isCollapse" class="title">在线音乐</div>
-      <el-menu-item index="1">
-        <i class="el-icon-user-solid" />
-        <span>音乐馆</span>
-      </el-menu-item>
-      <el-menu-item index="2">
-        <i class="el-icon-s-goods" />
-        <span>视频</span>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <i class="el-icon-help" />
-        <span>电台</span>
+      <el-menu-item
+        v-for="(item, index) of route"
+        :key="index"
+        :index="item.name"
+      >
+        <i :class="item.meta.icon" />
+        <span>{{ item.meta.title }}</span>
       </el-menu-item>
       <div v-if="!isCollapse" class="title">我的音乐</div>
-      <el-menu-item index="4">
+      <div v-if="!isCollapse" class="title">创建的歌单</div>
+      <el-menu-item index="8">
         <i class="el-icon-printer" />
         <span>我喜欢</span>
-      </el-menu-item>
-      <el-menu-item index="5">
-        <i class="el-icon-paperclip" />
-        <span>本地歌曲</span>
-      </el-menu-item>
-      <el-menu-item index="6">
-        <i class="el-icon-headset" />
-        <span>播放历史</span>
-      </el-menu-item>
-      <el-menu-item index="7">
-        <i class="el-icon-setting" />
-        <span>创建的歌单</span>
       </el-menu-item>
     </el-menu>
     <div :class="['account-number', { account: isCollapse }]">
@@ -54,11 +42,12 @@
 <script>
 import avatar from '@/assets/img/avatar.png'
 import { mapMutations, mapState } from 'vuex'
+import { routes } from '@/router'
 export default {
   data () {
     return {
       isCollapse: false,
-      width: '45px',
+      flex: '0.16',
       cover: avatar
     }
   },
@@ -68,7 +57,16 @@ export default {
       avatar: state => state.user.avatar,
       loginStatus: state => state.user.loginStatus,
       isUserRight: state => state.user.isUserRight
-    })
+    }),
+    route () {
+      const routelist = routes[0].children || []
+      const list = routelist.map(x => {
+        if (x.hidden) {
+          return x
+        }
+      })
+      return list
+    }
   },
   methods: {
     toLogin () {
@@ -102,14 +100,19 @@ export default {
   width: 100%;
   .title {
     font-size: 12px;
-    padding: 5px 0;
+    padding: 20px 0 10px;
     padding-left: 10px;
   }
   .el-menu-item {
-    padding: 12px 0;
+    padding: 10px 0;
     padding-left: 10px !important;
+    padding-right: 10px !important;
     line-height: 0;
     height: auto;
+    font-size: 13px;
+    i {
+      display: inline-block;
+    }
   }
   .menu {
     font-size: 22px;
