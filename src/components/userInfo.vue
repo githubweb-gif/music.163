@@ -2,7 +2,7 @@
   <div class="userInfo rigth-side">
     <header>用户信息</header>
     <div class="info">
-      <div class="avatar"><img :src="avatar" alt="" /></div>
+      <div class="avatar"><img :src="avatar" alt=""></div>
       <div class="name">{{ name }}</div>
     </div>
     <div class="logout"><span @click="logout">退出登录</span></div>
@@ -12,7 +12,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data () {
+  data() {
     return {}
   },
   computed: {
@@ -22,7 +22,7 @@ export default {
     })
   },
   methods: {
-    logout () {
+    logout() {
       this.$store.dispatch('logout')
     }
   }
@@ -31,6 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .rigth-side {
+      background-color:#fff;
   header {
     background-color: #edefee;
     padding: 10px 15px;

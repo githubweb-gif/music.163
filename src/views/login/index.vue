@@ -3,38 +3,38 @@
     <el-card v-if="!isRegister">
       <header>
         <div class="left">
-          <div @click="toggle" v-if="!isLogin">
+          <div v-if="!isLogin" @click="toggle">
             <span class="el-icon-arrow-left" />
             <span>返回登陆</span>
           </div>
         </div>
-        <div @click="setLoginState(false)" class="close"><span class="el-icon-close" /></div>
+        <div class="close" @click="setLoginState(false)"><span class="el-icon-close" /></div>
       </header>
       <div class="cover">
-        <img :src="logo" alt="" />
+        <img :src="logo" alt="">
       </div>
       <!-- form -->
       <el-form
+        ref="loginForm"
         :show-message="false"
         class="logo-form"
         :rules="rules"
-        ref="loginForm"
         :model="loginForm"
       >
         <el-form-item prop="phone">
           <el-input
-            @focus="validResult = ''"
-            prefix-icon="el-icon-goods"
             v-model="loginForm.phone"
-          ></el-input>
+            prefix-icon="el-icon-goods"
+            @focus="validResult = ''"
+          />
         </el-form-item>
         <el-form-item class="pwd" prop="password">
           <el-input
-            @focus="validResult = ''"
+            v-model="loginForm.password"
             prefix-icon="el-icon-info"
             type="password"
-            v-model="loginForm.password"
-          ></el-input>
+            @focus="validResult = ''"
+          />
         </el-form-item>
         <div v-if="!isLogin && !validResult" class="be-careful">
           密码8到20位，至少包含字母/数字/字符2种组合
@@ -42,9 +42,9 @@
         <div v-if="validResult" class="validResult">{{ validResult }}</div>
       </el-form>
       <!-- 这个注册是获取验证码 -->
-      <button v-if="!isLogin" @click="getCaptcha" type="button">注册</button>
+      <button v-if="!isLogin" type="button" @click="getCaptcha">注册</button>
       <!-- 登录 -->
-      <button v-else @click="toLogin" type="button">登录</button>
+      <button v-else type="button" @click="toLogin">登录</button>
       <!-- 切换到注册页 -->
       <div v-if="isLogin" class="register">
         <span @click="toggle">注册</span>
@@ -56,29 +56,29 @@
         <div class="title">请输入验证码</div>
       </header>
       <p>
-        你的手机号：+86 150****8295 <br />为了安全，我们会给你发送短信验证码
+        你的手机号：+86 150****8295 <br>为了安全，我们会给你发送短信验证码
       </p>
       <div class="code">
         <div class="text">
-          <input class="inputCode" @input="inputCode(0, $event)" type="text" />
+          <input class="inputCode" type="text" @input="inputCode(0, $event)">
         </div>
         <div class="text">
-          <input class="inputCode" @input="inputCode(1, $event)" type="text" />
+          <input class="inputCode" type="text" @input="inputCode(1, $event)">
         </div>
         <div class="text">
-          <input class="inputCode" @input="inputCode(2, $event)" type="text" />
+          <input class="inputCode" type="text" @input="inputCode(2, $event)">
         </div>
         <div class="text">
-          <input class="inputCode" @input="inputCode(3, $event)" type="text" />
+          <input class="inputCode" type="text" @input="inputCode(3, $event)">
         </div>
       </div>
-      <div v-if="num === 0" @click="sendCode" class="resetCode">重新发送</div>
+      <div v-if="num === 0" class="resetCode" @click="sendCode">重新发送</div>
       <div v-else class="resetCode">{{ num }}</div>
       <!-- 最终注册 -->
-      <button @click="toRegister" type="button">
+      <button type="button" @click="toRegister">
         下一步
       </button>
-      <div @click="backLogin" class="backLogin">返回登录</div>
+      <div class="backLogin" @click="backLogin">返回登录</div>
     </el-card>
     <div class="shadow" />
   </div>
@@ -88,7 +88,7 @@
 import logo from '@/assets/logo.png'
 import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
-  data () {
+  data() {
     return {
       logo: logo,
       loginForm: {
@@ -135,7 +135,7 @@ export default {
   }),
   watch: {
     // 验证码验证
-    captcha (value) {
+    captcha(value) {
       if (value.length === 4) {
         const that = this
         this.verifyCode({ phone: this.loginForm.phone, captcha: this.captcha })
@@ -152,7 +152,7 @@ export default {
       }
     },
     // 是否显示登录界面
-    loginState () {
+    loginState() {
       this.loginForm = {
         phone: '',
         password: ''
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     // 初始化
-    initData () {
+    initData() {
       this.captcha = ''
       this.isRegister = false
       this.inputCodes = null
@@ -172,7 +172,7 @@ export default {
       this.isLogin = true
     },
     // 登录
-    toLogin () {
+    toLogin() {
       const result = this.verifyForm()
       if (result) {
         this.login(this.loginForm)
@@ -191,7 +191,7 @@ export default {
       }
     },
     // 注册
-    toRegister () {
+    toRegister() {
       if (this.isVerify) {
         this.loginForm.captcha = this.captcha
         this.register(this.loginForm)
@@ -212,7 +212,7 @@ export default {
       }
     },
     // 表单验证
-    verifyForm () {
+    verifyForm() {
       let result = false
       this.$refs.loginForm.validate((valid, obj) => {
         console.log(obj)
@@ -236,12 +236,12 @@ export default {
       return result
     },
     // 登录注册切换
-    toggle () {
+    toggle() {
       this.validResult = ''
       this.isLogin = !this.isLogin
     },
     // 获取验证码
-    getCaptcha () {
+    getCaptcha() {
       if (!this.verifyForm()) {
         return
       }
@@ -249,7 +249,7 @@ export default {
       this.sendCode()
     },
     // 发送验证码
-    sendCode () {
+    sendCode() {
       if (this.loginForm.phone) {
         this.num = 60
         const time = setInterval(() => {
@@ -268,7 +268,7 @@ export default {
       }
     },
     // 输入验证码
-    inputCode (num, e) {
+    inputCode(num, e) {
       if (!this.inputCodes) {
         const inputCodes = document.querySelectorAll('.inputCode')
         this.inputCodes = inputCodes
@@ -299,7 +299,7 @@ export default {
       this.captcha = this.arr.join('')
     },
     // 返回登录
-    backLogin () {
+    backLogin() {
       this.initData()
     },
     ...mapActions({

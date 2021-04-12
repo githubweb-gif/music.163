@@ -1,25 +1,31 @@
 <template>
   <div class="footer">
     <div class="key">
-      <span class="iconfont icon-shangyishou-yuanshijituantubiao"></span>
       <span
-        @click="paused"
+        class="iconfont icon-shangyishou-yuanshijituantubiao"
+        @click="preOrNext(-1)"
+      />
+      <span
         v-if="icon === 'icon-bofang'"
         :class="['iconfont', 'play', icon]"
-      ></span>
+        @click="paused"
+      />
       <span
-        @click="play"
         v-if="icon === 'icon-bofang1'"
         :class="['iconfont', 'play', icon]"
-      ></span>
-      <span class="iconfont icon-xiayishou-yuanshijituantubiao"></span>
+        @click="play"
+      />
+      <span
+        class="iconfont icon-xiayishou-yuanshijituantubiao"
+        @click="preOrNext(1)"
+      />
     </div>
     <div class="cover">
       <img
         v-if="currentSong.album"
         :src="currentSong.album.album.blurPicUrl"
         alt=""
-      />
+      >
     </div>
     <div class="bar">
       <div class="name-time">
@@ -44,11 +50,14 @@
       />
     </div>
     <div class="function">
-      <div class="iconfont icon-lujing"></div>
-      <div class="iconfont icon-xunhuan1"></div>
-      <div class="iconfont icon-yinliang"></div>
-      <div @click.stop="isMusicList" class="iconfont menu icon-24gf-playlistMusic5">
-        <span v-if="list">{{list.length}}</span>
+      <div class="iconfont icon-lujing" />
+      <div class="iconfont icon-xunhuan1" />
+      <div class="iconfont icon-yinliang" />
+      <div
+        class="iconfont menu icon-24gf-playlistMusic5"
+        @click.stop="isMusicList"
+      >
+        <span v-if="list">{{ list.length }}</span>
       </div>
     </div>
   </div>
@@ -56,11 +65,13 @@
 
 <script>
 import progressBar from './components/progressBar'
+import { GET_HISTORY } from '@/untils/cache'
+import setMusciInfo from '@/untils/setMusciInfo'
 export default {
   components: {
     progressBar
   },
-  data () {
+  data() {
     return {
       icon: 'icon-bofang1',
       state: true,
@@ -70,40 +81,29 @@ export default {
       currentTime: 0
     }
   },
-  filters: {
-    formatTime (time) {
-      if (!time) {
-        return '00:00'
-      }
-      if (time < 10) {
-        return `00:0${parseInt(time)}`
-      } else if (time <= 60) {
-        return `00:${parseInt(time)}`
-      } else if (time > 60) {
-        if (parseInt(time % 60) < 10) {
-          return `${parseInt(time / 60)}:0${parseInt(time % 60)}`
-        }
-        return `${parseInt(time / 60)}:${parseInt(time % 60)}`
-      }
-      return '00:00'
-    }
-  },
   computed: {
-    percentage () {
+    musicList() {
+      return this.$store.getters.musicList
+    },
+    percentage() {
       return (this.currentTime / this.currentSong.duration) * 100
     },
-    currentSong () {
-      return this.$store.getters.musicInfo
+    currentSong() {
+      if (this.$store.getters.musicInfo.name) {
+        return this.$store.getters.musicInfo
+      } else {
+        return GET_HISTORY() || []
+      }
     },
-    playing () {
+    playing() {
       return this.$store.state.music.playing
     },
-    list () {
+    list() {
       return this.$store.state.music.list
     }
   },
   watch: {
-    playing (isPlaying) {
+    playing(isPlaying) {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         if (audio) {
@@ -113,7 +113,7 @@ export default {
     }
   },
   methods: {
-    onPercentage (value) {
+    onPercentage(value) {
       if (value > 1) {
         value = 1
       }
@@ -121,35 +121,54 @@ export default {
       this.$refs.audio.currentTime = this.currentSong.duration * value
     },
     // 播放
-    play () {
+    play() {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.play()
       })
     },
     // 暂停
-    paused () {
+    paused() {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.pause()
       })
     },
-    audioReady (e) {
+    audioReady(e) {
       this.icon = 'icon-bofang'
     },
     // 处理播放错误
-    audioError (e) {},
-    updateTime (e) {
+    audioError(e) {},
+    updateTime(e) {
       this.currentTime = e.target.currentTime
     },
-    audioEnd (e) {
+    audioEnd(e) {
+      // 播放完毕自动播放下一首
+      this.preOrNext(1)
+    },
+    audioPaused(e) {
       this.icon = 'icon-bofang1'
     },
-    audioPaused (e) {
-      this.icon = 'icon-bofang1'
-    },
-    isMusicList (e) {
+    isMusicList(e) {
       this.$store.commit('SET_ISMUSICLIST', true)
+    },
+    // 上一首或者下一首
+    preOrNext(i) {
+      this.$store.commit('SET_PLAYING', false)
+      this.musicList.forEach((ele, index) => {
+        if (ele.id === this.currentSong.id) {
+          if (index === this.musicList.length - 1) {
+            this.icon = 'icon-bofang1'
+            this.currentTime = 0
+            return
+          }
+          setMusciInfo(this.musicList[index + i]).then((data) => {
+            this.$store.dispatch('SET_HISTORY', data)
+            this.$store.commit('SET_PLAYING', true)
+          })
+          return
+        }
+      })
     }
   }
 }

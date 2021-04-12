@@ -7,7 +7,7 @@ import request from '@/untils/request'
  * @countrycode 可选参数 国家码，用于国外手机号登录，例如美国传入：1
  * @md5_password 可选参数 md5加密后的密码,传入后 password 将失效
  */
-export function phoneLogin (data) {
+export function phoneLogin(data) {
   return request({
     url: '/login/cellphone',
     method: 'post',
@@ -21,7 +21,7 @@ export function phoneLogin (data) {
  * @password 密码
  * @md5_password 可选参数 md5加密后的密码,传入后 password 将失效
  */
-export function emailLogin (data) {
+export function emailLogin(data) {
   return request({
     url: '/login',
     method: 'post',
@@ -30,7 +30,7 @@ export function emailLogin (data) {
 }
 
 // 刷新登录,说明 : 调用此接口 , 可刷新登录状态
-export function refreshLogin () {
+export function refreshLogin() {
   return request({
     url: '/login/refresh',
     method: 'get'
@@ -42,7 +42,7 @@ export function refreshLogin () {
  * @phone
  * @ctcode 可选参数,国家区号,默认86即中国
  */
-export function sentCode (data) {
+export function sentCode(data) {
   return request({
     url: '/captcha/sent',
     method: 'get',
@@ -55,7 +55,7 @@ export function sentCode (data) {
    * @phone
    * @captcha
    */
-export function verifyCode (data) {
+export function verifyCode(data) {
   return request({
     url: '/captcha/verify',
     method: 'get',
@@ -70,7 +70,7 @@ export function verifyCode (data) {
    * @password : 密码
    * @nickname : 昵称
    */
-export function register (data) {
+export function register(data) {
   return request({
     url: '/register/cellphone',
     method: 'post',
@@ -83,7 +83,7 @@ export function register (data) {
    * @phone : 手机号码
    * @countrycode 可选参数 国家码，用于国外手机号登录，例如美国传入：1
    */
-export function existencePhone (data) {
+export function existencePhone(data) {
   return request({
     url: '/cellphone/existence/check',
     method: 'get'
@@ -95,7 +95,7 @@ export function existencePhone (data) {
    * 说明 : 刚注册的账号(需登录),调用此接口 ,可初始化昵称
    * @nickname : 昵称
    */
-export function profile (data) {
+export function profile(data) {
   return request({
     url: '/activate/init/profile',
     method: 'get'
@@ -110,7 +110,7 @@ export function profile (data) {
    * @hone : 手机号码
    * @tcode : 国家区号,默认86即中国
    */
-export function rebind (data) {
+export function rebind(data) {
   return request({
     url: '/rebind',
     method: 'get'
@@ -121,7 +121,7 @@ export function rebind (data) {
    * 退出登录
    * 说明 : 调用此接口 , 可退出登录
    */
-export function logout (data) {
+export function logout(data) {
   return request({
     url: '/logout',
     method: 'get'
@@ -132,7 +132,7 @@ export function logout (data) {
    *登录状态
    * 说明 : 调用此接口,可获取登录状态
    */
-export function logoutStatus (data) {
+export function logoutStatus(data) {
   return request({
     url: '/login/status',
     method: 'get'
@@ -143,7 +143,7 @@ export function logoutStatus (data) {
    *获取账号信息
    * 说明 : 登录后调用此接口 ,可获取用户账号信息
    */
-export function accountNumberInfo (data) {
+export function accountNumberInfo(data) {
   return request({
     url: '/user/account',
     method: 'get'
@@ -151,12 +151,16 @@ export function accountNumberInfo (data) {
 }
 
 /**
-   *获取用户信息 , 歌单，收藏，mv, dj 数量
-   * 说明 : 登录后调用此接口 , 可以获取用户信息
+   * 歌单
+   * 说明 : 登录后调用传入用户 id, 可以获取用户歌单
+   * 必选参数: @uid
+   * @limit : 返回数量 , 默认为 30
+   * @offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
    */
-export function userInfo (data) {
+export function songList(data) {
   return request({
-    url: '/user/subcount',
-    method: 'get'
+    url: '/user/playlist',
+    method: 'get',
+    params: data
   })
 }

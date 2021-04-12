@@ -1,4 +1,4 @@
-import { phoneLogin, register, sentCode, verifyCode, logoutStatus, logout } from '../../api/login'
+import { phoneLogin, songList, register, sentCode, verifyCode, logoutStatus, logout } from '../../api/login'
 const state = {
   name: '',
   avatar: '',
@@ -8,7 +8,9 @@ const state = {
   // 登录状态
   loginStatus: false,
   // 右侧边栏是否显示
-  isUserRight: false
+  isUserRight: false,
+  // 用户歌单
+  songLists: null
 }
 
 const mutations = {
@@ -21,24 +23,26 @@ const mutations = {
   SET_ID: (state, id) => {
     state.id = id
   },
-  SET_LOGIN_STATE (state, bol) {
+  SET_LOGIN_STATE(state, bol) {
     state.loginState = bol
   },
-  SET_LOGIN_STATUS (state, bol) {
+  SET_LOGIN_STATUS(state, bol) {
     state.loginStatus = bol
   },
-  SET_IS_USER_Right (state, bol) {
+  SET_IS_USER_Right(state, bol) {
     state.isUserRight = bol
+  },
+  SET_SONGLISTS(state, value) {
+    state.songLists = value
   }
 }
 
 const actions = {
   // user login
-  login ({ commit }, userInfo) {
+  login({ commit }, userInfo) {
     const { phone, password } = userInfo
     return new Promise((resolve, reject) => {
       phoneLogin({ phone: phone.trim(), password: password }).then(response => {
-        console.log(response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -46,11 +50,10 @@ const actions = {
     })
   },
   // 注册
-  register ({ commit }, userInfo) {
+  register({ commit }, userInfo) {
     const { phone, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
       register({ phone: phone.trim(), password: password, captcha: captcha }).then(response => {
-        console.log(response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -58,10 +61,9 @@ const actions = {
     })
   },
   // 发送验证码
-  sentCode ({ commit }, phone) {
+  sentCode({ commit }, phone) {
     return new Promise((resolve, reject) => {
       sentCode({ phone: phone }).then(response => {
-        console.log(response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -69,10 +71,9 @@ const actions = {
     })
   },
   // 验证验证码
-  verifyCode ({ commit }, data) {
+  verifyCode({ commit }, data) {
     return new Promise((resolve, reject) => {
       verifyCode({ phone: data.phone, captcha: data.captcha }).then(response => {
-        console.log(response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -80,27 +81,31 @@ const actions = {
     })
   },
   // 登录状态验证，且返回用户基本信息
-  logoutStatus ({ commit, state }) {
+  logoutStatus({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logoutStatus().then(async (data) => {
+      logoutStatus().then((res) => {
         // // 刷新登录状态
         // const status = await refreshLogin()
         // console.log(status)
-        const { profile } = data
+        console.log(res)
+        const { profile } = res.data
+        if (!profile) {
+          commit('SET_LOGIN_STATUS', false)
+          return
+        }
         commit('SET_NAME', profile.nickname)
         commit('SET_AVATAR', profile.avatarUrl)
         commit('SET_ID', profile.userId)
         commit('SET_LOGIN_STATUS', true)
-        resolve(data)
+        resolve(res)
       }).catch((error) => {
-        console.log(error.response)
         commit('SET_LOGIN_STATUS', false)
         reject(error)
       })
     })
   },
   // user logout
-  logout ({ commit, state, dispatch }) {
+  logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout().then(() => {
         commit('SET_NAME', '')
@@ -110,6 +115,22 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      })
+    })
+  },
+  // 用户歌单
+  songList({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      if (!state.loginStatus) {
+        resolve()
+        return
+      }
+      console.log('--------------')
+      songList({ uid: state.id }).then((res) => {
+        commit('SET_SONGLISTS', res.playlist)
+        resolve(res)
+      }).catch(err => {
+        reject(err)
       })
     })
   }

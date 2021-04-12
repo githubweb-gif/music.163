@@ -1,95 +1,50 @@
 <template>
   <div ref="home" class="home">
-    <el-carousel ref="carousel" :interval="4000" type="card" height="100%">
-      <el-carousel-item v-for="(item, index) in banners" :key="index">
-        <img ref="img" :src="item.imageUrl" alt="" />
-      </el-carousel-item>
-    </el-carousel>
-    <div class="expand" ref="expand">
-      <div class="expandChild" ref="expandChild"></div>
-    </div>
-    <div class="shrink" ref="shrink">
-      <div class="shrinkChild" ref="shrinkChild"></div>
+    <div class="title">发现音乐</div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="个性推荐" name="first" />
+      <el-tab-pane label="歌单" name="second">歌单</el-tab-pane>
+      <el-tab-pane label="主播电台" name="third">主播电台</el-tab-pane>
+      <el-tab-pane label="最新音乐" name="fourth">最新音乐</el-tab-pane>
+      <el-tab-pane label="歌手" name="five">歌手</el-tab-pane>
+    </el-tabs>
+    <div class="home-main">
+      <component :is="componentName" />
     </div>
   </div>
 </template>
 
 <script>
-import { banner } from '@/api/music'
+import firstComponent from './components/first.vue'
 export default {
-  data () {
+  components: {
+    firstComponent
+  },
+  data() {
     return {
-      banners: [],
-      imgList: null
-    }
-  },
-  created () {
-    this.banner()
-  },
-  mounted () {
-    // 不支持火狐安卓
-    // 监听home内容宽高变化
-    const resizeObserver = new ResizeObserver(entries => {
-      this.changeImgWidth()
-    })
-    resizeObserver.observe(document.querySelector('.home'))
-  },
-  watch: {
-    imgList () {
-      this.$nextTick(() => {
-        const carousel = this.$refs.carousel.$el
-        carousel.style.height = this.imgList[0].offsetHeight + 'px'
-      })
+      // tab栏
+      activeName: 'first',
+      componentName: 'firstComponent'
     }
   },
   methods: {
-    banner () {
-      banner().then((res) => {
-        this.banners = res.banners
-        this.$nextTick(() => {
-          this.imgList = this.$refs.img
-        })
-      })
-    },
-    changeImgWidth () {
-      if (!this.imgList) {
-        return
-      }
-      this.$nextTick(() => {
-        if (!this.$refs.carouse) {
-          return
-        }
-        const carousel = this.$refs.carousel.$el
-        carousel.style.height = this.imgList[0].offsetHeight + 'px'
-      })
-    }
+    handleClick() {}
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .home {
-  padding: 15px 20px;
   height: 100%;
   box-sizing: border-box;
-  position: relative;
+  overflow-y: auto;
 }
-
-.el-carousel__item img {
-  width: 100%;
+.title {
+  font-size: 13px;
+  color: #666666;
+  padding-bottom: 5px;
 }
-.expand,
-.shrink {
-  position: absolute;
-  inset: 0px;
-  overflow: hidden;
-  visibility: hidden;
-  width: 100%;
-  height: 100%;
-}
-.expandChild,
-.shrinkChild {
-  transition: 0s;
-  animation: none;
+.home-main {
+  padding: 0 1%;
 }
 </style>

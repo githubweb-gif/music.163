@@ -1,15 +1,24 @@
 <template>
-    <div class="FM">FM</div>
+  <swiper />
 </template>
 
 <script>
+import swiper from '@/components/swiper/index.vue'
 export default {
-  data () {
-    return {}
+  name: 'Carrousel',
+  components: {
+    swiper
+  },
+  data() {
+    return {
+    }
+  },
+  computed: {
+  },
+  mounted() {
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
 </style>

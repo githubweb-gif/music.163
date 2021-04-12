@@ -1,10 +1,10 @@
 <template>
-    <div class="video">video</div>
+  <div class="video">video</div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {}
   }
 }

@@ -10,6 +10,7 @@ const date = new Date()
 
 service.interceptors.request.use(config => {
   if (config.method.toLocaleLowerCase() === 'post') {
+    // POST请求url必须添加时间戳,使每次请求url不一样,不然请求会被缓存timestamp
     config.data.timestamp = date.getTime()
   }
   return config
@@ -22,7 +23,15 @@ error => {
 )
 
 service.interceptors.response.use(response => {
-  return response.data
+  if (response.status === 200) {
+    if (response.data.code === 200 || response.data.data.code === 200) {
+      return response.data
+    } else {
+      return new Error()
+    }
+  } else {
+    return new Error()
+  }
 },
 error => {
   console.log(error.response)

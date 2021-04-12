@@ -1,7 +1,7 @@
 <template>
-    <div class="head">
-        <div class="name">网易云音乐</div>
-    </div>
+  <div class="head">
+    <div class="name">网易云音乐</div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

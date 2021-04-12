@@ -16,6 +16,27 @@ import './permission'
 
 Vue.use(ElementUI)
 
+Vue.filter('formatTime', (time) => {
+  if (!time) {
+    return '00:00'
+  }
+  switch (true) {
+    case time < 10:
+      return `00:0${parseInt(time)}`
+    case time === 60:
+      return `01:00`
+    case time < 60:
+      return `00:${parseInt(time)}`
+    case time > 60:
+      if (parseInt(time % 60) < 10) {
+        return `${parseInt(time / 60)}:0${parseInt(time % 60)}`
+      }
+      return `${parseInt(time / 60)}:${parseInt(time % 60)}`
+    default:
+      return '00:00'
+  }
+})
+
 Vue.config.productionTip = false
 
 new Vue({

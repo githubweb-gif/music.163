@@ -6,19 +6,20 @@
       <div class="main">
         <router-view />
         <transition name="fade-transform">
-          <user-info class="right-side" v-if="isUserRight && loginStatus" />
+          <user-info v-if="isUserRight && loginStatus" class="right-side" />
         </transition>
         <transition name="fade-transform">
-          <music-list
-          class="right-side"
-            v-show="isMusicList"
-          />
+          <music-list v-show="isMusicList" class="right-side" />
         </transition>
       </div>
     </div>
     <footer-bar class="footer" />
     <to-login class="login" />
-    <div class="shadow" v-show="isMusicList || isUserRight" @click="rightSideShow(false)" />
+    <div
+      v-show="isMusicList || isUserRight"
+      class="shadow"
+      @click="rightSideShow(false)"
+    />
   </div>
 </template>
 
@@ -26,10 +27,10 @@
 import musicList from '@/components/musicList'
 import userInfo from '@/components/userInfo'
 import headerBar from './components/header.vue'
-import sideBar from './components/side.vue'
+import sideBar from './components/sideBar.vue'
 import footerBar from './components/footer/footer.vue'
-import { searckMusic } from '@/api/music'
-import setMusciInfo from '@/untils/setMusciInfo'
+// import { searchMusic } from '@/api/music'
+// import setMusciInfo from '@/untils/setMusciInfo'
 import toLogin from '@/views/login/index.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
@@ -41,29 +42,29 @@ export default {
     toLogin,
     userInfo
   },
-  data () {
+  data() {
     return {}
   },
   computed: {
     ...mapState({
-      isMusicList: state => state.music.isMusicList,
-      isUserRight: state => state.user.isUserRight,
-      loginStatus: state => state.user.loginStatus
+      isMusicList: (state) => state.music.isMusicList,
+      isUserRight: (state) => state.user.isUserRight,
+      loginStatus: (state) => state.user.loginStatus
     })
   },
-  created () {
-    searckMusic({ keywords: '张学友' }).then(async (res) => {
-      // 设置播放队列
-      const playlist = res.result.songs
-      setMusciInfo(res.result.songs[1]).then((data) => {
-        const musicInfo = data
-        this.setHistory(musicInfo)
-      })
-      this.setPlaylist(playlist)
-    })
+  created() {
+    // searchMusic({ keywords: '张学友' }).then(async(res) => {
+    //   // 设置播放队列
+    //   const playlist = res.result.songs
+    //   setMusciInfo(res.result.songs[1]).then((data) => {
+    //     const musicInfo = data
+    //     this.setHistory(musicInfo)
+    //   })
+    //   this.setPlaylist(playlist)
+    // })
   },
   methods: {
-    rightSideShow (value) {
+    rightSideShow(value) {
       if (this.isMusicList) {
         this.setIsMusicList(false)
       }
@@ -84,6 +85,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: 700px) {
+  .main {
+    margin-left: 40px;
+  }
+}
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -107,21 +114,25 @@ export default {
   flex: auto;
   display: flex;
   align-items: stretch;
+  overflow: hidden;
+  margin-bottom: 60px;
   .main {
-    flex: 3;
+    flex: 1;
     position: relative;
-  }
-  .side {
-    flex: 0.9;
-    background-color: #f6f6f7;
+    overflow: hidden;
+    padding: 15px 20px;
   }
   .right-side {
-    z-index: 100;
+    z-index: 1000;
   }
 }
 
 .footer {
   height: 60px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
   border-top: 1px solid #c6c3c3;
 }
 

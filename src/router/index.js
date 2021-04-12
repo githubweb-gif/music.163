@@ -7,11 +7,12 @@ export const routes = [
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
+    redirect: '/home',
     children: [
       {
-        path: '/home',
+        path: 'home',
         name: 'home',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '发现音乐',
@@ -19,29 +20,30 @@ export const routes = [
         }
       },
       {
-        path: '/MV',
+        path: 'MV',
         name: 'MV',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/video/index.vue'),
         meta: {
           title: 'MV',
           icon: 'el-icon-s-goods'
         }
       },
+      /* 先不做
       {
-        path: '/people',
+        path: 'people',
         name: 'people',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/FM/index.vue'),
         meta: {
           title: '朋友',
           icon: 'el-icon-help'
         }
-      },
+      }, */
       {
-        path: '/LocalMusic',
+        path: 'LocalMusic',
         name: 'LocalMusic',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/FM/index.vue'),
         meta: {
           title: '本地音乐',
@@ -50,9 +52,9 @@ export const routes = [
         }
       },
       {
-        path: '/DownloadManagement',
+        path: 'DownloadManagement',
         name: 'DownloadManagement',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/FM/index.vue'),
         meta: {
           title: '下载管理',
@@ -61,14 +63,23 @@ export const routes = [
         }
       },
       {
-        path: '/RecentlyPlayed',
+        path: 'RecentlyPlayed',
         name: 'RecentlyPlayed',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/FM/index.vue'),
         meta: {
           title: '最近播放',
           class: 'MyMusic',
           icon: 'el-icon-headset'
+        }
+      },
+      {
+        path: 'songListDetail/:id',
+        name: 'songListDetail',
+        hidden: true,
+        component: () => import('@/components/songListDetail/index.vue'),
+        meta: {
+          title: '歌单详细内容'
         }
       }
     ]
