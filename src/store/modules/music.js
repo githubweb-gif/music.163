@@ -1,4 +1,4 @@
-import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL } from '@/untils/cache'
+import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/untils/cache'
 const state = {
   // 播放队列
   list: GET_PLAYLIST_LOCAL() || [],
@@ -20,7 +20,9 @@ const state = {
   // 播放状态
   playing: false,
   // 侧边栏是否显示
-  isMusicList: false
+  isMusicList: false,
+  // 歌单id用来记录那个歌单播放歌曲了
+  songListId: getSonglistIdLocal() || ''
 }
 
 const mutations = {
@@ -60,8 +62,11 @@ const mutations = {
     for (const i in state.musicInfo) {
       if (data[i]) {
         state.musicInfo[i] = data[i]
+      } else {
+        state.musicInfo[i] = null
       }
     }
+    console.log(state.musicInfo)
   },
   SET_ISMUSICLIST(state, bol) {
     if (!bol) {
@@ -69,6 +74,11 @@ const mutations = {
       return
     }
     state.isMusicList = !state.isMusicList
+  },
+  SET_SONGLISTID(state, id) {
+    // 非歌单播放歌曲清空歌单id
+    setSonglistIdLocal(id)
+    state.songListId = id
   }
 }
 const actions = {

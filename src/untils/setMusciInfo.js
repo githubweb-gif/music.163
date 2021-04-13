@@ -18,7 +18,7 @@ export default async function setMusciInfo(data) {
     album: albumInfo,
     singerName,
     duration,
-    url: urlInfo.data[0].url
+    url: urlInfo.data[0].url || ''
   }
   return musicInfo
 }

@@ -41,7 +41,7 @@
       <progress-bar :percent="percentage" @percentageChange="onPercentage" />
       <audio
         ref="audio"
-        :src="currentSong.url"
+        :src="currentSong.url || ''"
         @playing="audioReady($event)"
         @error="audioError"
         @timeupdate="updateTime($event)"

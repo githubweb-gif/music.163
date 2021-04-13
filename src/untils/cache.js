@@ -41,3 +41,19 @@ export function GET_HISTORY() {
 export function REMOVE_HISTORY() {
   window.sessionStorage.removeItem(key1)
 }
+
+/** 歌单id
+ * @id 播放歌单id
+ * @type String
+ */
+export function setSonglistIdLocal(id) {
+  window.sessionStorage.setItem('songListId', id)
+}
+
+export function getSonglistIdLocal(id) {
+  window.sessionStorage.getItem('songListId', id)
+}
+
+export function removeSonglistIdLocal(id) {
+  window.sessionStorage.removeItem('songListId', id)
+}

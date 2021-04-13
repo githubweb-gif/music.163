@@ -16,15 +16,18 @@
         <li
           v-for="(item, n) in songs"
           :key="item.id"
-          :class="[n === 0 || n % 2 === 0 ? 'odd' : 'even']"
+          :class="[n === 0 || n % 2 === 0 ? 'odd' : 'even', {iscopyright: copyright[n].st < 0}]"
           @click="playState(n)"
         >
-          <span class="index">{{ n | index }}</span>
+          <span v-if="id === songListId && musicID === item.id" class="index">
+            <i class="el-icon-video-play" />
+          </span>
+          <span v-else class="index">{{ n | index }}</span>
           <span class="name-play">
             <i class="icon" />
             <span class="name">{{ item.name }}</span>
             <span :class="['play-info', index === n ? 'play-state' : '']">
-              <i class="el-icon-video-play" @click="playMusic(item)" />
+              <i class="el-icon-video-play" @click="playMusic(item, copyright[n].st)" />
               <i
                 class="more el-icon-circle-plus-outline"
                 @click.stop="showCard(n, $event)"
@@ -63,6 +66,14 @@
         </li>
       </ul>
     </div>
+    <!-- 无版权提示 -->
+    <div v-if="dialogVisible" class="dialog">
+      <span class="el-icon-circle-close" />
+      <p>
+        因合作方要求<br>
+        该资源暂时下架
+      </p>
+    </div>
   </div>
 </template>
 
@@ -83,6 +94,14 @@ export default {
     songList: {
       type: Array,
       default: null
+    },
+    songListId: {
+      type: String,
+      default: ''
+    },
+    copyright: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -94,12 +113,23 @@ export default {
       i: '',
       // left right 用来记录card的位置
       left: 0,
-      top: 0
+      top: 0,
+      dialogVisible: false
+    }
+  },
+  computed: {
+    // 歌单播放的id
+    id() {
+      return this.$store.state.music.songListId
+    },
+    musicID() {
+      return this.$store.state.music.musicInfo.id
     }
   },
   watch: {
     songList() {
       allSongDetail(this.songList.join(',')).then((data) => {
+        console.log(data.songs)
         this.filterMusics(data.songs)
       })
     }
@@ -111,7 +141,11 @@ export default {
       // 播放图标显示
       this.index = index
     },
-    playMusic(data) {
+    playMusic(data, st) {
+      if (!this.noCopyright(st)) {
+        return
+      }
+      this.$store.commit('SET_SONGLISTID', this.songListId)
       // 先暂停
       this.$store.commit('SET_PLAYING', false)
       setMusciInfo(data).then((res) => {
@@ -122,6 +156,7 @@ export default {
         this.$store.commit('SET_PLAYING', true)
       })
     },
+    // 菜单卡片
     showCard(i, event) {
       this.left = event.target.getBoundingClientRect().left + 10 + 'px'
       this.top = event.target.getBoundingClientRect().top + 20 + 'px'
@@ -141,13 +176,28 @@ export default {
           albumName: x.al.name,
           name: x.name,
           singerName: x.ar[0].name,
-          duration: x.dt
+          duration: x.dt,
+          // 版权
+          copyright: x.copyright
         })
       })
     },
     // 下一首播放
     nextPlay(item) {
       this.$store.dispatch('SET_PLAYLIST', { list: item, one: true })
+    },
+    // 无版权歌曲提示
+    noCopyright(st) {
+      if (st < 0) {
+        this.dialogVisible = true
+        setTimeout(() => {
+          this.dialogVisible = false
+        }, 2000)
+        return false
+      } else {
+        this.dialogVisible = false
+        return true
+      }
     }
   }
 }
@@ -180,6 +230,12 @@ export default {
     }
   }
   .lists {
+    .iscopyright {
+      color: #cccccc;
+      .name {
+        color: #cccccc ;
+      }
+    }
     li.odd {
       background-color: #f2f2f3;
     }
@@ -280,4 +336,28 @@ export default {
     }
   }
 }
+  .dialog {
+    width: 30%;
+    height: 20%;
+    transition: all .3s ease;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #343434;
+    color: #a5a5a5;
+    span {
+      font-size: 50px;
+      margin-bottom: 4%;
+    }
+    p {
+      text-align: center;
+      line-height: 20px;
+    }
+  }
 </style>

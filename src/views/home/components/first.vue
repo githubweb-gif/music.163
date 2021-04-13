@@ -188,6 +188,7 @@ export default {
       flex: 1 1 20%;
       padding-right: 10px;
       overflow: hidden;
+      margin-bottom: 30px;
       img {
         width: 100%;
       }
