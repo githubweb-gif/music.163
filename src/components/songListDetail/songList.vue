@@ -22,6 +22,7 @@
           ]"
           @click="playState(n)"
         >
+          {{ item.id }}
           <span v-if="id === songListId && musicID === item.id" class="index">
             <i class="el-icon-video-play" />
           </span>
@@ -320,7 +321,16 @@ export default {
     },
     // 播放全部
     playALL() {
-      this.playMusic()
+      let i = ''
+      this.newCopyright.forEach((x, index) => {
+        if (index === 0) {
+          console.log(x)
+        }
+        if (x.st >= 0 && i === '') {
+          i = index
+          this.playMusic(this.songs[i], 0)
+        }
+      })
     }
   }
 }
