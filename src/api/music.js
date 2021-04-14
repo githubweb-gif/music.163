@@ -78,7 +78,8 @@ export function personalized(data) {
  * 说明 : 获取歌单详情,  调用此接口 , 传入歌单 id, 可 以获取对应歌单内的所有的音乐
  * 可拿全部 trackIds 请求一次 song/detail 接口获取所有歌曲的详情
  * 必选参数 : id : 歌单 id
- * 可选参数 : s : 歌单最近的 s 个收藏者,默认为8
+ * 可选参数 :
+ * @s : 歌单最近的 s 个收藏者,默认为8
  */
 export function songListDetail(data) {
   return request({
@@ -110,10 +111,28 @@ export function allSongDetail(ids) {
  * @op : 从歌单增加单曲为 add, 删除为 del
  * @pid : 歌单 id
  * @tracks : 歌曲 id,可多个,用逗号隔开
+ * 可选参数
+ * @timestamp : 时间戳因为服务端有缓存机制，所以为了及时拿到更新后的数据需要加上时间戳
  */
 export function addOrdel(data) {
   return request({
     url: '/playlist/tracks',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入歌单名字可新建歌单
+ * 必选参数 :
+ * @name : 歌单名
+ * 可选参数
+ * @privacy : 是否设置为隐私歌单，默认否，传'10'则设置成隐私歌单
+ * @type : 歌单类型,默认'NORMAL',传 'VIDEO'则为视频歌单
+ */
+export function createPlayList(data) {
+  return request({
+    url: '/playlist/create',
     method: 'get',
     params: data
   })

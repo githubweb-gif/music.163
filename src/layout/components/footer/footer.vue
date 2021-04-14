@@ -102,6 +102,16 @@ export default {
     },
     list() {
       return this.$store.state.music.list
+    },
+    // 当前播放的歌曲在播放列表中的位置
+    position() {
+      let i
+      this.musicList.forEach((x, index) => {
+        if (x.id === this.currentSong.id) {
+          i = index
+        }
+      })
+      return i
     }
   },
   watch: {
@@ -146,6 +156,9 @@ export default {
     },
     audioEnd(e) {
       // 播放完毕自动播放下一首
+      if (this.position === this.musicList.length - 1) {
+        return
+      }
       this.preOrNext(1)
     },
     audioPaused(e) {
@@ -155,22 +168,65 @@ export default {
       this.$store.commit('SET_ISMUSICLIST', true)
     },
     // 上一首或者下一首
-    preOrNext(i) {
+    preOrNext(i, after) {
+      let position = after || this.position
       this.$store.commit('SET_PLAYING', false)
-      this.musicList.forEach((ele, index) => {
-        if (ele.id === this.currentSong.id) {
-          if (index === this.musicList.length - 1) {
-            this.icon = 'icon-bofang1'
-            this.currentTime = 0
+      if (this.position === 0 || this.position) {
+        if (i > 0) {
+          if (position === this.musicList.length - 1) {
+            position = 0
+          } else {
+            position++
+          }
+        } else if (i < 0) {
+          if (position === 0) {
+            position = this.musicList.length - 1
+          } else {
+            position--
+          }
+        }
+        setMusciInfo(this.musicList[position]).then((data) => {
+          if (!data.url) {
+            if (i < 0) {
+              this.preOrNext(-1, position)
+            } else {
+              this.preOrNext(1, position)
+            }
             return
           }
-          setMusciInfo(this.musicList[index + i]).then((data) => {
-            this.$store.dispatch('SET_HISTORY', data)
-            this.$store.commit('SET_PLAYING', true)
-          })
-          return
-        }
-      })
+          this.$store.dispatch('SET_HISTORY', data)
+          this.$store.commit('SET_PLAYING', true)
+        })
+      }
+
+      // this.musicList.forEach((ele, index) => {
+      //   if (ele.id === this.currentSong.id) {
+      //     if (i < 0) {
+      //       if (index + i === -1) {
+      //         this.preOrNext(this.musicList.length - 1)
+      //         return
+      //       }
+      //     } else {
+      //       if (index + i === this.musicList.length) {
+      //         this.preOrNext(-this.musicList.length + 1)
+      //         return
+      //       }
+      //     }
+      //     setMusciInfo(this.musicList[index + i]).then((data) => {
+      //       if (!data.url) {
+      //         if (i < 0) {
+      //           this.preOrNext(i - 1)
+      //         } else {
+      //           this.preOrNext(i + 1)
+      //         }
+      //         return
+      //       }
+      //       this.$store.dispatch('SET_HISTORY', data)
+      //       this.$store.commit('SET_PLAYING', true)
+      //     })
+      //     return
+      //   }
+      // })
     }
   }
 }

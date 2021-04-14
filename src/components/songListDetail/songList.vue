@@ -1,7 +1,7 @@
 <template>
   <div class="songlist-detail-list">
     <div class="title">
-      <span>
+      <span @click="playALL">
         <i class="el-icon-delete-solid" />
         <span v-if="songs">{{ `播放全部(${songs.length})` }}</span>
       </span>
@@ -18,13 +18,14 @@
           :key="item.id"
           :class="[
             n === 0 || n % 2 === 0 ? 'odd' : 'even',
-            { iscopyright: copyright[n] && copyright[n].st < 0 },
+            { iscopyright: newCopyright[n] && newCopyright[n].st < 0 },
           ]"
           @click="playState(n)"
         >
           <span v-if="id === songListId && musicID === item.id" class="index">
             <i class="el-icon-video-play" />
           </span>
+          <!-- 已播放图标 -->
           <span v-else class="index">{{ n | index }}</span>
           <span class="name-play">
             <i class="icon" />
@@ -48,9 +49,9 @@
                   }"
                   class="card"
                 >
-                  <ul>
-                    <li @click.stop="nextPlay(item)">下一首播放</li>
-                    <li @click.stop="favorites(item.id)">收藏</li>
+                  <ul @click.stop="i = ''">
+                    <li @click="nextPlay(item)">下一首播放</li>
+                    <li @click="favorites(item.id)">收藏</li>
                     <li>下载</li>
                     <li class="singer">
                       <span>歌手：{{ item.singerName }}</span>
@@ -58,7 +59,7 @@
                     <li>
                       <span>专辑：{{ item.albumName }}</span>
                     </li>
-                    <li class="delete">从歌单中删除</li>
+                    <li class="delete" @click="todelete(item.id, n)">从歌单中删除</li>
                   </ul>
                 </div>
               </div>
@@ -72,22 +73,8 @@
         </li>
       </ul>
     </div>
-    <!-- 无版权提示 -->
-    <div v-if="dialogVisible" class="dialog">
-      <div class="copy-right-card">
-        <span class="el-icon-circle-close" />
-        <p>
-          因合作方要求<br>
-          该资源暂时下架
-        </p>
-      </div>
-      <div>
-        <span :class="shoucang === '收藏成功' ? 'el-icon-success' : 'el-icon-circle-close'" />
-        <p>
-          {{ shoucang }}
-        </p>
-      </div>
-    </div>
+    <!-- 版权或者错误信息提示 -->
+    <dialog-card v-if="dialogVisible" :message="message" :icon="icon" />
     <!-- 收藏歌曲弹框 -->
     <el-dialog
       v-if="songLists"
@@ -96,7 +83,7 @@
       :visible.sync="favoritesCard"
     >
       <ul>
-        <li>
+        <li @click="createPlayList">
           <span class="create el-icon-plus" />
           <span class="name">新建歌单</span>
         </li>
@@ -113,6 +100,7 @@
         </li>
       </ul>
     </el-dialog>
+    <create-playlist :is-create="isCreate" type="NORMAL" :music-id="mID.toString()" @close="close" />
   </div>
 </template>
 
@@ -120,7 +108,13 @@
 // api
 import { allSongDetail, addOrdel } from '@/api/music'
 import setMusciInfo from '@/untils/setMusciInfo'
+import dialogCard from './components/dialog.vue'
+import createPlaylist from '@/components/createPlaylist.vue'
 export default {
+  components: {
+    dialogCard,
+    createPlaylist
+  },
   filters: {
     index(value) {
       value++
@@ -154,16 +148,21 @@ export default {
       // left right 用来记录card的位置
       left: 0,
       top: 0,
+      // 消息提示
       dialogVisible: false,
+      // 收藏card显示
       favoritesCard: false,
       // 歌曲id
       mID: '',
-      // 收藏歌曲后的提示
-      shoucang: ''
+      message: '',
+      icon: '',
+      // 是否显示新建菜单
+      isCreate: false,
+      newCopyright: null
     }
   },
   computed: {
-    // 歌单播放的id
+    // 底部播放中的歌曲所在的歌单id
     id() {
       return this.$store.state.music.songListId
     },
@@ -176,19 +175,30 @@ export default {
     // 所有歌单
     songLists() {
       const data = this.$store.getters.songLists || []
+      console.log(data)
       return data.filter(x => {
         if (x.creator.userId === this.uid) {
           return true
         }
       })
+    },
+    // 当前歌单
+    gedanID() {
+      return this.$route.params.id
     }
   },
   watch: {
-    songList() {
-      allSongDetail(this.songList.join(',')).then((data) => {
-        console.log(data.songs)
-        this.filterMusics(data.songs)
-      })
+    songList(value) {
+      if (value && value.length > 0) {
+        allSongDetail(this.songList.join(',')).then((data) => {
+          console.log(data.songs)
+          this.filterMusics(data.songs)
+        })
+      }
+      this.songs = []
+    },
+    copyright(value) {
+      this.newCopyright = value
     }
   },
   created() {},
@@ -246,6 +256,8 @@ export default {
     noCopyright(st) {
       if (st < 0) {
         this.dialogVisible = true
+        this.message = '因合作方要求该资源暂时下架'
+        this.icon = 'el-icon-circle-close'
         setTimeout(() => {
           this.dialogVisible = false
         }, 2000)
@@ -269,11 +281,14 @@ export default {
       }).then(res => {
         if (res.body && res.body.code === 502) {
           // 歌曲已存在
-          this.shoucang = '歌曲已存在'
+          this.message = '歌曲已存在'
+          this.icon = 'el-icon-circle-close'
         }
         if (res.body.code === 200) {
           // 收藏成功
-          this.shoucang = '收藏成功'
+          this.message = '收藏成功'
+          this.icon = 'el-icon-success'
+          this.$store.dispatch('songList', Date.now())
         }
         this.favoritesCard = false
         this.dialogVisible = true
@@ -281,6 +296,31 @@ export default {
           this.dialogVisible = false
         }, 2000)
       })
+    },
+    // 新建歌单
+    createPlayList() {
+      this.isCreate = true
+      this.favoritesCard = false
+    },
+    // 关闭
+    close(value) {
+      this.isCreate = false
+    },
+    // 从歌单中删除歌曲
+    todelete(id, index) {
+      addOrdel({
+        op: 'del',
+        pid: this.gedanID,
+        tracks: id
+      }).then(() => {
+        this.songs.splice(index, 1)
+        this.newCopyright.splice(index, 1)
+        this.$store.dispatch('SET_PLAYLIST', { list: this.songs, one: false })
+      })
+    },
+    // 播放全部
+    playALL() {
+      this.playMusic()
     }
   }
 }

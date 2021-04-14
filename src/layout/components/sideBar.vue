@@ -42,7 +42,7 @@
 
 <script>
 import avatar from '@/assets/img/avatar.png'
-import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 import { routes } from '@/router'
 export default {
   data() {
@@ -54,10 +54,10 @@ export default {
   },
   computed: {
     ...mapState({
-      name: (state) => state.user.name,
-      avatar: (state) => state.user.avatar,
-      loginStatus: (state) => state.user.loginStatus,
-      isUserRight: (state) => state.user.isUserRight
+      name: state => state.user.name,
+      avatar: state => state.user.avatar,
+      loginStatus: state => state.user.loginStatus,
+      isUserRight: state => state.user.isUserRight
     }),
     ...mapGetters(['songLists']),
     songLists() {
@@ -93,21 +93,17 @@ export default {
     }
   },
   created() {
-    this.songList()
   },
   mounted() {
     const body = document.body
     window.onresize = () => {
-      console.log(body.clientWidth)
       if (body.clientWidth <= 700) {
         this.isCollapse = true
       }
     }
   },
   methods: {
-    ...mapActions(['songList']),
     toLogin() {
-      console.log(this.loginStatus)
       if (this.loginStatus) {
         if (this.isUserRight) {
           this.setUserRight(false)

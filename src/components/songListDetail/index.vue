@@ -53,14 +53,15 @@ export default {
   },
   methods: {
     songListDetail() {
-      songListDetail({ id: this.id }).then((data) => {
+      songListDetail({ id: this.id, timestamp: Date.now() }).then((data) => {
         console.log(data)
         this.name = data.playlist.name
         this.coverImgUrl = data.playlist.coverImgUrl
         this.createTime = data.playlist.createTime.toString()
         const { nickname, avatarUrl, backgroundUrl } = data.playlist.creator
         const trackIds = []
-        data.privileges.forEach((element, index) => {
+        const privileges = data.privileges || []
+        privileges.forEach((element, index) => {
           trackIds.push(element.id)
         })
         this.copyright = data.privileges

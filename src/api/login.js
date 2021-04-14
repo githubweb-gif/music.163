@@ -156,6 +156,7 @@ export function accountNumberInfo(data) {
    * 必选参数: @uid
    * @limit : 返回数量 , 默认为 30
    * @offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
+   * @timestamp 时间戳因为服务端有缓存机制，所以为了及时拿到更新后的数据需要加上时间戳
    */
 export function songList(data) {
   return request({
