@@ -16,7 +16,10 @@
         <li
           v-for="(item, n) in songs"
           :key="item.id"
-          :class="[n === 0 || n % 2 === 0 ? 'odd' : 'even', {iscopyright: copyright[n].st < 0}]"
+          :class="[
+            n === 0 || n % 2 === 0 ? 'odd' : 'even',
+            { iscopyright: copyright[n] && copyright[n].st < 0 },
+          ]"
           @click="playState(n)"
         >
           <span v-if="id === songListId && musicID === item.id" class="index">
@@ -27,7 +30,10 @@
             <i class="icon" />
             <span class="name">{{ item.name }}</span>
             <span :class="['play-info', index === n ? 'play-state' : '']">
-              <i class="el-icon-video-play" @click="playMusic(item, copyright[n].st)" />
+              <i
+                class="el-icon-video-play"
+                @click.stop="playMusic(item, copyright[n].st)"
+              />
               <i
                 class="more el-icon-circle-plus-outline"
                 @click.stop="showCard(n, $event)"
@@ -43,8 +49,8 @@
                   class="card"
                 >
                   <ul>
-                    <li @click="nextPlay(item)">下一首播放</li>
-                    <li>收藏</li>
+                    <li @click.stop="nextPlay(item)">下一首播放</li>
+                    <li @click.stop="favorites(item.id)">收藏</li>
                     <li>下载</li>
                     <li class="singer">
                       <span>歌手：{{ item.singerName }}</span>
@@ -68,17 +74,51 @@
     </div>
     <!-- 无版权提示 -->
     <div v-if="dialogVisible" class="dialog">
-      <span class="el-icon-circle-close" />
-      <p>
-        因合作方要求<br>
-        该资源暂时下架
-      </p>
+      <div class="copy-right-card">
+        <span class="el-icon-circle-close" />
+        <p>
+          因合作方要求<br>
+          该资源暂时下架
+        </p>
+      </div>
+      <div>
+        <span :class="shoucang === '收藏成功' ? 'el-icon-success' : 'el-icon-circle-close'" />
+        <p>
+          {{ shoucang }}
+        </p>
+      </div>
     </div>
+    <!-- 收藏歌曲弹框 -->
+    <el-dialog
+      v-if="songLists"
+      width="400px"
+      title="添加歌单"
+      :visible.sync="favoritesCard"
+    >
+      <ul>
+        <li>
+          <span class="create el-icon-plus" />
+          <span class="name">新建歌单</span>
+        </li>
+        <li v-for="item in songLists" :key="item.id" @click="toadd(item.id)">
+          <span class="cover">
+            <img :src="item.coverImgUrl">
+          </span>
+          <span>
+            <div class="name">{{ item.name }}</div>
+            <div class="count">
+              {{ item.trackCount }}首音乐
+            </div>
+          </span>
+        </li>
+      </ul>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { allSongDetail } from '@/api/music'
+// api
+import { allSongDetail, addOrdel } from '@/api/music'
 import setMusciInfo from '@/untils/setMusciInfo'
 export default {
   filters: {
@@ -114,7 +154,12 @@ export default {
       // left right 用来记录card的位置
       left: 0,
       top: 0,
-      dialogVisible: false
+      dialogVisible: false,
+      favoritesCard: false,
+      // 歌曲id
+      mID: '',
+      // 收藏歌曲后的提示
+      shoucang: ''
     }
   },
   computed: {
@@ -122,8 +167,20 @@ export default {
     id() {
       return this.$store.state.music.songListId
     },
+    uid() {
+      return this.$store.state.user.id
+    },
     musicID() {
       return this.$store.state.music.musicInfo.id
+    },
+    // 所有歌单
+    songLists() {
+      const data = this.$store.getters.songLists || []
+      return data.filter(x => {
+        if (x.creator.userId === this.uid) {
+          return true
+        }
+      })
     }
   },
   watch: {
@@ -134,8 +191,7 @@ export default {
       })
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     playState(index) {
       // 播放图标显示
@@ -198,6 +254,33 @@ export default {
         this.dialogVisible = false
         return true
       }
+    },
+    // 显示收藏歌曲card
+    favorites(id) {
+      this.favoritesCard = true
+      this.mID = id
+    },
+    // 收藏歌曲到歌单
+    toadd(id) {
+      addOrdel({
+        op: 'add',
+        pid: id,
+        tracks: this.mID
+      }).then(res => {
+        if (res.body && res.body.code === 502) {
+          // 歌曲已存在
+          this.shoucang = '歌曲已存在'
+        }
+        if (res.body.code === 200) {
+          // 收藏成功
+          this.shoucang = '收藏成功'
+        }
+        this.favoritesCard = false
+        this.dialogVisible = true
+        setTimeout(() => {
+          this.dialogVisible = false
+        }, 2000)
+      })
     }
   }
 }
@@ -233,7 +316,7 @@ export default {
     .iscopyright {
       color: #cccccc;
       .name {
-        color: #cccccc ;
+        color: #cccccc;
       }
     }
     li.odd {
@@ -336,28 +419,75 @@ export default {
     }
   }
 }
-  .dialog {
-    width: 30%;
-    height: 20%;
-    transition: all .3s ease;
-    border-radius: 8px;
+.dialog {
+  width: 250px;
+  height: 170px;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #343434;
+  color: #a5a5a5;
+  div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  }
+  span {
+    font-size: 50px;
+    margin-bottom: 4%;
+  }
+  p {
+    text-align: center;
+    line-height: 20px;
+  }
+}
+.el-dialog__wrapper  {
+  overflow: hidden;
+  ul {
+    height: 380px;
+    overflow-y: auto;
+  }
+  li:hover {
+    background-color: rgb(199, 199, 199);
+  }
+  li {
+    padding: 10px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #343434;
-    color: #a5a5a5;
-    span {
-      font-size: 50px;
-      margin-bottom: 4%;
-    }
-    p {
+    cursor: pointer;
+    border-bottom: 1px solid rgb(226, 226, 226);
+    .create, .cover {
+      width: 55px;
+      height: 55px;
+      font-size: 20px;
+      line-height: 55px;
       text-align: center;
-      line-height: 20px;
+      margin-right: 10px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .create {
+      border: 1px dashed rgb(172, 172, 172);
+    }
+    .name {
+      font-size: 16px;
+      color: #000;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .count {
+      font-size: 12px;
     }
   }
+}
 </style>
+y

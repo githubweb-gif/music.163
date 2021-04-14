@@ -102,3 +102,19 @@ export function allSongDetail(ids) {
     }
   })
 }
+
+/**
+ * 说明 : 对歌单添加或删除歌曲( 需要登录 )
+ * 可获得歌曲详情(注意:歌曲封面现在需要通过专辑内容接口获取)
+ * 必选参数 :
+ * @op : 从歌单增加单曲为 add, 删除为 del
+ * @pid : 歌单 id
+ * @tracks : 歌曲 id,可多个,用逗号隔开
+ */
+export function addOrdel(data) {
+  return request({
+    url: '/playlist/tracks',
+    method: 'get',
+    params: data
+  })
+}

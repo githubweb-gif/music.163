@@ -23,12 +23,9 @@ error => {
 )
 
 service.interceptors.response.use(response => {
+  console.log(response)
   if (response.status === 200) {
-    if (response.data.code === 200 || response.data.data.code === 200) {
-      return response.data
-    } else {
-      return new Error()
-    }
+    return response.data
   } else {
     return new Error()
   }

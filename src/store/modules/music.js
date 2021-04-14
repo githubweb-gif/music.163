@@ -30,21 +30,25 @@ const mutations = {
     // one表示添加，而不是更新整个表单
     let i, n
     if (data.one) {
+      console.log(state.musicInfo.id)
       if (state.list instanceof Array) {
         state.list.forEach((x, index) => {
           if (state.musicInfo.id === x.id) {
+            // 当前播放歌曲的位置
             i = index
           }
           if (x.id === data.list.id) {
+            // 判断下一首是否在播放列表中
             n = index
           }
         })
+        if (n === i) {
+          return
+        }
         if (n) {
           state.list.splice(n, 1)
-          state.list.splice(i + 1, 0, data.list)
-        } else {
-          state.list.push(data.list)
         }
+        state.list.splice(i + 1, 0, data.list)
       } else {
         state.list = []
         state.list.push(data.list)

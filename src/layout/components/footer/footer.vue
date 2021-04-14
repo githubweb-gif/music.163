@@ -92,7 +92,9 @@ export default {
       if (this.$store.getters.musicInfo.name) {
         return this.$store.getters.musicInfo
       } else {
-        return GET_HISTORY() || []
+        const data = GET_HISTORY() || []
+        this.$store.commit('SET_MUSICINFO', data)
+        return data
       }
     },
     playing() {

@@ -101,3 +101,17 @@ a {
 ul {
     list-style: none;
 }
+
+
+.songlist-detail-list .el-dialog__wrapper .el-dialog__header {
+    padding: 5px 10px;
+}
+
+.songlist-detail-list .el-dialog__wrapper .el-dialog__header span {
+   font-size: 14px;
+   font-weight: 600;
+}
+
+.songlist-detail-list .el-dialog__wrapper .el-dialog__body {
+    padding: 0;
+}
