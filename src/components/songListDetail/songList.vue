@@ -1,77 +1,88 @@
 <template>
   <div class="songlist-detail-list">
     <div class="title">
-      <span @click="playALL">
+      <span class="play-all" @click="playALL">
         <i class="el-icon-delete-solid" />
         <span v-if="songs">{{ `播放全部(${songs.length})` }}</span>
       </span>
       <span class="mid">|</span>
-      <span>
-        <i class="el-icon-delete-solid" />
+      <span class="choose" @click="choosed">
+        <i :class="choose" />
         <span>选择</span>
       </span>
     </div>
     <div class="lists">
       <ul>
-        <li
-          v-for="(item, n) in songs"
-          :key="item.id"
-          :class="[
-            n === 0 || n % 2 === 0 ? 'odd' : 'even',
-            { iscopyright: newCopyright[n] && newCopyright[n].st < 0 },
-          ]"
-          @click="playState(n)"
-        >
-          {{ item.id }}
-          <span v-if="id === songListId && musicID === item.id" class="index">
-            <i class="el-icon-video-play" />
-          </span>
-          <!-- 已播放图标 -->
-          <span v-else class="index">{{ n | index }}</span>
-          <span class="name-play">
-            <i class="icon" />
-            <span class="name">{{ item.name }}</span>
-            <span :class="['play-info', index === n ? 'play-state' : '']">
-              <i
-                class="el-icon-video-play"
-                @click.stop="playMusic(item, copyright[n].st)"
-              />
-              <i
-                class="more el-icon-circle-plus-outline"
-                @click.stop="showCard(n, $event)"
-              />
-              <!-- 这个box-shadow用来取消card显示 -->
-              <div v-show="i === n" class="box-shadow" @click="i = ''">
-                <div
-                  :style="{
-                    height: i === n ? 'auto' : 0,
-                    left: left,
-                    top: top,
-                  }"
-                  class="card"
-                >
-                  <ul @click.stop="i = ''">
-                    <li @click="nextPlay(item)">下一首播放</li>
-                    <li @click="favorites(item.id)">收藏</li>
-                    <li>下载</li>
-                    <li class="singer">
-                      <span>歌手：{{ item.singerName }}</span>
-                    </li>
-                    <li>
-                      <span>专辑：{{ item.albumName }}</span>
-                    </li>
-                    <li class="delete" @click="todelete(item.id, n)">从歌单中删除</li>
-                  </ul>
-                </div>
-              </div>
+        <el-checkbox-group v-model="checkeds" fill="#c20c0c" @change="change">
+          <li
+            v-for="(item, n) in songs"
+            :key="item.id"
+            :class="[
+              n === 0 || n % 2 === 0 ? 'odd' : 'even',
+              { iscopyright: newCopyright[n] && newCopyright[n].st < 0 },
+            ]"
+            @click="playState(n)"
+          >
+
+            <el-checkbox v-if="isChoose" :label="item">
+              <!-- br占位符用来隐藏label -->
+              <br>
+            </el-checkbox>
+            <span v-if="!isChoose">
+              <span v-if="id === songListId && musicID === item.id" class="index">
+                <i class="el-icon-video-play" />
+              </span>
+              <!-- 已播放图标 -->
+              <span v-else class="index">{{ n | index }}</span>
             </span>
-          </span>
-          <span class="author">
-            {{ item.singerName }}
-          </span>
-          <span class="zhuanji">{{ item.albumName }}</span>
-          <span class="time">{{ (item.duration / 1000) | formatTime }}</span>
-        </li>
+            <span class="name-play over">
+              <i class="icon" />
+              <span class="name">{{ item.name }}</span>
+              <span v-if="!isChoose" :class="['play-info', index === n ? 'play-state' : '']">
+                <i
+                  class="el-icon-video-play"
+                  @click.stop="playMusic(item, copyright[n].st)"
+                />
+                <i
+                  class="more el-icon-circle-plus-outline"
+                  @click.stop="showCard(n, $event)"
+                />
+                <!-- 这个box-shadow用来取消card显示 -->
+                <div v-show="i === n" class="box-shadow" @click="i = ''">
+                  <div
+                    :style="{
+                      height: i === n ? 'auto' : 0,
+                      left: left,
+                      top: top,
+                    }"
+                    class="card"
+                  >
+                    <ul @click.stop="i = ''">
+                      <li @click="nextPlay(item)">下一首播放</li>
+                      <li @click="favorites(item.id)">收藏</li>
+                      <li>下载</li>
+                      <li class="singer">
+                        <span>歌手：{{ item.singerName }}</span>
+                      </li>
+                      <li>
+                        <span>专辑：{{ item.albumName }}</span>
+                      </li>
+                      <li class="delete" @click="todelete(item.id, n)">
+                        从歌单中删除
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </span>
+            </span>
+            <span class="author over">
+              {{ item.singerName }}
+            </span>
+            <span class="zhuanji over">{{ item.albumName }}</span>
+            <span class="time">{{ (item.duration / 1000) | formatTime }}</span>
+
+          </li>
+        </el-checkbox-group>
       </ul>
     </div>
     <!-- 版权或者错误信息提示 -->
@@ -82,6 +93,7 @@
       width="400px"
       title="添加歌单"
       :visible.sync="favoritesCard"
+      @before-close="beforeClose"
     >
       <ul>
         <li @click="createPlayList">
@@ -94,27 +106,34 @@
           </span>
           <span>
             <div class="name">{{ item.name }}</div>
-            <div class="count">
-              {{ item.trackCount }}首音乐
-            </div>
+            <div class="count">{{ item.trackCount }}首音乐</div>
           </span>
         </li>
       </ul>
     </el-dialog>
-    <create-playlist :is-create="isCreate" type="NORMAL" :music-id="mID.toString()" @close="close" />
+    <create-playlist
+      :is-create="isCreate"
+      type="NORMAL"
+      :music-id="mID.toString()"
+      @close="close"
+    />
+    <choose-component :check-state="checkState" :checkeds="checkeds" :is-choose="isChoose" @favorites="favoriteShow" @deletes="deletes" @closeFooter="closeFooter" @checkAll="checkAll" />
   </div>
 </template>
 
 <script>
 // api
 import { allSongDetail, addOrdel } from '@/api/music'
+
 import setMusciInfo from '@/untils/setMusciInfo'
 import dialogCard from './components/dialog.vue'
 import createPlaylist from '@/components/createPlaylist.vue'
+import chooseComponent from './components/choose.vue'
 export default {
   components: {
     dialogCard,
-    createPlaylist
+    createPlaylist,
+    chooseComponent
   },
   filters: {
     index(value) {
@@ -159,7 +178,12 @@ export default {
       icon: '',
       // 是否显示新建菜单
       isCreate: false,
-      newCopyright: null
+      newCopyright: null,
+      // 选择
+      choose: 'el-icon-delete-solid',
+      isChoose: false,
+      checkeds: [],
+      checkState: false
     }
   },
   computed: {
@@ -176,8 +200,7 @@ export default {
     // 所有歌单
     songLists() {
       const data = this.$store.getters.songLists || []
-      console.log(data)
-      return data.filter(x => {
+      return data.filter((x) => {
         if (x.creator.userId === this.uid) {
           return true
         }
@@ -192,7 +215,6 @@ export default {
     songList(value) {
       if (value && value.length > 0) {
         allSongDetail(this.songList.join(',')).then((data) => {
-          console.log(data.songs)
           this.filterMusics(data.songs)
         })
       }
@@ -200,9 +222,13 @@ export default {
     },
     copyright(value) {
       this.newCopyright = value
+    },
+    gedanID() {
+      this.isChoose = false
+      this.checkeds = []
+      this.choose = 'el-icon-delete-solid'
     }
   },
-  created() {},
   methods: {
     playState(index) {
       // 播放图标显示
@@ -251,7 +277,11 @@ export default {
     },
     // 下一首播放
     nextPlay(item) {
-      this.$store.dispatch('SET_PLAYLIST', { list: item, one: true })
+      if (item instanceof Array) {
+        this.$store.dispatch('SET_PLAYLIST', { list: item, one: true })
+        return
+      }
+      this.$store.dispatch('SET_PLAYLIST', { list: [item], one: true })
     },
     // 无版权歌曲提示
     noCopyright(st) {
@@ -279,7 +309,7 @@ export default {
         op: 'add',
         pid: id,
         tracks: this.mID
-      }).then(res => {
+      }).then((res) => {
         if (res.body && res.body.code === 502) {
           // 歌曲已存在
           this.message = '歌曲已存在'
@@ -323,14 +353,59 @@ export default {
     playALL() {
       let i = ''
       this.newCopyright.forEach((x, index) => {
-        if (index === 0) {
-          console.log(x)
-        }
         if (x.st >= 0 && i === '') {
           i = index
           this.playMusic(this.songs[i], 0)
         }
       })
+    },
+    // 选择
+    choosed() {
+      if (this.choose === 'el-icon-delete-solid') {
+        this.choose = 'el-icon-success'
+        this.isChoose = true
+      } else {
+        this.choose = 'el-icon-delete-solid'
+        this.isChoose = false
+        this.checkeds = []
+      }
+      this.checkState = false
+    },
+    // 全选
+    checkAll(value) {
+      if (value) {
+        this.checkeds = this.songs
+        this.checkState = true
+      } else {
+        this.checkState = false
+        this.checkeds = []
+      }
+    },
+    change() {
+      this.checkState = this.checkeds.length === this.songs.length
+    },
+    closeFooter() {
+      this.choose = 'el-icon-delete-solid'
+      this.isChoose = false
+      this.checkeds = []
+    },
+    favoriteShow() {
+      this.favoritesCard = true
+      const arr = []
+      this.checkeds.forEach(x => {
+        arr.push(x.id)
+      })
+      this.mID = arr.join(',')
+    },
+    beforeClose() {
+      this.mID = ''
+    },
+    deletes() {
+      const arr = []
+      this.checkeds.forEach(x => {
+        arr.push(x.id)
+      })
+      this.todelete(arr.join(','))
     }
   }
 }
@@ -355,11 +430,17 @@ export default {
 .songlist-detail-list {
   .title {
     margin: 20px 0 15px 0;
+    .play-all {
+      cursor: pointer;
+    }
     .mid {
       padding: 0 10px;
     }
     i {
       margin-right: 5px;
+    }
+    .choose {
+      cursor: pointer;
     }
   }
   .lists {
@@ -372,7 +453,7 @@ export default {
     li.odd {
       background-color: #f2f2f3;
     }
-    li > span {
+    li > .over {
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
@@ -386,6 +467,9 @@ export default {
       display: flex;
       align-items: center;
       font-size: 13px;
+      .el-checkbox {
+        margin-left: 10px;
+      }
       .index {
         margin: 0 10px;
         color: #000;
@@ -481,11 +565,11 @@ export default {
   background-color: #343434;
   color: #a5a5a5;
   div {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   span {
     font-size: 50px;
@@ -496,7 +580,7 @@ export default {
     line-height: 20px;
   }
 }
-.el-dialog__wrapper  {
+.el-dialog__wrapper {
   overflow: hidden;
   ul {
     height: 380px;
@@ -511,7 +595,8 @@ export default {
     align-items: center;
     cursor: pointer;
     border-bottom: 1px solid rgb(226, 226, 226);
-    .create, .cover {
+    .create,
+    .cover {
       width: 55px;
       height: 55px;
       font-size: 20px;

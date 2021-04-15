@@ -1,4 +1,5 @@
 import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/untils/cache'
+import norepeat from '@/untils/norepeat.js'
 const state = {
   // 播放队列
   list: GET_PLAYLIST_LOCAL() || [],
@@ -28,31 +29,12 @@ const state = {
 const mutations = {
   SET_LIST(state, data) {
     // one表示添加，而不是更新整个表单
-    let i, n
     if (data.one) {
-      console.log(state.musicInfo.id)
-      if (state.list instanceof Array) {
-        state.list.forEach((x, index) => {
-          if (state.musicInfo.id === x.id) {
-            // 当前播放歌曲的位置
-            i = index
-          }
-          if (x.id === data.list.id) {
-            // 判断下一首是否在播放列表中
-            n = index
-          }
-        })
-        if (n === i) {
-          return
-        }
-        if (n) {
-          state.list.splice(n, 1)
-        }
-        state.list.splice(i + 1, 0, data.list)
-      } else {
-        state.list = []
-        state.list.push(data.list)
-      }
+      let index
+      state.list.forEach((i, n) => {
+        if (i.id === state.musicInfo.id) { index = n }
+      })
+      state.list = norepeat(state.list, data.list, index)
     } else {
       state.list = data.list
     }
@@ -70,7 +52,6 @@ const mutations = {
         state.musicInfo[i] = null
       }
     }
-    console.log(state.musicInfo)
   },
   SET_ISMUSICLIST(state, bol) {
     if (!bol) {

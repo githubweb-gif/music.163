@@ -115,3 +115,18 @@ ul {
 .songlist-detail-list .el-dialog__wrapper .el-dialog__body {
     padding: 0;
 }
+
+/* 复选框颜色 */
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+    background-color:rgba(194, 12, 12) !important;
+    border-color: rgba(194, 12, 12) !important;
+  }
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: rgb(255, 255, 255) !important;
+  }
+  .el-checkbox.is-bordered.is-checked{
+    border-color: rgba(194, 12, 12) !important;
+  }
+  .el-checkbox__input.is-focus .el-checkbox__inner{
+    border-color:  rgba(194, 12, 12) !important;
+  }

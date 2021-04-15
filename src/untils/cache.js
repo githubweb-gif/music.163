@@ -27,13 +27,11 @@ const key1 = 'HISTORY_KEY'
 
 // 最近播放
 export function SET_HISTORY(data) {
-  console.log(data)
   window.sessionStorage.setItem(key1, JSON.stringify(data))
 }
 
 // 获取最近播放
 export function GET_HISTORY() {
-  console.log(JSON.parse(window.sessionStorage.getItem(key1)))
   return JSON.parse(window.sessionStorage.getItem(key1))
 }
 

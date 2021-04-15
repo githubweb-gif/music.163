@@ -27,14 +27,12 @@ const mutations = {
     state.loginState = bol
   },
   SET_LOGIN_STATUS(state, bol) {
-    console.log(bol)
     state.loginStatus = bol
   },
   SET_IS_USER_Right(state, bol) {
     state.isUserRight = bol
   },
   SET_SONGLISTS(state, value) {
-    console.log(value)
     state.songLists = value
   }
 }
@@ -88,8 +86,6 @@ const actions = {
       logoutStatus().then((res) => {
         // // 刷新登录状态
         // const status = await refreshLogin()
-        // console.log(status)
-        console.log(res)
         const { profile } = res.data
         if (!profile) {
           commit('SET_LOGIN_STATUS', false)
@@ -126,7 +122,6 @@ const actions = {
   songList({ commit, state }, timestamp) {
     return new Promise((resolve, reject) => {
       songList({ uid: state.id, timestamp: timestamp || '' }).then((res) => {
-        console.log(res.playlist)
         commit('SET_SONGLISTS', res.playlist)
         resolve(res)
       }).catch(err => {

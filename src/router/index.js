@@ -77,7 +77,7 @@ export const routes = [
         path: 'songListDetail/:id',
         name: 'songListDetail',
         hidden: true,
-        component: () => import('@/components/songListDetail/index.vue'),
+        component: () => import('@/components/songListDetailcopy/index.vue'),
         meta: {
           title: '歌单详细内容'
         }

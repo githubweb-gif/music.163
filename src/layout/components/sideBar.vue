@@ -5,7 +5,11 @@
       <div
         v-for="(item, index) of route"
         :key="index"
-        :class="['menu-item', 'item', {selected: routePath === `/${item.path}`}]"
+        :class="[
+          'menu-item',
+          'item',
+          { selected: routePath === `/${item.path}` },
+        ]"
         :index="item.name"
       >
         <router-link :to="`/${item.path}`">
@@ -20,9 +24,19 @@
           <i class="el-icon-eleme" />
         </div>
         <ul class="lists">
-          <li v-for="(item, index) in songLists" :key="index" :class="['list','item', {selected: routePath === `/songListDetail/${item.id}`}]" @click="toSongListDetail(item.id)">
+          <li
+            v-for="(item, index) in songLists"
+            :key="index"
+            :class="[
+              'list',
+              'item',
+              { selected: routePath === `/songListDetail/${item.id}` },
+            ]"
+            @click="toSongListDetail(item.id)"
+          >
             <i class="el-icon-eleme" />
             <span> {{ item.name }}</span>
+            <i v-if="+songListId === item.id" class="el-icon-eleme" />
           </li>
         </ul>
       </div>
@@ -54,10 +68,10 @@ export default {
   },
   computed: {
     ...mapState({
-      name: state => state.user.name,
-      avatar: state => state.user.avatar,
-      loginStatus: state => state.user.loginStatus,
-      isUserRight: state => state.user.isUserRight
+      name: (state) => state.user.name,
+      avatar: (state) => state.user.avatar,
+      loginStatus: (state) => state.user.loginStatus,
+      isUserRight: (state) => state.user.isUserRight
     }),
     ...mapGetters(['songLists']),
     songLists() {
@@ -79,6 +93,10 @@ export default {
     // 当路由和menu-item相同时，给他一个类名，用来高亮显示，表示被选中
     routePath() {
       return this.$route.path
+    },
+    // songListId
+    songListId() {
+      return this.$store.state.music.songListId
     }
   },
   watch: {
@@ -92,8 +110,7 @@ export default {
       }
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {
     const body = document.body
     window.onresize = () => {
@@ -174,7 +191,7 @@ export default {
       }
     }
     .selected {
-        background-color: #dddde1;
+      background-color: #dddde1;
     }
     .song-list {
       display: flex;
@@ -195,12 +212,15 @@ export default {
         padding: 0;
         .list {
           width: 100%;
-          padding:10px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
+          padding: 10px;
+          display: flex;
+          justify-content: space-between;
           span {
-              margin-left: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin: 0 5px;
+            flex: 1;
           }
         }
       }

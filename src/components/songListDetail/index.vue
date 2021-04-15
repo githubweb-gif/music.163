@@ -49,12 +49,10 @@ export default {
   },
   created() {
     this.songListDetail()
-    console.log(this.playlist)
   },
   methods: {
     songListDetail() {
       songListDetail({ id: this.id, timestamp: Date.now() }).then((data) => {
-        console.log(data)
         this.name = data.playlist.name
         this.coverImgUrl = data.playlist.coverImgUrl
         this.createTime = data.playlist.createTime.toString()
