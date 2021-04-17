@@ -20,21 +20,21 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       body: null
     }
   },
   computed: {},
-  mounted() {
+  mounted () {
     this.body = document.body.clientWidth
     window.onresize = () => {
       this.body = document.body.clientWidth
     }
   },
   methods: {
-    prev() {},
-    next() {}
+    prev () {},
+    next () {}
   }
 }
 </script>

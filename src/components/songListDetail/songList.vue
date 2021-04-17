@@ -88,13 +88,7 @@
     <!-- 版权或者错误信息提示 -->
     <dialog-card v-if="dialogVisible" :message="message" :icon="icon" />
     <!-- 收藏歌曲弹框 -->
-    <el-dialog
-      v-if="songLists"
-      width="400px"
-      title="添加歌单"
-      :visible.sync="favoritesCard"
-      @before-close="beforeClose"
-    >
+    <el-dialog v-if="songLists" width="400px" title="添加歌单" :visible.sync="favoritesCard" @before-close="beforeClose">
       <ul>
         <li @click="createPlayList">
           <span class="create el-icon-plus" />
@@ -136,7 +130,7 @@ export default {
     chooseComponent
   },
   filters: {
-    index(value) {
+    index (value) {
       value++
       if (value < 10) {
         return '0' + value
@@ -158,7 +152,7 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       songs: [],
       // 记录被点击list的index
@@ -188,17 +182,17 @@ export default {
   },
   computed: {
     // 底部播放中的歌曲所在的歌单id
-    id() {
+    id () {
       return this.$store.state.music.songListId
     },
-    uid() {
+    uid () {
       return this.$store.state.user.id
     },
-    musicID() {
+    musicID () {
       return this.$store.state.music.musicInfo.id
     },
     // 所有歌单
-    songLists() {
+    songLists () {
       const data = this.$store.getters.songLists || []
       return data.filter((x) => {
         if (x.creator.userId === this.uid) {
@@ -207,12 +201,12 @@ export default {
       })
     },
     // 当前歌单
-    gedanID() {
+    gedanID () {
       return this.$route.params.id
     }
   },
   watch: {
-    songList(value) {
+    songList (value) {
       if (value && value.length > 0) {
         allSongDetail(this.songList.join(',')).then((data) => {
           this.filterMusics(data.songs)
@@ -220,21 +214,21 @@ export default {
       }
       this.songs = []
     },
-    copyright(value) {
+    copyright (value) {
       this.newCopyright = value
     },
-    gedanID() {
+    gedanID () {
       this.isChoose = false
       this.checkeds = []
       this.choose = 'el-icon-delete-solid'
     }
   },
   methods: {
-    playState(index) {
+    playState (index) {
       // 播放图标显示
       this.index = index
     },
-    playMusic(data, st) {
+    playMusic (data, st) {
       if (!this.noCopyright(st)) {
         return
       }
@@ -250,7 +244,7 @@ export default {
       })
     },
     // 菜单卡片
-    showCard(i, event) {
+    showCard (i, event) {
       this.left = event.target.getBoundingClientRect().left + 10 + 'px'
       this.top = event.target.getBoundingClientRect().top + 20 + 'px'
       if (this.i === i) {
@@ -260,7 +254,7 @@ export default {
       this.i = i
     },
     // 对所有的歌曲信息进行修改以满足我们需要的格式,有利于维护和开发
-    filterMusics(data) {
+    filterMusics (data) {
       this.songs = []
       data.forEach((x) => {
         this.songs.push({
@@ -276,7 +270,7 @@ export default {
       })
     },
     // 下一首播放
-    nextPlay(item) {
+    nextPlay (item) {
       if (item instanceof Array) {
         this.$store.dispatch('SET_PLAYLIST', { list: item, one: true })
         return
@@ -284,7 +278,7 @@ export default {
       this.$store.dispatch('SET_PLAYLIST', { list: [item], one: true })
     },
     // 无版权歌曲提示
-    noCopyright(st) {
+    noCopyright (st) {
       if (st < 0) {
         this.dialogVisible = true
         this.message = '因合作方要求该资源暂时下架'
@@ -299,12 +293,12 @@ export default {
       }
     },
     // 显示收藏歌曲card
-    favorites(id) {
+    favorites (id) {
       this.favoritesCard = true
       this.mID = id
     },
     // 收藏歌曲到歌单
-    toadd(id) {
+    toadd (id) {
       addOrdel({
         op: 'add',
         pid: id,
@@ -329,16 +323,16 @@ export default {
       })
     },
     // 新建歌单
-    createPlayList() {
+    createPlayList () {
       this.isCreate = true
       this.favoritesCard = false
     },
     // 关闭
-    close(value) {
+    close (value) {
       this.isCreate = false
     },
     // 从歌单中删除歌曲
-    todelete(id, index) {
+    todelete (id, index) {
       addOrdel({
         op: 'del',
         pid: this.gedanID,
@@ -350,7 +344,7 @@ export default {
       })
     },
     // 播放全部
-    playALL() {
+    playALL () {
       let i = ''
       this.newCopyright.forEach((x, index) => {
         if (x.st >= 0 && i === '') {
@@ -360,7 +354,7 @@ export default {
       })
     },
     // 选择
-    choosed() {
+    choosed () {
       if (this.choose === 'el-icon-delete-solid') {
         this.choose = 'el-icon-success'
         this.isChoose = true
@@ -372,7 +366,7 @@ export default {
       this.checkState = false
     },
     // 全选
-    checkAll(value) {
+    checkAll (value) {
       if (value) {
         this.checkeds = this.songs
         this.checkState = true
@@ -381,15 +375,15 @@ export default {
         this.checkeds = []
       }
     },
-    change() {
+    change () {
       this.checkState = this.checkeds.length === this.songs.length
     },
-    closeFooter() {
+    closeFooter () {
       this.choose = 'el-icon-delete-solid'
       this.isChoose = false
       this.checkeds = []
     },
-    favoriteShow() {
+    favoriteShow () {
       this.favoritesCard = true
       const arr = []
       this.checkeds.forEach(x => {
@@ -397,10 +391,10 @@ export default {
       })
       this.mID = arr.join(',')
     },
-    beforeClose() {
+    beforeClose () {
       this.mID = ''
     },
-    deletes() {
+    deletes () {
       const arr = []
       this.checkeds.forEach(x => {
         arr.push(x.id)
@@ -625,4 +619,3 @@ export default {
   }
 }
 </style>
-y

@@ -76,6 +76,7 @@ export const routes = [
       {
         path: 'songListDetail/:id',
         name: 'songListDetail',
+        hash: 'to-top',
         hidden: true,
         component: () => import('@/components/songListDetailcopy/index.vue'),
         meta: {
@@ -90,8 +91,15 @@ export const routes = [
   }
 ]
 
+const VueRouterPush = VueRouter.prototype.push
+
+VueRouter.prototype.push = function push (location) {
+  return VueRouterPush.call(this, location).catch(err => err)
+}
+
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 })
 
 export default router

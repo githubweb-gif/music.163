@@ -23,23 +23,23 @@ const mutations = {
   SET_ID: (state, id) => {
     state.id = id
   },
-  SET_LOGIN_STATE(state, bol) {
+  SET_LOGIN_STATE (state, bol) {
     state.loginState = bol
   },
-  SET_LOGIN_STATUS(state, bol) {
+  SET_LOGIN_STATUS (state, bol) {
     state.loginStatus = bol
   },
-  SET_IS_USER_Right(state, bol) {
+  SET_IS_USER_Right (state, bol) {
     state.isUserRight = bol
   },
-  SET_SONGLISTS(state, value) {
+  SET_SONGLISTS (state, value) {
     state.songLists = value
   }
 }
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login ({ commit }, userInfo) {
     const { phone, password } = userInfo
     return new Promise((resolve, reject) => {
       phoneLogin({ phone: phone.trim(), password: password }).then(response => {
@@ -50,7 +50,7 @@ const actions = {
     })
   },
   // 注册
-  register({ commit }, userInfo) {
+  register ({ commit }, userInfo) {
     const { phone, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
       register({ phone: phone.trim(), password: password, captcha: captcha }).then(response => {
@@ -61,7 +61,7 @@ const actions = {
     })
   },
   // 发送验证码
-  sentCode({ commit }, phone) {
+  sentCode ({ commit }, phone) {
     return new Promise((resolve, reject) => {
       sentCode({ phone: phone }).then(response => {
         resolve(response)
@@ -71,7 +71,7 @@ const actions = {
     })
   },
   // 验证验证码
-  verifyCode({ commit }, data) {
+  verifyCode ({ commit }, data) {
     return new Promise((resolve, reject) => {
       verifyCode({ phone: data.phone, captcha: data.captcha }).then(response => {
         resolve(response)
@@ -81,7 +81,7 @@ const actions = {
     })
   },
   // 登录状态验证，且返回用户基本信息
-  logoutStatus({ commit, dispatch }) {
+  logoutStatus ({ commit, dispatch }) {
     return new Promise((resolve, reject) => {
       logoutStatus().then((res) => {
         // // 刷新登录状态
@@ -105,7 +105,7 @@ const actions = {
     })
   },
   // user logout
-  logout({ commit, state, dispatch }) {
+  logout ({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout().then(() => {
         commit('SET_NAME', '')
@@ -119,7 +119,7 @@ const actions = {
     })
   },
   // 用户歌单
-  songList({ commit, state }, timestamp) {
+  songList ({ commit, state }, timestamp) {
     return new Promise((resolve, reject) => {
       songList({ uid: state.id, timestamp: timestamp || '' }).then((res) => {
         commit('SET_SONGLISTS', res.playlist)

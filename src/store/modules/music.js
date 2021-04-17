@@ -1,5 +1,6 @@
 import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/untils/cache'
 import norepeat from '@/untils/norepeat.js'
+import { songListDetail } from '@/api/music'
 const state = {
   // 播放队列
   list: GET_PLAYLIST_LOCAL() || [],
@@ -23,28 +24,27 @@ const state = {
   // 侧边栏是否显示
   isMusicList: false,
   // 歌单id用来记录那个歌单播放歌曲了
-  songListId: getSonglistIdLocal() || ''
+  songListId: getSonglistIdLocal() || '',
+  // 歌单内容详情
+  playlistDetails: null
 }
 
 const mutations = {
-  SET_LIST(state, data) {
-    // one表示添加，而不是更新整个表单
+  SET_LIST (state, data) {
+    // one表示下一首或者更多首，而不是更新整个表单
     if (data.one) {
-      let index
-      state.list.forEach((i, n) => {
-        if (i.id === state.musicInfo.id) { index = n }
-      })
-      state.list = norepeat(state.list, data.list, index)
+      state.list = norepeat(state.list, data.list, state.musicInfo.id)
+      console.log(state.list)
     } else {
       state.list = data.list
     }
     // 播放队列放在本地, 不是从云端获取
     SET_PLAYLIST_LOCAL(state.list)
   },
-  SET_PLAYING(state, flag) {
+  SET_PLAYING (state, flag) {
     state.playing = flag
   },
-  SET_MUSICINFO(state, data) {
+  SET_MUSICINFO (state, data) {
     for (const i in state.musicInfo) {
       if (data[i]) {
         state.musicInfo[i] = data[i]
@@ -53,17 +53,20 @@ const mutations = {
       }
     }
   },
-  SET_ISMUSICLIST(state, bol) {
+  SET_ISMUSICLIST (state, bol) {
     if (!bol) {
       state.isMusicList = false
       return
     }
     state.isMusicList = !state.isMusicList
   },
-  SET_SONGLISTID(state, id) {
+  SET_SONGLISTID (state, id) {
     // 非歌单播放歌曲清空歌单id
     setSonglistIdLocal(id)
     state.songListId = id
+  },
+  SET_PLAYLISTDETAIL (state, data) {
+    state.playlistDetails = data
   }
 }
 const actions = {
@@ -73,13 +76,24 @@ const actions = {
    * 搜索到的歌曲，如果播放了其中一首则把此歌曲添加到播放队列
    * 播放队列存储在本地，也就是多设备登录不会共享播放列表，都是单独的
    */
-  SET_PLAYLIST({ commit }, data) {
+  SET_PLAYLIST ({ commit }, data) {
     commit('SET_LIST', data)
   },
   // 添加播放记录
-  SET_HISTORY({ commit }, data) {
+  SET_HISTORY ({ commit }, data) {
     SET_HISTORY(data)
     commit('SET_MUSICINFO', data)
+  },
+  // 获取歌单详细内容
+  GET_SONGS_DETAIL ({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      songListDetail({ id, timestamp: Date.now() }).then(data => {
+        commit('SET_PLAYLISTDETAIL', data)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 }
 

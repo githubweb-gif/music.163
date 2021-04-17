@@ -59,7 +59,7 @@ import avatar from '@/assets/img/avatar.png'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 import { routes } from '@/router'
 export default {
-  data() {
+  data () {
     return {
       width: '200px',
       isCollapse: false,
@@ -74,14 +74,14 @@ export default {
       isUserRight: (state) => state.user.isUserRight
     }),
     ...mapGetters(['songLists']),
-    songLists() {
+    songLists () {
       const arr = this.$store.getters.songLists
       if (arr) {
         arr[0].name = '我喜欢的音乐'
       }
       return arr
     },
-    route() {
+    route () {
       const routelist = routes[0].children || []
       const list = routelist.filter((x) => {
         if (!x.hidden) {
@@ -91,16 +91,16 @@ export default {
       return list
     },
     // 当路由和menu-item相同时，给他一个类名，用来高亮显示，表示被选中
-    routePath() {
+    routePath () {
       return this.$route.path
     },
     // songListId
-    songListId() {
+    songListId () {
       return this.$store.state.music.songListId
     }
   },
   watch: {
-    isCollapse(val) {
+    isCollapse (val) {
       if (val) {
         this.width = '40px'
         this.$refs.account.style.flexDirection = 'column'
@@ -110,8 +110,8 @@ export default {
       }
     }
   },
-  created() {},
-  mounted() {
+  created () {},
+  mounted () {
     const body = document.body
     window.onresize = () => {
       if (body.clientWidth <= 700) {
@@ -120,7 +120,7 @@ export default {
     }
   },
   methods: {
-    toLogin() {
+    toLogin () {
       if (this.loginStatus) {
         if (this.isUserRight) {
           this.setUserRight(false)
@@ -135,8 +135,10 @@ export default {
       setLoginState: 'SET_LOGIN_STATE',
       setUserRight: 'SET_IS_USER_Right'
     }),
-    toSongListDetail(id) {
-      this.$router.push(`/songListDetail/${id}`)
+    toSongListDetail (id) {
+      this.$router.push({
+        path: `/songListDetail/${id}`
+      })
     }
   }
 }

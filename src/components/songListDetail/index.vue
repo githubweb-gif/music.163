@@ -15,7 +15,7 @@ export default {
     headerComponent,
     songList
   },
-  data() {
+  data () {
     return {
       // 歌单名
       name: '',
@@ -38,20 +38,20 @@ export default {
   },
   computed: {
     // 歌单id
-    id() {
+    id () {
       return this.$route.params.id || ''
     }
   },
   watch: {
-    id() {
+    id () {
       this.songListDetail()
     }
   },
-  created() {
+  created () {
     this.songListDetail()
   },
   methods: {
-    songListDetail() {
+    songListDetail () {
       songListDetail({ id: this.id, timestamp: Date.now() }).then((data) => {
         this.name = data.playlist.name
         this.coverImgUrl = data.playlist.coverImgUrl

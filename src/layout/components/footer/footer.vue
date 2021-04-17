@@ -71,7 +71,7 @@ export default {
   components: {
     progressBar
   },
-  data() {
+  data () {
     return {
       icon: 'icon-bofang1',
       state: true,
@@ -82,13 +82,13 @@ export default {
     }
   },
   computed: {
-    musicList() {
+    musicList () {
       return this.$store.getters.musicList
     },
-    percentage() {
+    percentage () {
       return (this.currentTime / this.currentSong.duration) * 100
     },
-    currentSong() {
+    currentSong () {
       if (this.$store.getters.musicInfo.name) {
         return this.$store.getters.musicInfo
       } else {
@@ -97,14 +97,14 @@ export default {
         return data
       }
     },
-    playing() {
+    playing () {
       return this.$store.state.music.playing
     },
-    list() {
+    list () {
       return this.$store.state.music.list
     },
     // 当前播放的歌曲在播放列表中的位置
-    position() {
+    position () {
       let i
       this.musicList.forEach((x, index) => {
         if (x.id === this.currentSong.id) {
@@ -115,7 +115,7 @@ export default {
     }
   },
   watch: {
-    playing(isPlaying) {
+    playing (isPlaying) {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         if (audio) {
@@ -125,7 +125,7 @@ export default {
     }
   },
   methods: {
-    onPercentage(value) {
+    onPercentage (value) {
       if (value > 1) {
         value = 1
       }
@@ -133,42 +133,42 @@ export default {
       this.$refs.audio.currentTime = this.currentSong.duration * value
     },
     // 播放
-    play() {
+    play () {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.play()
       })
     },
     // 暂停
-    paused() {
+    paused () {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.pause()
       })
     },
-    audioReady(e) {
+    audioReady (e) {
       this.icon = 'icon-bofang'
     },
     // 处理播放错误
-    audioError(e) {},
-    updateTime(e) {
+    audioError (e) {},
+    updateTime (e) {
       this.currentTime = e.target.currentTime
     },
-    audioEnd(e) {
+    audioEnd (e) {
       // 播放完毕自动播放下一首
       if (this.position === this.musicList.length - 1) {
         return
       }
       this.preOrNext(1)
     },
-    audioPaused(e) {
+    audioPaused (e) {
       this.icon = 'icon-bofang1'
     },
-    isMusicList(e) {
+    isMusicList (e) {
       this.$store.commit('SET_ISMUSICLIST', true)
     },
     // 上一首或者下一首
-    preOrNext(i, after) {
+    preOrNext (i, after) {
       let position = after || this.position
       this.$store.commit('SET_PLAYING', false)
       if (this.position === 0 || this.position) {

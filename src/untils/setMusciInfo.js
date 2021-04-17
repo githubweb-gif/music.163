@@ -1,5 +1,5 @@
 import { getAlbum, getMusic } from '../api/music'
-export default async function setMusciInfo(data) {
+export default async function setMusciInfo (data) {
   // 歌曲id
   const id = data.id
   // 获取专辑信息-封面

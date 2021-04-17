@@ -88,7 +88,7 @@
 import logo from '@/assets/logo.png'
 import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       logo: logo,
       loginForm: {
@@ -135,7 +135,7 @@ export default {
   }),
   watch: {
     // 验证码验证
-    captcha(value) {
+    captcha (value) {
       if (value.length === 4) {
         const that = this
         this.verifyCode({ phone: this.loginForm.phone, captcha: this.captcha })
@@ -152,7 +152,7 @@ export default {
       }
     },
     // 是否显示登录界面
-    loginState() {
+    loginState () {
       this.loginForm = {
         phone: '',
         password: ''
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     // 初始化
-    initData() {
+    initData () {
       this.captcha = ''
       this.isRegister = false
       this.inputCodes = null
@@ -172,7 +172,7 @@ export default {
       this.isLogin = true
     },
     // 登录
-    toLogin() {
+    toLogin () {
       const result = this.verifyForm()
       if (result) {
         this.login(this.loginForm)
@@ -191,7 +191,7 @@ export default {
       }
     },
     // 注册
-    toRegister() {
+    toRegister () {
       if (this.isVerify) {
         this.loginForm.captcha = this.captcha
         this.register(this.loginForm)
@@ -212,7 +212,7 @@ export default {
       }
     },
     // 表单验证
-    verifyForm() {
+    verifyForm () {
       let result = false
       this.$refs.loginForm.validate((valid, obj) => {
         console.log(obj)
@@ -236,12 +236,12 @@ export default {
       return result
     },
     // 登录注册切换
-    toggle() {
+    toggle () {
       this.validResult = ''
       this.isLogin = !this.isLogin
     },
     // 获取验证码
-    getCaptcha() {
+    getCaptcha () {
       if (!this.verifyForm()) {
         return
       }
@@ -249,7 +249,7 @@ export default {
       this.sendCode()
     },
     // 发送验证码
-    sendCode() {
+    sendCode () {
       if (this.loginForm.phone) {
         this.num = 60
         const time = setInterval(() => {
@@ -268,7 +268,7 @@ export default {
       }
     },
     // 输入验证码
-    inputCode(num, e) {
+    inputCode (num, e) {
       if (!this.inputCodes) {
         const inputCodes = document.querySelectorAll('.inputCode')
         this.inputCodes = inputCodes
@@ -299,7 +299,7 @@ export default {
       this.captcha = this.arr.join('')
     },
     // 返回登录
-    backLogin() {
+    backLogin () {
       this.initData()
     },
     ...mapActions({

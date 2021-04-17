@@ -20,7 +20,7 @@ export default {
   components: {
     firstComponent
   },
-  data() {
+  data () {
     return {
       // tab栏
       activeName: 'first',
@@ -28,7 +28,7 @@ export default {
     }
   },
   methods: {
-    handleClick() {}
+    handleClick () {}
   }
 }
 </script>

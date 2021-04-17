@@ -1,8 +1,8 @@
 <template>
-  <div class="dialog">
+  <div v-show="visible" class="dialog">
     <span :class="icon" />
     <p>
-      {{ message }}
+      {{ visible }}
     </p>
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 export default {
   props: {
-    message: {
+    visible: {
       type: String,
       default: ''
     },
@@ -20,7 +20,17 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+    }
+  },
+  watch: {
+    visible (val) {
+      if (val) {
+        setTimeout(() => {
+          this.$emit('update:visible', '')
+        }, 2000)
+      }
+    }
   }
 }
 </script>

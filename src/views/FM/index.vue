@@ -9,13 +9,13 @@ export default {
   components: {
     swiper
   },
-  data() {
+  data () {
     return {
     }
   },
   computed: {
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>

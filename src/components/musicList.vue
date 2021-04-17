@@ -46,7 +46,7 @@
 import setMusciInfo from '@/untils/setMusciInfo'
 import { GET_HISTORY } from '@/untils/cache'
 export default {
-  data() {
+  data () {
     return {
       // 播放id
       id: null,
@@ -55,10 +55,10 @@ export default {
     }
   },
   computed: {
-    musicList() {
+    musicList () {
       return this.$store.getters.musicList
     },
-    currentSong() {
+    currentSong () {
       if (this.$store.getters.musicInfo.name) {
         return this.$store.getters.musicInfo
       } else {
@@ -67,14 +67,14 @@ export default {
     }
   },
   watch: {
-    musicList(value) {}
+    musicList (value) {}
   },
-  created() {},
+  created () {},
   methods: {
-    clickMusic(e, index) {
+    clickMusic (e, index) {
       this.n = index
     },
-    play(item) {
+    play (item) {
       this.$store.commit('SET_PLAYING', false)
       if (this.id === item.id) {
         this.id = null
@@ -88,10 +88,10 @@ export default {
 
       this.id = item.id
     },
-    love() {
+    love () {
       //   this.iconLove = this.iconLove === 'icon-shoucang' ? 'icon-lujing' : 'icon-shoucang'
     },
-    openMenu() {}
+    openMenu () {}
   }
 }
 </script>

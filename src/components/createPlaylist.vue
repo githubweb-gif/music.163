@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isCreate" class="createPlaylist">
+  <div v-if="visible" class="createPlaylist">
     <div class="content">
       <h4>新建歌单</h4>
       <div class="text">
@@ -21,26 +21,27 @@ import { createPlayList, addOrdel } from '@/api/music'
 export default {
   props: {
     musicId: {
-      type: String,
-      default: ''
+      type: Object,
+      default: null
     },
+    // 视频还是歌曲''时歌曲
     type: {
       type: String,
       default: ''
     },
-    isCreate: {
+    visible: {
       type: Boolean,
       default: false
     }
   },
-  data() {
+  data () {
     return {
       checked: false,
       name: ''
     }
   },
   computed: {
-    privacy() {
+    privacy () {
       if (this.checked) {
         return '10'
       }
@@ -48,27 +49,29 @@ export default {
     }
   },
   methods: {
-    create() {
+    create () {
       createPlayList({
         name: this.name,
         privacy: this.privacy,
         type: this.type
-      }).then(res => {
+      }).then((res) => {
         addOrdel({
           op: 'add',
           pid: res.id,
-          tracks: this.musicId,
+          tracks: this.musicId.id,
           timestamp: Date.now()
-        }).then(() => {
-          this.$store.dispatch('songList', Date.now())
-        }).catch(err => {
-          console.log(err)
         })
+          .then(() => {
+            this.$store.dispatch('songList', Date.now())
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       })
-      this.$emit('close', false)
+      this.close()
     },
-    close() {
-      this.$emit('close', false)
+    close () {
+      this.$emit('update:visible', false)
     }
   }
 }
@@ -105,16 +108,16 @@ export default {
       padding: 10px;
     }
     .text {
-        padding: 20px;
+      padding: 20px;
     }
     .el-checkbox {
-        padding: 0 20px;
-        margin-bottom: 10px;
+      padding: 0 20px;
+      margin-bottom: 10px;
     }
     .footer {
-        padding: 15px 20px 10px 20px;
-        display: flex;
-        justify-content: flex-end;
+      padding: 15px 20px 10px 20px;
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }

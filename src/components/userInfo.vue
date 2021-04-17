@@ -12,7 +12,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {}
   },
   computed: {
@@ -22,7 +22,7 @@ export default {
     })
   },
   methods: {
-    logout() {
+    logout () {
       this.$store.dispatch('logout')
     }
   }

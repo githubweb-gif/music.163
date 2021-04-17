@@ -4,7 +4,7 @@ import request from '@/untils/request'
  * 搜索歌曲
  * @keywords 关键词
  */
-export function searchMusic(data) {
+export function searchMusic (data) {
   return request({
     url: '/search',
     method: 'get',
@@ -16,7 +16,7 @@ export function searchMusic(data) {
  * 获取歌曲url
  * @id 歌曲id
  */
-export function getMusic(data) {
+export function getMusic (data) {
   return request({
     url: '/song/url',
     method: 'get',
@@ -28,7 +28,7 @@ export function getMusic(data) {
  * 获取专辑内容
  * @id 专辑 id
  */
-export function getAlbum(data) {
+export function getAlbum (data) {
   return request({
     url: '/album',
     method: 'get',
@@ -44,7 +44,7 @@ export function getAlbum(data) {
  * 2: iphone
  * 3: ipad 专辑 id
  */
-export function banner(data) {
+export function banner (data) {
   return request({
     url: '/banner',
     method: 'get',
@@ -55,7 +55,7 @@ export function banner(data) {
 /**
  * 说明 : 私人 FM( 需要登录 )
  */
-export function personalFM() {
+export function personalFM () {
   return request({
     url: '/personal_fm',
     method: 'get'
@@ -66,7 +66,7 @@ export function personalFM() {
  * 说明 : 调用此接口 , 可获取推荐歌单
  * 可选参数 : limit: 取出数量 , 默认为 30 (不支持 offset)
  */
-export function personalized(data) {
+export function personalized (data) {
   return request({
     url: '/personalized',
     method: 'get',
@@ -81,7 +81,7 @@ export function personalized(data) {
  * 可选参数 :
  * @s : 歌单最近的 s 个收藏者,默认为8
  */
-export function songListDetail(data) {
+export function songListDetail (data) {
   return request({
     url: '/playlist/detail',
     method: 'get',
@@ -94,7 +94,7 @@ export function songListDetail(data) {
  * 可获得歌曲详情(注意:歌曲封面现在需要通过专辑内容接口获取)
  * 必选参数 : ids: 音乐 id, 如 ids=347230
  */
-export function allSongDetail(ids) {
+export function allSongDetail (ids) {
   return request({
     url: '/song/detail',
     method: 'get',
@@ -114,7 +114,7 @@ export function allSongDetail(ids) {
  * 可选参数
  * @timestamp : 时间戳因为服务端有缓存机制，所以为了及时拿到更新后的数据需要加上时间戳
  */
-export function addOrdel(data) {
+export function addOrdel (data) {
   return request({
     url: '/playlist/tracks',
     method: 'get',
@@ -130,7 +130,7 @@ export function addOrdel(data) {
  * @privacy : 是否设置为隐私歌单，默认否，传'10'则设置成隐私歌单
  * @type : 歌单类型,默认'NORMAL',传 'VIDEO'则为视频歌单
  */
-export function createPlayList(data) {
+export function createPlayList (data) {
   return request({
     url: '/playlist/create',
     method: 'get',

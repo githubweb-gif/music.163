@@ -56,7 +56,7 @@ export default {
   components: {
     swiper
   },
-  data() {
+  data () {
     return {
       banners: null,
       // 推荐歌单
@@ -64,20 +64,20 @@ export default {
     }
   },
   computed: {},
-  created() {
+  created () {
     this.initData()
   },
   methods: {
-    initData() {
+    initData () {
       this.banner()
       this.personalized()
     },
-    banner() {
+    banner () {
       banner().then((res) => {
         this.banners = res.banners
       })
     },
-    personalized() {
+    personalized () {
       personalized({ limit: 10 }).then((res) => {
         this.playlist = res.result
       })

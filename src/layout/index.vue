@@ -42,7 +42,7 @@ export default {
     toLogin,
     userInfo
   },
-  data() {
+  data () {
     return {}
   },
   computed: {
@@ -52,7 +52,7 @@ export default {
       loginStatus: (state) => state.user.loginStatus
     })
   },
-  created() {
+  created () {
     // searchMusic({ keywords: '张学友' }).then(async(res) => {
     //   // 设置播放队列
     //   const playlist = res.result.songs
@@ -64,7 +64,7 @@ export default {
     // })
   },
   methods: {
-    rightSideShow(value) {
+    rightSideShow (value) {
       if (this.isMusicList) {
         this.setIsMusicList(false)
       }

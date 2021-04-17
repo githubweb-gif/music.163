@@ -24,7 +24,7 @@ Vue.filter('formatTime', (time) => {
     case time < 10:
       return `00:0${parseInt(time)}`
     case time === 60:
-      return `01:00`
+      return '01:00'
     case time < 60:
       return `00:${parseInt(time)}`
     case time > 60:
