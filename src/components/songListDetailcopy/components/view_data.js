@@ -57,6 +57,9 @@ export default {
       obj.transform = `translateY(${row.translateY})`
       obj.position = 'absolute'
       obj.top = 0
+      if (row.copyright < 0) {
+        obj.color = 'rgb(183, 183, 183)'
+      }
       return obj
     },
     buildRenderData (minHeight, maxHeight) {
@@ -120,7 +123,6 @@ export default {
       const scrollTop = (head ? head.scrollTop : 0) - this.headHeight
       const [minItemHeight, maxItemHeight] = this.calDomItemsHeight(this.itemHeight, this.remainHeight, this.viewPortHeight, this.renderItemsHeight, scrollTop)
       this.updateRenderData(this.buildRenderData(minItemHeight, maxItemHeight))
-      console.log(this.viewPortHeight)
     },
     onVirtualScroll () {
       window.requestAnimationFrame(this.refreshRenderData)

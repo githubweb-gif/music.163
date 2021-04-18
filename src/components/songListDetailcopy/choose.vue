@@ -1,15 +1,15 @@
 <template>
-  <transition v-if="isChoose" name="fade">
+  <transition v-if="visible" name="fade">
     <div ref="chooseSelect" class="choose-select">
       <ul>
         <li>
           <el-checkbox v-model="checked" @change="change">全选</el-checkbox>
         </li>
-        <li @click="nextPlay">
+        <li>
           <div class="icon el-icon-video-play" />
           <p>下一首播放</p>
         </li>
-        <li @click="tofavorites">
+        <li>
           <div class="icon el-icon-folder-add" />
           <p>收藏</p>
         </li>
@@ -17,7 +17,7 @@
           <div class="icon el-icon-bottom" />
           <p>下载</p>
         </li>
-        <li @click="deletes">
+        <li >
           <div class="icon el-icon-delete-solid" />
           <p>删除</p>
         </li>
@@ -29,48 +29,36 @@
 <script>
 export default {
   props: {
-    isChoose: {
-      type: Boolean,
-      default: false
-    },
-    checkeds: {
-      type: Array,
-      default: null
-    },
-    checkState: {
+    visible: {
       type: Boolean,
       default: false
     }
   },
   data () {
     return {
+      datas: null,
       checked: false
     }
   },
-  watch: {
-    checkeds (value) {
-      console.log(value)
-    },
-    checkState (value) {
-      this.checked = value
-    }
+  mounted () {
+    this.$bus.$on('selection', (data) => {
+      console.log(data)
+      this.datas = data
+    })
   },
   methods: {
-    change (value) {
-      if (value) {
-        this.$emit('checkAll', true)
-      } else {
-        this.$emit('checkAll', false)
-      }
+    change (val) {
+      this.$bus.$emit('AllSelection', val)
     },
     nextPlay () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$store.dispatch('SET_PLAYLIST', { list: this.checkeds, one: true })
+      if (!this.datas) {
+        return
       }
+      this.$store.dispatch('SET_PLAYLIST', { list: this.this.datas, one: true })
       this.close()
     },
     close () {
-      this.$emit('closeFooter', false)
+      this.$emit('update:visible', false)
     },
     tofavorites () {
       if (this.checkeds && this.checkeds.length > 0) {

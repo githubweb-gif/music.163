@@ -88,6 +88,9 @@ export default {
       allSongDetail(ids.join(',')).then((res) => {
         this.filterMusics(res.songs)
       })
+    },
+    $route () {
+      this.songs = []
     }
   },
   created () {

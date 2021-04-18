@@ -17,7 +17,7 @@ export default {
       default: 0
     }
   },
-  data() {
+  data () {
     return {
       percentage: 0,
       // 拖动
@@ -25,7 +25,7 @@ export default {
     }
   },
   watch: {
-    percent(value) {
+    percent (value) {
       if (this.drag) {
         return
       }
@@ -36,11 +36,11 @@ export default {
       this.percentage = value
     }
   },
-  mounted() {
+  mounted () {
     this.createbar()
   },
   methods: {
-    createbar() {
+    createbar () {
       const progressOuter = this.$refs.progress.$el.querySelector(
         '.el-progress-bar__outer'
       )
@@ -54,12 +54,12 @@ export default {
 
       const _this = this
 
-      bar.addEventListener('mousedown', function(e) {
+      bar.addEventListener('mousedown', function (e) {
         clearMouse()
         _this.drag = true
         const X = e.clientX - this.offsetLeft
 
-        document.onmousemove = function(e) {
+        document.onmousemove = function (e) {
           left = e.clientX - X
           if (left < 0) {
             left = 0
@@ -77,8 +77,8 @@ export default {
         }
       })
 
-      function clearMouse() {
-        document.onmouseup = function(e) {
+      function clearMouse () {
+        document.onmouseup = function (e) {
           const bizhi = left / progressOuter.offsetWidth
           _this.drag = false
 
@@ -91,7 +91,7 @@ export default {
       progress.appendChild(bar)
     },
     // 点击进度条
-    jumpbar(e) {
+    jumpbar (e) {
       const progress = this.$refs.progress.$el
       const { left } = progress.getBoundingClientRect()
       let bizhi = (e.clientX - left) / progress.offsetWidth

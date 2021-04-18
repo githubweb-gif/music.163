@@ -14,6 +14,10 @@ import './style/transition.css'
 // 路由守卫
 import './permission'
 
+import vueBus from './untils/vue_bus'
+// vue_bus
+Vue.prototype.$bus = vueBus
+
 Vue.use(ElementUI)
 
 Vue.filter('formatTime', (time) => {

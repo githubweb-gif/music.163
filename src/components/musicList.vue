@@ -5,38 +5,28 @@
     </div>
     <div v-if="musicList" class="data">
       <div class="list">
-        <div
-          v-for="(item, index) in musicList"
-          :ref="`song${index}`"
-          :key="index"
-          :class="[
+        <template v-for="(item, index) in musicList">
+          <div v-if="item.copyright >= 0" :ref="`song${index}`" :key="index" :class="[
             'song',
             { odd: (index + 1) % 2 !== 0 },
             { selected: n === index || item.name === currentSong.name && !n },
-          ]"
-          @click="clickMusic($event, index)"
-        >
-          <div class="music">
-            <div class="name">{{ item.name }}</div>
-            <div class="singer">{{ item.singerName }}</div>
-          </div>
-          <span
-            v-if="item.id === id || item.name === currentSong.name"
-            class="bar iconfont icon-bar-chart-fill"
-          />
-          <div v-show="n === index" class="option">
-            <div class="option-content">
-              <div
-                class="iconfont play"
-                :class="item.id === id ? 'icon-pause' : 'icon-Play'"
-                @click="play(item)"
-              />
-              <div class="love iconfont icon-shoucang" @click="love($event)" />
-              <div class="menu iconfont icon-menucircledots" />
+          ]" @click="clickMusic($event, index)">
+            <div class="music">
+              <div class="name">{{ item.name }}</div>
+              <div class="singer">{{ item.singerName }}</div>
             </div>
+            <span v-if="item.id === id || item.name === currentSong.name" class="bar iconfont icon-bar-chart-fill" />
+            <div v-show="n === index" class="option">
+              <div class="option-content">
+                <div class="iconfont play" :class="item.id === id ? 'icon-pause' : 'icon-Play'" @click="play(item)" />
+                <div class="love iconfont icon-shoucang" @click="love($event)" />
+                <div class="menu iconfont icon-menucircledots" />
+              </div>
+            </div>
+            <div class="time">{{ (item.duration / 1000) | formatTime }}</div>
           </div>
-          <div class="time">{{ (item.duration / 1000) | formatTime }}</div>
-        </div>
+        </template>
+
       </div>
     </div>
   </div>
@@ -145,7 +135,8 @@ export default {
   .music {
     overflow: hidden;
     flex: 4;
-    .name, .singer {
+    .name,
+    .singer {
       width: 100%;
       margin-bottom: 8px;
       overflow: hidden;
