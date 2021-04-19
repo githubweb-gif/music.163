@@ -20,8 +20,8 @@
 import { createPlayList, addOrdel } from '@/api/music'
 export default {
   props: {
-    musicId: {
-      type: Object,
+    musics: {
+      type: Array,
       default: null
     },
     // 视频还是歌曲''时歌曲
@@ -55,10 +55,14 @@ export default {
         privacy: this.privacy,
         type: this.type
       }).then((res) => {
+        const ids = []
+        this.musics.forEach((x) => {
+          ids.push(x.id)
+        })
         addOrdel({
           op: 'add',
           pid: res.id,
-          tracks: this.musicId.id,
+          tracks: ids.join(','),
           timestamp: Date.now()
         })
           .then(() => {

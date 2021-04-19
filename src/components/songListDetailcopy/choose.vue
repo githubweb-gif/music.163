@@ -3,13 +3,13 @@
     <div ref="chooseSelect" class="choose-select">
       <ul>
         <li>
-          <el-checkbox v-model="checked" @change="change">全选</el-checkbox>
+          <el-checkbox v-model="status" @change="change">全选</el-checkbox>
         </li>
-        <li>
+        <li @click="nextPlay">
           <div class="icon el-icon-video-play" />
           <p>下一首播放</p>
         </li>
-        <li>
+        <li @click="tofavorites">
           <div class="icon el-icon-folder-add" />
           <p>收藏</p>
         </li>
@@ -17,7 +17,7 @@
           <div class="icon el-icon-bottom" />
           <p>下载</p>
         </li>
-        <li >
+        <li @click="deletes">
           <div class="icon el-icon-delete-solid" />
           <p>删除</p>
         </li>
@@ -32,45 +32,53 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    data: {
+      type: Array,
+      default: null
+    },
+    checkAll: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      datas: null,
-      checked: false
+      status: false
     }
   },
-  mounted () {
-    this.$bus.$on('selection', (data) => {
-      console.log(data)
-      this.datas = data
-    })
+  watch: {
+    checkAll (val) {
+      this.status = val
+    },
+    data (val) {
+      console.log(val)
+    }
   },
+  mounted () {},
   methods: {
     change (val) {
       this.$bus.$emit('AllSelection', val)
     },
     nextPlay () {
-      if (!this.datas) {
+      if (!this.data) {
         return
       }
-      this.$store.dispatch('SET_PLAYLIST', { list: this.this.datas, one: true })
+      this.$store.dispatch('SET_PLAYLIST', { list: this.data, one: true })
       this.close()
     },
     close () {
-      this.$emit('update:visible', false)
+      this.$bus.$emit('close', false)
     },
     tofavorites () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$emit('favorites', true)
+      if (this.data && this.data.length > 0) {
+        this.$bus.$emit('tofavorites', this.data)
       }
-      this.close()
     },
     deletes () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$emit('deletes', true)
+      if (this.data && this.data.length > 0) {
+        this.$bus.$emit('deletes', this.data)
       }
-      this.close()
     }
   }
 }
@@ -86,7 +94,7 @@ export default {
   height: 60px;
   z-index: 999;
   color: #b0afaf;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   ul {
     display: flex;
     height: 60px;
@@ -112,10 +120,12 @@ export default {
     }
   }
 }
-.fade-enter-active, .fade-leave-active {
-  transition: all .3s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   height: 0;
 }
 </style>

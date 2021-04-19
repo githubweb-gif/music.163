@@ -14,11 +14,16 @@ import './style/transition.css'
 // 路由守卫
 import './permission'
 
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 import vueBus from './untils/vue_bus'
 // vue_bus
 Vue.prototype.$bus = vueBus
 
 Vue.use(ElementUI)
+Vue.use(VXETable)
 
 Vue.filter('formatTime', (time) => {
   if (!time) {

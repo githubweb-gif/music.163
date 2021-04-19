@@ -19,7 +19,7 @@
             :key="item.id"
             :class="[
               n === 0 || n % 2 === 0 ? 'odd' : 'even',
-              { iscopyright: newCopyright[n] && newCopyright[n].st < 0 },
+              { iscopyright: item.copyright < 0 },
             ]"
             @click="playState(n)"
           >
@@ -41,7 +41,7 @@
               <span v-if="!isChoose" :class="['play-info', index === n ? 'play-state' : '']">
                 <i
                   class="el-icon-video-play"
-                  @click.stop="playMusic(item, copyright[n].st)"
+                  @click.stop="playMusic(item, item.copyright)"
                 />
                 <i
                   class="more el-icon-circle-plus-outline"
@@ -117,7 +117,7 @@
 
 <script>
 // api
-import { allSongDetail, addOrdel } from '@/api/music'
+import { addOrdel } from '@/api/music'
 
 import setMusciInfo from '@/untils/setMusciInfo'
 import dialogCard from './components/dialog.vue'
@@ -139,7 +139,7 @@ export default {
     }
   },
   props: {
-    songList: {
+    songs: {
       type: Array,
       default: null
     },
@@ -154,7 +154,6 @@ export default {
   },
   data () {
     return {
-      songs: [],
       // 记录被点击list的index
       index: '',
       // 记录more被点击时card显示
@@ -206,14 +205,6 @@ export default {
     }
   },
   watch: {
-    songList (value) {
-      if (value && value.length > 0) {
-        allSongDetail(this.songList.join(',')).then((data) => {
-          this.filterMusics(data.songs)
-        })
-      }
-      this.songs = []
-    },
     copyright (value) {
       this.newCopyright = value
     },

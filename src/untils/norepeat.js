@@ -9,12 +9,13 @@ export default function norepeat (oldArr, replaceArr, current) {
   const arr3 = newArr.splice(0, length)
   newArr.forEach((x, n) => {
     if (x.id === current && !index) {
-      console.log(current)
       index = n
       console.log(index)
     }
   })
-  index = index || newArr.length - 1
+  if (!index && index !== 0) {
+    index = newArr.length - 1
+  }
   newArr.splice(index + 1, 0, ...arr3)
   return newArr
 }

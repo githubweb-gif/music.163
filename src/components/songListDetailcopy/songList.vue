@@ -11,8 +11,7 @@
         <span>选择</span>
       </span>
     </div>
-    <music-item :songs="songs" />
-    <choose-component :visible.sync="dialogVisible"></choose-component>
+    <music-item :dialogVisible="dialogVisible" :songs="songs" />
   </div>
 </template>
 
@@ -20,11 +19,9 @@
 // components
 import musicItem from './components/index.vue'
 import setMusciInfo from '@/untils/setMusciInfo'
-import chooseComponent from './choose.vue'
 export default {
   components: {
-    musicItem,
-    chooseComponent
+    musicItem
   },
   props: {
     songs: {
@@ -37,8 +34,7 @@ export default {
       dialogVisible: false
     }
   },
-  mounted () {
-
+  watch: {
   },
   computed: {
     // 歌单id
@@ -46,7 +42,10 @@ export default {
       return this.$route.params.id || ''
     }
   },
-  watch: {
+  mounted () {
+    this.$bus.$on('close', () => {
+      this.dialogVisible = false
+    })
   },
   methods: {
     // 播放全部

@@ -1,15 +1,18 @@
 <template>
-  <div class="songlistDetail">
-    <header-component :name="name" :cover-img-url="coverImgUrl" :create-time="createTime" :creator="creator" />
-    <song-list :song-list-id="id" :song-list="songList" :copyright="copyright" />
+  <div id="to-top" v-loading="fullscreenLoading"
+  element-loading-background="rgb(255, 255, 255)"
+  element-loading-spinner="el-icon-loading" class="songlistDetail">
+    <header-component :name="name" :cover-img-url="coverImgUrl"
+    :create-time="createTime" :creator="creator" />
+    <song-list :songs="songs" />
   </div>
 </template>
 
 <script>
+// api
+import { allSongDetail } from '@/api/music'
 import headerComponent from './header.vue'
 import songList from './songList.vue'
-// api
-import { songListDetail } from '@/api/music'
 export default {
   components: {
     headerComponent,
@@ -32,43 +35,79 @@ export default {
         // 顶部背景图像
         backgroundUrl: ''
       },
-      songList: null,
-      copyright: [] // 记录歌曲是否具有版权 st>=0 具有版权 <0 没有版权
+      fullscreenLoading: true,
+      songs: [],
+      trackIds: []
     }
   },
   computed: {
+    playlistDetails () {
+      return this.$store.state.music.playlistDetails
+    },
     // 歌单id
     id () {
       return this.$route.params.id || ''
     }
   },
+  mounted () {
+  },
   watch: {
-    id () {
-      this.songListDetail()
+    id (value) {
+      if (value) {
+        this.$store.dispatch('GET_SONGS_DETAIL', value)
+      }
+    },
+    playlistDetails (data) {
+      this.trackIds = []
+      this.name = data.playlist.name
+      this.coverImgUrl = data.playlist.coverImgUrl
+      this.createTime = data.playlist.createTime.toString()
+      const { nickname, avatarUrl, backgroundUrl } = data.playlist.creator
+      this.creator = {
+        nickname,
+        avatarUrl,
+        backgroundUrl
+      }
+      const privileges = data.privileges || []
+      privileges.forEach((item, index) => {
+        this.trackIds.push({
+          // st版权信息 >=0 有版权 <0无版权
+          st: item.st,
+          id: item.id
+        })
+      })
+      const ids = []
+      this.trackIds.forEach((item) => {
+        ids.push(item.id)
+      })
+      allSongDetail(ids.join(',')).then((res) => {
+        this.filterMusics(res.songs)
+      })
+      this.fullscreenLoading = false
+    },
+    $route () {
+      this.fullscreenLoading = true
+      this.songs = []
     }
   },
   created () {
-    this.songListDetail()
+    this.$store.dispatch('GET_SONGS_DETAIL', this.id)
   },
   methods: {
-    songListDetail () {
-      songListDetail({ id: this.id, timestamp: Date.now() }).then((data) => {
-        this.name = data.playlist.name
-        this.coverImgUrl = data.playlist.coverImgUrl
-        this.createTime = data.playlist.createTime.toString()
-        const { nickname, avatarUrl, backgroundUrl } = data.playlist.creator
-        const trackIds = []
-        const privileges = data.privileges || []
-        privileges.forEach((element, index) => {
-          trackIds.push(element.id)
+    filterMusics (data) {
+      this.songs = []
+      data.forEach((x, index) => {
+        this.songs.push({
+          id: x.id,
+          album: { id: x.al.id },
+          albumName: x.al.name,
+          name: x.name,
+          singerName: x.ar[0].name,
+          duration: x.dt,
+          // 版权 st<0无版权
+          copyright: this.trackIds[index].st,
+          index: index
         })
-        this.copyright = data.privileges
-        this.songList = trackIds
-        this.creator = {
-          nickname,
-          avatarUrl,
-          backgroundUrl
-        }
       })
     }
   }

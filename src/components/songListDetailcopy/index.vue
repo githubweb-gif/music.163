@@ -1,7 +1,10 @@
 <template>
-  <div id="to-top" class="songlistDetail">
-    <header-component :name="name" :cover-img-url="coverImgUrl" :create-time="createTime" :creator="creator" />
-    <song-list :y="Y" :songs="songs" />
+  <div id="to-top" v-loading="fullscreenLoading"
+  element-loading-background="rgb(255, 255, 255)"
+  element-loading-spinner="el-icon-loading" class="songlistDetail">
+    <header-component :name="name" :cover-img-url="coverImgUrl"
+    :create-time="createTime" :creator="creator" />
+    <song-list :songs="songs" />
   </div>
 </template>
 
@@ -32,14 +35,14 @@ export default {
         // 顶部背景图像
         backgroundUrl: ''
       },
-      Y: 10,
+      fullscreenLoading: true,
       songs: [],
       trackIds: []
     }
   },
   computed: {
     playlistDetails () {
-      return this.$store.state.music.playlistDetails
+      return this.$store.state.music.playlistDetails || []
     },
     // 歌单id
     id () {
@@ -47,14 +50,9 @@ export default {
     }
   },
   mounted () {
-    const detail = document.querySelector('#to-top')
-    detail.onscroll = (e) => {
-      if (e.target.scrollTop > 220) {
-        this.Y = e.target.scrollTop - 220
-      } else {
-        this.Y = 0
-      }
-    }
+    this.$bus.$on('deleted', data => {
+      this.songs = data
+    })
   },
   watch: {
     id (value) {
@@ -63,6 +61,7 @@ export default {
       }
     },
     playlistDetails (data) {
+      console.log(data)
       this.trackIds = []
       this.name = data.playlist.name
       this.coverImgUrl = data.playlist.coverImgUrl
@@ -88,8 +87,10 @@ export default {
       allSongDetail(ids.join(',')).then((res) => {
         this.filterMusics(res.songs)
       })
+      this.fullscreenLoading = false
     },
     $route () {
+      this.fullscreenLoading = true
       this.songs = []
     }
   },
@@ -97,7 +98,7 @@ export default {
     this.$store.dispatch('GET_SONGS_DETAIL', this.id)
   },
   methods: {
-    filterMusics (data) {
+    filterMusics (data = []) {
       this.songs = []
       data.forEach((x, index) => {
         this.songs.push({

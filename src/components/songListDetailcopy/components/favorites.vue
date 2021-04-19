@@ -18,7 +18,7 @@
         </li>
       </ul>
     </el-dialog>
-    <create-playlist :musicId="favoritesMsg" :visible.sync="showone"  />
+    <create-playlist :musics="favoritesMsg" :visible.sync="showone"  />
     <dialog-component :visible.sync="message" :icon="icon"></dialog-component>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   props: {
     // 当前要收藏的歌曲信息
     favoritesMsg: {
-      type: Object,
+      type: Array,
       default: null
     },
     visible: {
@@ -81,10 +81,14 @@ export default {
     },
     // 收藏歌曲到歌单
     toadd (id) {
+      const ids = []
+      this.favoritesMsg.forEach(e => {
+        ids.push(e.id)
+      })
       addOrdel({
         op: 'add',
         pid: id,
-        tracks: this.favoritesMsg.id
+        tracks: ids.join(',')
       }).then((res) => {
         console.log(res)
         if (res.body && res.body.code === 502) {
@@ -98,6 +102,7 @@ export default {
           this.icon = 'el-icon-success'
           this.$store.dispatch('songList', Date.now())
         }
+        this.$bus.$emit('close', false)
         this.beforeClose()
       })
     }

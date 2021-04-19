@@ -25,42 +25,46 @@ export default {
   mounted () {
     // window.requestAnimationFrame = window.webkitRequestAnimationFrame
     this.$nextTick(() => {
-      const head = document.querySelector('#to-top')
-      console.log(head)
-      head.onscroll = () => {
-        this.onVirtualScroll()
+      if (this.songs) {
+        const head = document.querySelector('#to-top')
+        head.onscroll = () => {
+          this.onVirtualScroll()
+        }
       }
     })
   },
   watch: {
     songs: {
       handler (val) {
-        this.renderData = []
-        const renderItems = Math.ceil(this.viewPortHeight / this.itemHeight) + 2 * this.remain_count
-        this.renderItems = renderItems
-        this.renderItemsHeight = renderItems * this.itemHeight
-        this.remainHeight = this.remain_count * this.itemHeight
-        if (val && val.length > 0) {
-          this.height = val.length * 48 + 'px'
-          this.refreshRenderData()
-          return
+        if (val) {
+          this.legitimateData = this.songs.filter((x) => {
+            return x.copyright >= 0
+          })
+          this.renderData = []
+          const renderItems = Math.ceil(this.viewPortHeight / this.itemHeight) + 2 * this.remain_count
+          this.renderItems = renderItems
+          this.renderItemsHeight = renderItems * this.itemHeight
+          this.remainHeight = this.remain_count * this.itemHeight
+          if (val && val.length > 0) {
+            this.height = val.length * 48 + 'px'
+            this.refreshRenderData()
+            return
+          }
+          this.height = 0
         }
-        this.height = 0
       },
       immediate: true,
       deep: true
+    },
+    renderData (val) {
     }
   },
   methods: {
-    rowStyle ({ row }) {
-      const obj = {}
-      obj.transform = `translateY(${row.translateY})`
-      obj.position = 'absolute'
-      obj.top = 0
-      if (row.copyright < 0) {
-        obj.color = 'rgb(183, 183, 183)'
+    rowStyle (record) {
+      return {
+        transform: `translateY(${record.translateY})`,
+        color: record.copyright < 0 ? '#939292' : ''
       }
-      return obj
     },
     buildRenderData (minHeight, maxHeight) {
       const minItemKey = minHeight / this.itemHeight
