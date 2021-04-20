@@ -4,7 +4,8 @@
   padding: 0;
 }
 
-body, html {
+body,
+html {
   width: 100%;
   height: 100%;
 }
@@ -127,11 +128,18 @@ ul {
   border-color: rgba(194, 12, 12) !important;
 }
 .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: rgb(255, 255, 255) !important;
-  }
+  color: rgb(255, 255, 255) !important;
+}
 .el-checkbox.is-bordered.is-checked {
   border-color: rgba(194, 12, 12) !important;
 }
 .el-checkbox__input.is-focus .el-checkbox__inner {
   border-color: rgba(194, 12, 12) !important;
+}
+
+/* 发现音乐全部歌单 */
+.popover-category {
+  width: 600px !important;
+  height: 300px;
+  overflow: auto;
 }

@@ -1,8 +1,8 @@
-import deepCopy from './deepCopy'
+import _ from 'lodash'
 export default function norepeat (oldArr, replaceArr, current) {
   let index
-  oldArr = deepCopy(oldArr)
-  replaceArr = deepCopy(replaceArr)
+  oldArr = _.cloneDeep(oldArr)
+  replaceArr = _.cloneDeep(replaceArr)
   const length = replaceArr.length
   replaceArr.push(...oldArr)
   const newArr = unique(replaceArr)

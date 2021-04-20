@@ -1,9 +1,9 @@
 <template>
-  <transition v-if="isChoose" name="fade">
+  <transition v-if="visible" name="fade">
     <div ref="chooseSelect" class="choose-select">
       <ul>
         <li>
-          <el-checkbox v-model="checked" @change="change">全选</el-checkbox>
+          <el-checkbox v-model="status" @change="change">全选</el-checkbox>
         </li>
         <li @click="nextPlay">
           <div class="icon el-icon-video-play" />
@@ -29,60 +29,53 @@
 <script>
 export default {
   props: {
-    isChoose: {
+    visible: {
       type: Boolean,
       default: false
     },
-    checkeds: {
+    data: {
       type: Array,
       default: null
     },
-    checkState: {
+    checkAll: {
       type: Boolean,
       default: false
     }
   },
   data () {
     return {
-      checked: false
+      status: false
     }
   },
   watch: {
-    checkeds (value) {
-      console.log(value)
-    },
-    checkState (value) {
-      this.checked = value
+    checkAll (val) {
+      this.status = val
     }
   },
+  mounted () {},
   methods: {
-    change (value) {
-      if (value) {
-        this.$emit('checkAll', true)
-      } else {
-        this.$emit('checkAll', false)
-      }
+    change (val) {
+      this.$bus.$emit('AllSelection', val)
     },
     nextPlay () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$store.dispatch('SET_PLAYLIST', { list: this.checkeds, one: true })
+      if (!this.data) {
+        return
       }
+      this.$store.dispatch('SET_PLAYLIST', { list: this.data, one: true })
       this.close()
     },
     close () {
-      this.$emit('closeFooter', false)
+      this.$bus.$emit('close', false)
     },
     tofavorites () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$emit('favorites', true)
+      if (this.data && this.data.length > 0) {
+        this.$bus.$emit('tofavorites', this.data)
       }
-      this.close()
     },
     deletes () {
-      if (this.checkeds && this.checkeds.length > 0) {
-        this.$emit('deletes', true)
+      if (this.data && this.data.length > 0) {
+        this.$bus.$emit('deletes', this.data)
       }
-      this.close()
     }
   }
 }
@@ -98,7 +91,7 @@ export default {
   height: 60px;
   z-index: 999;
   color: #b0afaf;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   ul {
     display: flex;
     height: 60px;
@@ -124,10 +117,12 @@ export default {
     }
   }
 }
-.fade-enter-active, .fade-leave-active {
-  transition: all .3s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   height: 0;
 }
 </style>

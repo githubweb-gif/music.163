@@ -5,7 +5,6 @@ export default {
       renderItems: 0,
       // tabel高度
       height: 0,
-      viewPortHeight: 633,
       // 每行高度
       itemHeight: 48,
       // tabel表格上方区域歌单信息高度
@@ -26,8 +25,8 @@ export default {
     // window.requestAnimationFrame = window.webkitRequestAnimationFrame
     this.$nextTick(() => {
       if (this.songs) {
-        const head = document.querySelector('#to-top')
-        head.onscroll = () => {
+        const element = document.querySelector('#to-top') || document.querySelector('.home')
+        element.onscroll = () => {
           this.onVirtualScroll()
         }
       }
@@ -123,9 +122,10 @@ export default {
       this.refreshVirtualItems(newItems, replaceItemsIndex)
     },
     refreshRenderData () {
-      const head = document.querySelector('#to-top')
+      const head = document.querySelector('#to-top') || document.querySelector('.home')
       const scrollTop = (head ? head.scrollTop : 0) - this.headHeight
       const [minItemHeight, maxItemHeight] = this.calDomItemsHeight(this.itemHeight, this.remainHeight, this.viewPortHeight, this.renderItemsHeight, scrollTop)
+      console.log(minItemHeight)
       this.updateRenderData(this.buildRenderData(minItemHeight, maxItemHeight))
     },
     onVirtualScroll () {

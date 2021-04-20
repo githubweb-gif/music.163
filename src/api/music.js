@@ -137,3 +137,42 @@ export function createPlayList (data) {
     params: data
   })
 }
+
+/**
+ * 说明 : 调用此接口,可获取歌单分类,包含 category 信息
+ */
+export function songLists () {
+  return request({
+    url: '/playlist/catlist',
+    method: 'get'
+  })
+}
+
+/**
+ * 说明 : 调用此接口,可以获取对应类型的歌单
+ * 可选参数
+ * @order 可选 'new' 'hot',分别对应最新和最热默认，hot
+ * @cat 比如 " 华语 "、" 古风 " 、" 欧美 "、" 流行 ", 默认为 "全部"
+ * @limit 歌单数量，默认50
+ * @offset 偏移数量 , 用于分页 , 如 :( 评论页数 1)*50, 其中 50 为 limit 的值
+ */
+export function catergroyList (data) {
+  return request({
+    url: '/top/playlist',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 可获取新歌速递
+ * 必选参数 :
+ * @type 地区类型 id,对应以下:全部:0华语:7欧美:96日本:8韩国:16
+ */
+export function getNewMusic (data) {
+  return request({
+    url: '/top/song',
+    method: 'get',
+    params: data
+  })
+}

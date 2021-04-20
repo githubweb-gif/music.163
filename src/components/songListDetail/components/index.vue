@@ -3,7 +3,7 @@
     <el-checkbox v-show="false" v-model="checkAll" @change="checkAllChange"></el-checkbox>
     <ul :style="`height: ${height};`">
       <el-checkbox-group v-model="checkeds" @change="handleChange">
-        <li @click="isMenu = item.id" :style="rowStyle(item)" :class="[(item.index+1)%2 === 0 ? 'even' : 'odd']" v-for="(item) in renderData" :key="item.id">
+        <li @click="isMenu = item.id" :style="rowStyle(item)" :class="[(item.index+1)%2 === 0 ? 'even' : 'odd']" v-for="item in renderData" :key="item.id">
           <el-checkbox v-show="dialogVisible" :label="item">
             <!-- br占位符用来隐藏label -->
             <br>
@@ -78,25 +78,37 @@ export default {
     dialogVisible: {
       type: Boolean,
       default: false
+    },
+    viewPortHeight: {
+      type: Number,
+      default: 633
+    },
+    isDelete: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      checked: false,
-      // 全选时拿到的全部数据
+      // checked: false,
+      // 选择到的数据
       checkeds: [],
+      // 全选状态
       checkAll: false,
+      // 是否显示menu icon
       isMenu: '',
+      // 消息提示
       message: '',
+      // 消息提示对应的icon
       icon: '',
-      // 筛选出具有版权的shuju
+      // 筛选出具有版权的shuju,传给播放列表
       legitimateData: [],
       // 收藏信息
       favoritesMsg: null,
+      // 收藏是否显示
       favoriteShow: false,
-      isconfirmdel: false,
-      // 深拷贝的数据
-      cloneSongs: null
+      // 是否显示确认删除框
+      isconfirmdel: false
     }
   },
   computed: {
@@ -110,6 +122,7 @@ export default {
     }
   },
   watch: {
+    // 底部选择消失清除数据
     dialogVisible (val) {
       if (!val) {
         this.checkeds = []
@@ -133,9 +146,11 @@ export default {
     })
   },
   methods: {
+    // 选择发生变化时，会触发此函数
     handleChange (val) {
       this.checkAll = val.length === this.songs.length
     },
+    // 全选的状态
     checkAllChange (val) {
       if (val) {
         this.checkeds = this.songs

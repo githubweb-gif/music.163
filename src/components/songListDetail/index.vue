@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     playlistDetails () {
-      return this.$store.state.music.playlistDetails
+      return this.$store.state.music.playlistDetails || []
     },
     // 歌单id
     id () {
@@ -50,6 +50,9 @@ export default {
     }
   },
   mounted () {
+    this.$bus.$on('deleted', data => {
+      this.songs = data
+    })
   },
   watch: {
     id (value) {
@@ -88,13 +91,15 @@ export default {
     $route () {
       this.fullscreenLoading = true
       this.songs = []
+      // 路由变化时，关闭选择
+      this.$bus.$emit('close', false)
     }
   },
   created () {
     this.$store.dispatch('GET_SONGS_DETAIL', this.id)
   },
   methods: {
-    filterMusics (data) {
+    filterMusics (data = []) {
       this.songs = []
       data.forEach((x, index) => {
         this.songs.push({
