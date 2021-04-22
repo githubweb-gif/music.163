@@ -25,7 +25,7 @@
                   <li>
                     <span>专辑：{{ item.albumName }}</span>
                   </li>
-                  <li @click="todelete(item)" class="delete">
+                  <li v-if="uid === userId" @click="todelete(item)" class="delete">
                     从歌单中删除
                   </li>
                 </ul>
@@ -82,10 +82,6 @@ export default {
     viewPortHeight: {
       type: Number,
       default: 633
-    },
-    isDelete: {
-      type: Boolean,
-      default: false
     }
   },
   data () {
@@ -119,6 +115,14 @@ export default {
     // 当前歌单id
     id () {
       return this.$route.params.id
+    },
+    // 当前登录用户id
+    uid () {
+      return this.$store.state.user.id
+    },
+    // 歌单拥有者id
+    userId () {
+      return this.$store.state.music.userId
     }
   },
   watch: {

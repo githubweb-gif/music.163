@@ -141,5 +141,6 @@ ul {
 .popover-category {
   width: 600px !important;
   height: 300px;
+  max-width: 90% !important;
   overflow: auto;
 }

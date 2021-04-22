@@ -59,7 +59,6 @@ export default {
     // 所有歌单
     songLists () {
       const data = this.$store.getters.songLists || []
-      console.log(data)
       // 筛选出时我自己创建的歌单
       return data.filter((x) => {
         if (x.creator.userId === this.uid) {
@@ -90,7 +89,6 @@ export default {
         pid: id,
         tracks: ids.join(',')
       }).then((res) => {
-        console.log(res)
         if (res.body && res.body.code === 502) {
           // 歌曲已存在
           this.message = '歌曲已存在'

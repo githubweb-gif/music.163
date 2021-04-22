@@ -4,7 +4,10 @@
     <div class="container">
       <side-bar class="side" />
       <div class="main">
-        <router-view />
+        <keep-alive v-if="$route.meta.keepAlive" >
+          <router-view />
+        </keep-alive>
+          <router-view v-else />
         <transition name="fade-transform">
           <user-info v-if="isUserRight && loginStatus" class="right-side" />
         </transition>
@@ -15,11 +18,7 @@
     </div>
     <footer-bar class="footer" />
     <to-login class="login" />
-    <div
-      v-show="isMusicList || isUserRight"
-      class="shadow"
-      @click="rightSideShow(false)"
-    />
+    <div v-show="isMusicList || isUserRight" class="shadow" @click="rightSideShow(false)" />
   </div>
 </template>
 

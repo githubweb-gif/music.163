@@ -202,10 +202,9 @@ export default {
               type: 'success'
             })
           })
-          .catch((error) => {
+          .catch(() => {
             this.initData()
             this.$message.error('注册失败')
-            console.log(error)
           })
       } else {
         this.$message.error('验证码错误')
@@ -215,7 +214,6 @@ export default {
     verifyForm () {
       let result = false
       this.$refs.loginForm.validate((valid, obj) => {
-        console.log(obj)
         if (valid) {
           result = true
           return true

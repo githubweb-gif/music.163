@@ -14,16 +14,19 @@ import './style/transition.css'
 // 路由守卫
 import './permission'
 
-import 'xe-utils'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-
+import VueLazyLoad from 'vue-lazyload'
 import vueBus from './untils/vue_bus'
 // vue_bus
 Vue.prototype.$bus = vueBus
 
 Vue.use(ElementUI)
-Vue.use(VXETable)
+Vue.use(VueLazyLoad, {
+  preLoad: 1.3,
+  error: require('./assets/logo.png'),
+  loading: require('./assets/logo.png'),
+  attempt: 2,
+  listenEvents: ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend', 'touchmove', 'click']
+})
 
 Vue.filter('formatTime', (time) => {
   if (!time) {

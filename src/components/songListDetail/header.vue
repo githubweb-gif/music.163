@@ -7,17 +7,15 @@
       </div>
       <div class="right">
         <div class="name">{{ name }}</div>
-        <div class="creator">
-          <span class="avatarUrl"><img :src="creator.avatarUrl" alt=""></span>
-          <span class="nickname">{{ creator.nickname }}</span>
-          <span class="create-time">{{ createTime | filterTime }}</span>
-          <span>创建</span>
-        </div>
+          <slot name="creator"></slot>
         <div class="mg">
           <span class="download-all">
             <i class="el-icon-plus" />
             <span>下载全部</span>
           </span>
+        </div>
+        <div class="description">
+          <p>{{description}}</p>
         </div>
       </div>
     </div>
@@ -26,17 +24,6 @@
 
 <script>
 export default {
-  filters: {
-    filterTime (value) {
-      const date = new Date(Number(value))
-      const year = date.getFullYear()
-      let month = date.getMonth() + 1
-      month = month < 10 ? '0' + month : month
-      let dd = date.getDate()
-      dd = dd < 10 ? '0' + dd : dd
-      return `${year}-${month}-${dd}`
-    }
-  },
   props: {
     name: {
       type: String,
@@ -53,6 +40,10 @@ export default {
     creator: {
       type: Object,
       default: null
+    },
+    description: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -117,6 +108,13 @@ export default {
         border: 1px solid #666666;
         font-size: 1px;
         cursor: pointer;
+      }
+      .description p {
+        margin-top: 15px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

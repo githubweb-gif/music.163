@@ -10,7 +10,6 @@ export default function norepeat (oldArr, replaceArr, current) {
   newArr.forEach((x, n) => {
     if (x.id === current && !index) {
       index = n
-      console.log(index)
     }
   })
   if (!index && index !== 0) {

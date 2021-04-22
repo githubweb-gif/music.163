@@ -7,9 +7,7 @@
       <el-tab-pane label="最新音乐" name="latestMusic"></el-tab-pane>
       <el-tab-pane label="歌手" name="five">歌手</el-tab-pane>
     </el-tabs>
-    <div class="home-main">
-      <component :is="componentName" />
-    </div>
+    <component class="home-main" :is="componentName" />
   </div>
 </template>
 
@@ -56,7 +54,9 @@ export default {
 .home {
   height: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .title {
   font-size: 13px;
@@ -65,5 +65,6 @@ export default {
 }
 .home-main {
   padding: 0 1%;
+  overflow-y: auto;
 }
 </style>

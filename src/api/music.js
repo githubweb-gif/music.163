@@ -176,3 +176,26 @@ export function getNewMusic (data) {
     params: data
   })
 }
+
+/**
+ * 说明 : 调用此接口 , 可获取新碟上架列表 , 如需具体音乐信息需要调用获取专辑列表接 口 /album , 然后传入 id, 如 /album?id=32311&limit=30
+ * 返回最近几月和本周的数据
+ */
+export function getNewList () {
+  return request({
+    url: '/top/album',
+    method: 'get'
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入专辑 id, 可获得专辑内容
+ * 必选参数 : @id : 专辑 id
+ */
+export function albumDetail (data) {
+  return request({
+    url: '/album',
+    method: 'get',
+    params: data
+  })
+}

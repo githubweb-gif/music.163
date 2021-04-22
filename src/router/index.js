@@ -16,7 +16,8 @@ export const routes = [
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '发现音乐',
-          icon: 'el-icon-user-solid'
+          icon: 'el-icon-user-solid',
+          keepAlive: true
         }
       },
       {
@@ -29,17 +30,6 @@ export const routes = [
           icon: 'el-icon-s-goods'
         }
       },
-      /* 先不做
-      {
-        path: 'people',
-        name: 'people',
-        hidden: false,
-        component: () => import('@/views/FM/index.vue'),
-        meta: {
-          title: '朋友',
-          icon: 'el-icon-help'
-        }
-      }, */
       {
         path: 'LocalMusic',
         name: 'LocalMusic',
@@ -76,11 +66,19 @@ export const routes = [
       {
         path: 'songListDetail/:id',
         name: 'songListDetail',
-        hash: 'to-top',
         hidden: true,
         component: () => import('@/components/songListDetail/index.vue'),
         meta: {
           title: '歌单详细内容'
+        }
+      },
+      {
+        path: 'albumDetail/:id',
+        name: 'albumDetail',
+        hidden: true,
+        component: () => import('@/components/songListDetail/index.vue'),
+        meta: {
+          title: '专辑详细内容'
         }
       }
     ]

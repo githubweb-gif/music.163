@@ -17,7 +17,7 @@
           <div class="icon el-icon-bottom" />
           <p>下载</p>
         </li>
-        <li @click="deletes">
+        <li v-if="uid === userId" @click="deletes">
           <div class="icon el-icon-delete-solid" />
           <p>删除</p>
         </li>
@@ -47,12 +47,21 @@ export default {
       status: false
     }
   },
+  computed: {
+    // 当前登录用户id
+    uid () {
+      return this.$store.state.user.id
+    },
+    // 歌单拥有者id
+    userId () {
+      return this.$store.state.music.userId
+    }
+  },
   watch: {
     checkAll (val) {
       this.status = val
     }
   },
-  mounted () {},
   methods: {
     change (val) {
       this.$bus.$emit('AllSelection', val)

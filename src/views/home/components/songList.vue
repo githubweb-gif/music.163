@@ -25,7 +25,7 @@
     </div>
     <div class="playList">
       <ul>
-        <li @click="toplayListDetail(list.id)" :style="index > 0 ? `max-width: ${imgWidth}px` : ''" v-for="(list, index) in lists" :key="index">
+        <li @click="toplayListDetail(list.id)" :style="index > 0 &&  imgWidth > 0? `max-width: ${imgWidth}px` : ''" v-for="(list, index) in lists" :key="index">
           <img :ref="index === 0 ? 'imgFirst' : '' " :src="list.coverImgUrl" alt="">
           <div class="name">{{list.name}}</div>
           <div class="creator">by {{list.creator.nickname}}</div>
@@ -33,18 +33,17 @@
         </li>
       </ul>
     </div>
-    <div ref="expand" class="expand">
-      <div ref="expandChild" class="expand-child"></div>
-    </div>
-    <div ref="shrink" class="shrink">
-      <div ref="shrinkChild" class="shrink-child"></div>
-    </div>
+    <scroll @scroll="onScroll"></scroll>
   </div>
 </template>
 
 <script>
 import { songLists, catergroyList } from '@/api/music'
+import scroll from '@/components/scroll/index.vue'
 export default {
+  components: {
+    scroll
+  },
   data () {
     return {
       hot: [],
@@ -52,7 +51,6 @@ export default {
       categories: [],
       lists: null,
       cat: '全部歌单',
-      maxWidth: 0,
       imgWidth: 0
     }
   },
@@ -90,18 +88,12 @@ export default {
     })
   },
   mounted () {
-    const expand = this.$refs.expand
-    const shrink = this.$refs.shrink
-    const expandChild = this.$refs.expandChild
-    const shrinkChild = this.$refs.shrinkChild
-    this.maxWidth = expand.offsetWidth * 1000
-    expandChild.style.width = this.maxWidth + 'px'
-    expandChild.style.height = '10px'
-    shrinkChild.style.height = '10px'
-    expand.scrollLeft = this.maxWidth
-    shrink.scrollLeft = this.maxWidth
-    expand.addEventListener('scroll', this.onScroll)
-    shrink.addEventListener('scroll', this.onScroll)
+    const homeMain = document.querySelector('.home-main')
+    homeMain.addEventListener('scroll', () => {
+      if (this.$refs.popover) {
+        this.$refs.popover.doClose()
+      }
+    })
   },
   methods: {
     // 获取对应类型的歌单
@@ -112,6 +104,9 @@ export default {
         cat
       }).then((data) => {
         this.lists = data.playlists
+        this.$nextTick(() => {
+          this.onScroll()
+        })
       })
       if (this.$refs.popover) {
         this.$refs.popover.doClose()
@@ -119,10 +114,6 @@ export default {
     },
     // 监听滚动
     onScroll () {
-      const expand = this.$refs.expand
-      const shrink = this.$refs.shrink
-      expand.scrollLeft = this.maxWidth * 1000
-      shrink.scrollLeft = this.maxWidth * 1000
       const img = this.$refs.imgFirst
       if (img) {
         this.imgWidth = Math.ceil(img[0].offsetWidth)
@@ -224,7 +215,7 @@ export default {
     li {
       position: relative;
       min-width: 120px;
-      flex: 1 1 0;
+      flex: 1;
       margin-right: 20px;
       margin-bottom: 20px;
       img {

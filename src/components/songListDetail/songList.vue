@@ -11,7 +11,7 @@
         <span>选择</span>
       </span>
     </div>
-    <music-item :is-delete="isDelete" :view-port-height="viewPortHeight" :dialogVisible="dialogVisible" :songs="songs" />
+    <music-item :view-port-height="viewPortHeight" :dialogVisible="dialogVisible" :songs="songs" />
   </div>
 </template>
 
@@ -31,10 +31,6 @@ export default {
     viewPortHeight: {
       type: Number,
       default: 633
-    },
-    isDelete: {
-      type: Boolean,
-      default: false
     }
   },
   data () {

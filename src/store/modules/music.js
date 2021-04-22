@@ -1,6 +1,6 @@
 import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/untils/cache'
 import norepeat from '@/untils/norepeat.js'
-import { songListDetail } from '@/api/music'
+import { songListDetail, albumDetail } from '@/api/music'
 const state = {
   // 播放队列
   list: GET_PLAYLIST_LOCAL() || [],
@@ -26,7 +26,11 @@ const state = {
   // 歌单id用来记录那个歌单播放歌曲了
   songListId: getSonglistIdLocal() || '',
   // 歌单内容详情
-  playlistDetails: null
+  playlistDetails: null,
+  // 歌单拥有者id
+  userId: '',
+  // 专辑内容详情
+  albumDetails: null
 }
 
 const mutations = {
@@ -34,7 +38,6 @@ const mutations = {
     // one表示下一首或者更多首，而不是更新整个表单
     if (data.one) {
       state.list = norepeat(state.list, data.list, state.musicInfo.id)
-      console.log(state.list)
     } else {
       state.list = data.list
     }
@@ -67,6 +70,12 @@ const mutations = {
   },
   SET_PLAYLISTDETAIL (state, data) {
     state.playlistDetails = data
+  },
+  SET_ALNUMDETAILS (state, data) {
+    state.albumDetails = data
+  },
+  SET_USERID (state, id) {
+    state.userId = id
   }
 }
 const actions = {
@@ -89,6 +98,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       songListDetail({ id, timestamp: Date.now() }).then(data => {
         commit('SET_PLAYLISTDETAIL', data)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 获取专辑详细内容
+  GET_ALBUM_DETAIL ({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      albumDetail({ id, timestamp: Date.now() }).then(data => {
+        commit('SET_ALNUMDETAILS', data)
         resolve(data)
       }).catch(error => {
         reject(error)
