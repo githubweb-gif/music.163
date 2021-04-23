@@ -110,11 +110,10 @@ export default {
 }
 
 .container {
-  flex: auto;
+  flex: 1;
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  margin-bottom: 60px;
   .main {
     flex: 1;
     position: relative;
@@ -128,9 +127,6 @@ export default {
 
 .footer {
   height: 60px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
   overflow: hidden;
   border-top: 1px solid #c6c3c3;
 }
