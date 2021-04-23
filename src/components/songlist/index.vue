@@ -1,12 +1,8 @@
 <template>
   <div id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading" class="songlistDetail">
-    <header-component :description="description" :name="name" :cover-img-url="coverImgUrl" :create-time="createTime" :creator="creator">
+    <header-component :description="description" :name="name" :cover-img-url="coverImgUrl" >
       <template v-slot:creator>
-        <div v-if="albumId" class="creator">
-          <span class="nickname">歌手名：{{ creator.nickname }}</span>
-          <span class="create-time">发行时间：{{ createTime | filterTime }}</span>
-        </div>
-        <div v-else class="creator">
+        <div class="creator">
           <span class="avatarUrl"><img :src="creator.avatarUrl" alt=""></span>
           <span class="nickname">{{ creator.nickname }}</span>
           <span class="create-time">{{ createTime | filterTime }}</span>
@@ -20,8 +16,8 @@
 <script>
 // api
 import { allSongDetail } from '@/api/music'
-import headerComponent from './header.vue'
-import songList from './songList.vue'
+import headerComponent from '../playList/header.vue'
+import songList from '../playList/list.vue'
 export default {
   filters: {
     filterTime (value) {
@@ -55,37 +51,22 @@ export default {
         // 顶部背景图像
         backgroundUrl: ''
       },
+      // 描述
+      description: '',
       fullscreenLoading: true,
       songs: [],
       ids: [],
       // 存放有版权信息
-      privileges: null,
-      // 描述
-      description: ''
+      privileges: null
     }
   },
   computed: {
     playlistDetails () {
       return this.$store.state.music.playlistDetails || []
     },
-    albumDetails () {
-      return this.$store.state.music.albumDetails || []
-    },
     // 歌单id
     songlistId () {
-      const path = this.$route.path
-      if (path.includes('songListDetail')) {
-        return this.$route.params.id || ''
-      }
-      return ''
-    },
-    // 专辑
-    albumId () {
-      const path = this.$route.path
-      if (path.includes('albumDetail')) {
-        return this.$route.params.id || ''
-      }
-      return ''
+      return this.$route.params.id || ''
     }
   },
   mounted () {
@@ -97,11 +78,6 @@ export default {
     songlistId (value) {
       if (value) {
         this.$store.dispatch('GET_SONGS_DETAIL', value)
-      }
-    },
-    albumId (value) {
-      if (value) {
-        this.$store.dispatch('GET_ALBUM_DETAIL', value)
       }
     },
     playlistDetails (data) {
@@ -129,29 +105,14 @@ export default {
       })
       this.fullscreenLoading = false
     },
-    albumDetails (data) {
-      console.log(data)
-      this.$store.commit('SET_USERID', '')
-      this.name = data.album.name
-      this.coverImgUrl = data.album.picUrl
-      this.createTime = data.album.publishTime.toString()
-      this.description = data.album.description
-      this.creator.backgroundUrl = data.album.blurPicUrl
-      this.creator.nickname = data.album.artist.name
-      this.filterMusics(data.songs)
-      this.fullscreenLoading = false
-    },
     $route () {
       // 路由变化时，关闭选择
       this.$bus.$emit('close', false)
+      this.fullscreenLoading = true
     }
   },
   created () {
-    if (this.albumId) {
-      this.$store.dispatch('GET_ALBUM_DETAIL', this.albumId)
-    } else if (this.songlistId) {
-      this.$store.dispatch('GET_SONGS_DETAIL', this.songlistId)
-    }
+    this.$store.dispatch('GET_SONGS_DETAIL', this.songlistId)
   },
   methods: {
     filterMusics (data = []) {

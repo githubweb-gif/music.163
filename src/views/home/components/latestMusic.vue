@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import newMusic from '@/components/songListDetail/songList.vue'
+import newMusic from '@/components/playList/list.vue'
 import newList from './newList.vue'
 // api
 import { getNewMusic } from '@/api/music'

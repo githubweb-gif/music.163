@@ -25,6 +25,10 @@
 <script>
 export default {
   props: {
+    description: {
+      type: String,
+      default: ''
+    },
     name: {
       type: String,
       default: ''
@@ -32,27 +36,8 @@ export default {
     coverImgUrl: {
       type: String,
       default: ''
-    },
-    createTime: {
-      type: String,
-      default: ''
-    },
-    creator: {
-      type: Object,
-      default: null
-    },
-    description: {
-      type: String,
-      default: ''
     }
-  },
-  data () {
-    return {}
-  },
-  computed: {},
-  watch: {},
-  created () {},
-  methods: {}
+  }
 }
 </script>
 
