@@ -5,7 +5,7 @@
       <el-tab-pane label="个性推荐" name="firstComponent" />
       <el-tab-pane label="歌单" name="songList"></el-tab-pane>
       <el-tab-pane label="最新音乐" name="latestMusic"></el-tab-pane>
-      <el-tab-pane label="歌手" name="five">歌手</el-tab-pane>
+      <el-tab-pane label="歌手" name="singer"></el-tab-pane>
     </el-tabs>
     <component class="home-main" :is="componentName" />
   </div>
@@ -15,11 +15,13 @@
 import firstComponent from './components/first.vue'
 import songList from './components/songList.vue'
 import latestMusic from './components/latestMusic.vue'
+import singer from './components/singer.vue'
 export default {
   components: {
     firstComponent,
     songList,
-    latestMusic
+    latestMusic,
+    singer
   },
   data () {
     return {

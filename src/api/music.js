@@ -77,7 +77,7 @@ export function personalized (data) {
 /**
  * 说明 : 获取歌单详情,  调用此接口 , 传入歌单 id, 可 以获取对应歌单内的所有的音乐
  * 可拿全部 trackIds 请求一次 song/detail 接口获取所有歌曲的详情
- * 必选参数 : id : 歌单 id
+ * 必选参数 : @id : 歌单 @id
  * 可选参数 :
  * @s : 歌单最近的 s 个收藏者,默认为8
  */
@@ -92,7 +92,7 @@ export function songListDetail (data) {
 /**
  * 说明 : 调用此接口 , 传入音乐 id(支持多个 id, 用 , 隔开),
  * 可获得歌曲详情(注意:歌曲封面现在需要通过专辑内容接口获取)
- * 必选参数 : ids: 音乐 id, 如 ids=347230
+ * 必选参数 : @ids : 音乐 id, 如 ids=347230
  */
 export function allSongDetail (ids) {
   return request({
@@ -195,6 +195,117 @@ export function getNewList () {
 export function albumDetail (data) {
   return request({
     url: '/album',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 :  调用此接口,可获取歌手分类列表
+ * 可选参数 :
+ * @limit : 返回数量 , 默认为 30
+ * @offset : 偏移数量，用于分页
+ * @initial : 按首字母索引查找参数,,如 /artist/list?type=1&area=96&initial=b 返回内容将以 name 字段开头为 b 或者拼音开头为 b 为顺序排列 热门传-1,#传0
+ * @type 取值: -1:全部 1:男歌手 2:女歌手 3:乐队
+ * @area 取值: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
+ */
+export function getSinger (data) {
+  return request({
+    url: '/artist/list',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 :  获取歌手描述,传入歌手 id。个人经历，成就，获奖
+ * 必选参数 :
+ * @id : 歌手 id
+ */
+export function singerDesc (data) {
+  return request({
+    url: '/artist/desc',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 :  获取歌手详情,传入歌手 id。获取歌手单曲数，专辑，mv等。还有个人简介
+ * 必选参数 :
+ * @id : 歌手 id
+ */
+export function singerDetail (data) {
+  return request({
+    url: '/artist/detail',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口,可获取歌手热门50首歌曲
+ * 必选参数 :
+ * @id : 歌手 id
+ */
+export function singerHotMusic (data) {
+  return request({
+    url: '/artist/top/song',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入歌手 id, 可获得歌手专辑内容
+ * 必选参数 :
+ * @id : 歌手 id
+ * @limit :数量默认30
+ * @offset :偏移数量
+ */
+export function singerAblum (data) {
+  return request({
+    url: '/artist/album',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入歌手 id, 可获得相似歌手
+ * 必选参数 :
+ * @id : 歌手 id
+ */
+export function similarSinger (data) {
+  return request({
+    url: '/simi/artist',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 获取歌手 mv, 传入歌手 id, 可获得歌手 mv 信息
+ * 必选参数 :
+ * @id : 歌手 id
+ */
+export function singerMv (data) {
+  return request({
+    url: '/artist/mv',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 :  调用此接口 , 传入 mv id,可获取 mv 播放地址
+ * 必选参数 :
+ * @id : mv id
+ * 可选参数 : @r : 分辨率,默认1080,可从 /mv/detail 接口获取分辨率列表
+ */
+export function mvUrl (data) {
+  return request({
+    url: '/mv/url',
     method: 'get',
     params: data
   })

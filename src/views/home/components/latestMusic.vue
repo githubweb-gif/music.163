@@ -1,10 +1,17 @@
 <template>
   <div class="latestMusic">
     <div class="title">
-      <span @click="getData(0)" :class="['newMusic', {selected : value===0}]">新歌速递</span>
-      <span @click="getData(1)" :class="['newList', {selected : value===1}]">新碟上架</span>
+      <div class="left">
+        <span @click="getData(0)" :class="['newMusic', {selected : value===0}]">新歌速递</span>
+        <span @click="getData(1)" :class="['newList', {selected : value===1}]">新碟上架</span>
+      </div>
+      <div v-show="value === 0" class="right">
+        <span :class="type === 7? 'selected' : ''" @click="getNewMusic(7)">华语</span>
+        <span :class="type === 96? 'selected' : ''" @click="getNewMusic(96)">欧美</span>
+        <span :class="type === 8? 'selected' : ''" @click="getNewMusic(8)">日本</span>
+      </div>
     </div>
-    <new-music v-show="value === 0" v-if="musics" :view-port-height="800"  :songs="musics" />
+    <new-music v-show="value === 0" v-if="musics" :view-port-height="800" :songs="musics" />
     <new-list v-show="value === 1" />
   </div>
 </template>
@@ -23,7 +30,8 @@ export default {
     return {
       musics: [],
       element: null,
-      value: ''
+      value: '',
+      type: 7
     }
   },
   created () {
@@ -43,8 +51,10 @@ export default {
         this.getNewList()
       }
     },
-    getNewMusic () {
-      getNewMusic({ type: 0 }).then((res) => {
+    getNewMusic (type = 7) {
+      this.type = type
+      getNewMusic({ type: this.type }).then((res) => {
+        this.musics = []
         const { data } = res
         data.forEach((x, index) => {
           const singername = []
@@ -67,8 +77,7 @@ export default {
         })
       })
     },
-    getNewList () {
-    }
+    getNewList () {}
   }
 }
 </script>
@@ -78,17 +87,35 @@ export default {
   width: 100%;
   height: 100%;
   .title {
-    span {
-      display: inline-block;
-      font-size: 12px;
-      padding: 3px 5px;
-      border: 1px solid #6e6e6d;
-      color: #6e6e6d;
-      cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #6e6e6d;
+    .left {
+      span {
+        display: inline-block;
+        padding: 3px 5px;
+        border: 1px solid #6e6e6d;
+        cursor: pointer;
+      }
+      span.selected {
+        color: #fff;
+        background-color: #6e6e6d;
+      }
     }
-    span.selected {
-      color: #fff;
-      background-color: #6e6e6d;
+    .right {
+      margin-right: 8%;
+      span.selected {
+        color: #000;
+      }
+      span {
+        padding: 0 15px;
+        border-right: 1px solid #6e6e6d;
+        cursor: pointer;
+      }
+      span:nth-child(3) {
+        border: 0;
+      }
     }
   }
 }

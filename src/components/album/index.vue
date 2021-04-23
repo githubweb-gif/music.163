@@ -83,10 +83,6 @@ export default {
       this.nickname = data.album.artist.name
       this.filterMusics(data.songs)
       this.fullscreenLoading = false
-    },
-    $route () {
-      // 路由变化时，关闭选择
-      this.$bus.$emit('close', false)
     }
   },
   created () {

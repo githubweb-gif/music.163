@@ -80,8 +80,26 @@ export const routes = [
         meta: {
           title: '专辑详细内容'
         }
+      },
+      {
+        path: 'singerDetail/:id',
+        name: 'singerDetail',
+        hidden: true,
+        component: () => import('@/components/singerDetail/index.vue'),
+        meta: {
+          title: '歌手详细内容'
+        }
       }
     ]
+  },
+  {
+    path: '/MV/:id',
+    name: 'MV',
+    hidden: true,
+    component: () => import('@/components/MV/index.vue'),
+    meta: {
+      title: 'MV'
+    }
   },
   {
     path: '*',
