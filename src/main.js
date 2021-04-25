@@ -49,6 +49,46 @@ Vue.filter('formatTime', (time) => {
   }
 })
 
+Vue.filter('count',
+  (val) => {
+    if (val) {
+      val = val.toString()
+      switch (true) {
+        case Math.ceil(val) >= 10000 && Math.ceil(val) < 100000:
+          return `${val.slice(0, 1)}万`
+        case Math.ceil(val) >= 100000 && Math.ceil(val) < 1000000:
+          return `${val.slice(0, 2)}万`
+        case Math.ceil(val) >= 1000000 && Math.ceil(val) < 10000000:
+          return `${val.slice(0, 3)}万`
+        case Math.ceil(val) >= 10000000 && Math.ceil(val) < 100000000:
+          return `${val.slice(0, 4)}千万`
+        default:
+          return val
+      }
+    }
+    return 0
+  }
+)
+
+Vue.filter('commentTime', (value) => {
+  if (!value) {
+    return ''
+  }
+  const time = new Date(value)
+  const now = new Date()
+  const cz = now.getTime() - time.getTime()
+  switch (true) {
+    case cz <= 60 * 1000 * 60 * 24:
+      return `${time.getHours()}:${time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()}`
+    case cz <= 60 * 1000 * 60 * 24 * 2:
+      return '昨天'
+    case now.getFullYear() === time.getFullYear():
+      return `${time.getMonth() + 1}月${time.getDate()}日`
+    default:
+      return `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`
+  }
+})
+
 Vue.config.productionTip = false
 
 new Vue({

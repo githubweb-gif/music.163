@@ -310,3 +310,80 @@ export function mvUrl (data) {
     params: data
   })
 }
+
+/**
+ * 说明 : 调用此接口 , 传入 mvid ( 在搜索音乐的时候传 type=1004 获得 ) , 可获取对应 MV 数据
+ * 必选参数 :
+ * @mvid : mvid
+ */
+export function mvDetail (data) {
+  return request({
+    url: '/mv/detail',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 说明 : 调用此接口 , 传入 mvid 可获取相似 mv
+ * 必选参数 :
+ * @mvid : mvid
+ */
+export function simi (data) {
+  return request({
+    url: '/simi/mv',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该 mv 的所有评论 ( 不需要 登录 )
+ * 必选参数 :
+ * @id : mvid
+ * 可选参数 : limit: 取出评论数量 , 默认为 20
+ * @offset : 偏移数量 , 用于分页
+ * @before : 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
+ */
+export function getComment (data) {
+  return request({
+    url: '/comment/mv',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口,可发送评论或者删除评论
+ * 必选参数 :
+ * @t :1 发送, 2 回复
+ * @tpye : 数字,资源类型,对应歌曲,mv,专辑,歌单,电台,视频对应以下类型
+ * 0: 歌曲 1: mv2: 歌单3: 专辑4: 电台5: 视频6: 动态
+ * @id :对应资源 id
+ * @content :要发送的内容
+ * @commentId :回复的评论id (回复评论时必填)
+ * 注意：如给动态发送评论，则不需要传 id，需要传动态的 @threadId
+ */
+export function sendOrdelComment (data) {
+  return request({
+    url: '/comment',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入 type, 资源 id, 和评论 id cid 和 是否点赞参数 t 即可给对 应评论点赞 ( 需要登录 )
+ * 必选参数 :
+ * @id : 资源 id, 如歌曲 id,mv id
+ * @cid : 评论 id
+ * @t : 是否点赞 ,1 为点赞 ,0 为取消点赞
+ * @tpye : 数字 , 资源类型 , 对应歌曲 , mv, 专辑 , 歌单 , 电台, 视频对应以下类型： 0: 歌曲 1: mv 2: 歌单3: 专辑4: 电台5: 视频6: 动态
+ */
+export function addOrDelLike (data) {
+  return request({
+    url: '/comment/like',
+    method: 'get',
+    params: data
+  })
+}

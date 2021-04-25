@@ -68,5 +68,6 @@ export default {
 .home-main {
   padding: 0 1%;
   overflow-y: auto;
+  margin-top: 25px;
 }
 </style>

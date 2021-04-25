@@ -93,12 +93,12 @@ export const routes = [
     ]
   },
   {
-    path: '/MV/:id',
-    name: 'MV',
+    path: '/MvDetail/:id',
+    name: 'MvDetail',
     hidden: true,
     component: () => import('@/components/MV/index.vue'),
     meta: {
-      title: 'MV'
+      title: 'MvDetail'
     }
   },
   {

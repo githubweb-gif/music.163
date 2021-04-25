@@ -10,6 +10,23 @@ html {
   height: 100%;
 }
 
+.el-textarea__inner:focus {
+  border-color: rgb(189, 189, 189) !important;
+}
+
+.el-textarea__inner {
+  border-color: rgb(189, 189, 189) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
 a {
   display: block;
   text-decoration: none;
@@ -92,11 +109,11 @@ a {
 }
 
 /* home页tab栏颜色 */
- .el-tabs__item.is-active {
+.el-tabs__item.is-active {
   color: #e20000 !important;
 }
 
- .el-tabs__active-bar {
+.el-tabs__active-bar {
   background-color: #e20000 !important;
 }
 
@@ -111,7 +128,6 @@ a {
 .el-tabs__header {
   margin: 0 !important;
 }
-
 
 ul {
   list-style: none;

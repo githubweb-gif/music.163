@@ -20,26 +20,6 @@ export default {
       default: ''
     }
   },
-  filters: {
-    count (val) {
-      if (val) {
-        val = val.toString()
-        switch (true) {
-          case Math.ceil(val) >= 10000 && Math.ceil(val) < 100000:
-            return `${val.slice(0, 1)}万`
-          case Math.ceil(val) >= 100000 && Math.ceil(val) < 1000000:
-            return `${val.slice(0, 2)}万`
-          case Math.ceil(val) >= 1000000 && Math.ceil(val) < 10000000:
-            return `${val.slice(0, 3)}万`
-          case Math.ceil(val) >= 10000000 && Math.ceil(val) < 100000000:
-            return `${val.slice(0, 4)}千万`
-          default:
-            return val
-        }
-      }
-      return 0
-    }
-  },
   data () {
     return {
       mvs: [],
@@ -83,7 +63,7 @@ export default {
       })
     },
     toMV (id) {
-      this.$router.push(`/MV/${id}`)
+      this.$router.push(`/MvDetail/${id}`)
     }
   }
 }
