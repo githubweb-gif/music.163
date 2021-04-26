@@ -26,7 +26,7 @@
     <div class="playList">
       <ul>
         <li @click="toplayListDetail(list.id)" :style="index > 0 &&  imgWidth > 0? `max-width: ${imgWidth}px` : ''" v-for="(list, index) in lists" :key="index">
-          <img :ref="index === 0 ? 'imgFirst' : '' " :src="list.coverImgUrl" alt="">
+          <img :ref="index === 0 ? 'imgFirst' : '' " v-lazy="list.coverImgUrl" alt="">
           <div class="name">{{list.name}}</div>
           <div class="creator">by {{list.creator.nickname}}</div>
           <div class="after"></div>
@@ -49,9 +49,11 @@ export default {
       hot: [],
       all: null,
       categories: [],
-      lists: null,
+      lists: [],
       cat: '全部歌单',
-      imgWidth: 0
+      imgWidth: 0,
+      bol: true,
+      offset: 0
     }
   },
   watch: {
@@ -89,24 +91,44 @@ export default {
   },
   mounted () {
     const homeMain = document.querySelector('.home-main')
-    homeMain.addEventListener('scroll', () => {
+    homeMain.addEventListener('scroll', e => {
       if (this.$refs.popover) {
         this.$refs.popover.doClose()
+      }
+      if (!this.bol) {
+        return
+      }
+      const target = e.target
+      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
+        this.offset += 50
+        this.bol = false
+        this.getCatergroyList(this.cat)
       }
     })
   },
   methods: {
     // 获取对应类型的歌单
     getCatergroyList (cat) {
+      if (cat && cat !== this.cat) {
+        this.lists = []
+      }
       this.cat = cat
       catergroyList({
         order: 'hot',
-        cat
+        cat,
+        offset: this.offset
       }).then((data) => {
-        this.lists = data.playlists
-        this.$nextTick(() => {
-          this.onScroll()
-        })
+        if (data.playlists.length === 0) {
+          console.log(data.playlists.length)
+          return
+        }
+        this.lists.push(...data.playlists)
+        this.bol = true
+        if (!this.imgWidth) {
+          this.$nextTick(() => {
+            this.onScroll()
+          })
+        }
       })
       if (this.$refs.popover) {
         this.$refs.popover.doClose()

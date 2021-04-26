@@ -35,11 +35,11 @@ export default {
   },
   watch: {
     $route () {
-      this.activeName = this.$route.query.tab
+      this.activeName = this.$route.query.tab || 'firstComponent'
     }
   },
   created () {
-    this.activeName = this.$route.query.tab
+    this.activeName = this.$route.query.tab || 'firstComponent'
   },
   methods: {
     handleClick (val) {

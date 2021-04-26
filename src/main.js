@@ -16,10 +16,14 @@ import './permission'
 
 import VueLazyLoad from 'vue-lazyload'
 import vueBus from './untils/vue_bus'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import style (>= Swiper 6.x)
+import 'swiper/swiper-bundle.css'
+
+Vue.use(VueAwesomeSwiper)
+Vue.use(ElementUI)
 // vue_bus
 Vue.prototype.$bus = vueBus
-
-Vue.use(ElementUI)
 Vue.use(VueLazyLoad, {
   preLoad: 1.3,
   error: require('./assets/logo.png'),

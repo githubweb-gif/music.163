@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll">
+  <div ref="scroll" class="scroll">
     <div ref="expand" class="expand">
       <div ref="expandChild" class="expand-child"></div>
     </div>
@@ -13,7 +13,8 @@
 export default {
   data () {
     return {
-      maxWidth: 0
+      maxWidth: 0,
+      width: 0
     }
   },
   created () {
@@ -25,11 +26,13 @@ export default {
       const shrink = this.$refs.shrink
       expand.scrollLeft = this.maxWidth * 1000
       shrink.scrollLeft = this.maxWidth * 1000
-      this.$emit('scroll', true)
+      this.width = this.$refs.scroll.offsetWidth
+      this.$emit('scroll', this.width)
     }
   },
   mounted () {
-    this.$emit('scroll', true)
+    this.width = this.$refs.scroll.offsetWidth
+    this.$emit('scroll', this.width)
     const expand = this.$refs.expand
     const shrink = this.$refs.shrink
     const expandChild = this.$refs.expandChild
