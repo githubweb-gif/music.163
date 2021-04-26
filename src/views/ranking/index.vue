@@ -81,13 +81,13 @@ export default {
     initData () {
       rankingDtail().then((res) => {
         this.rankings = res.list
-      })
-      singerRanking().then((res) => {
-        console.log(res)
-        this.rankings.push({
-          name: '歌手榜',
-          tracks: res.list.artists.slice(0, 3),
-          coverImgUrl: this.singerImg
+        singerRanking().then((res) => {
+          console.log('-----------------')
+          this.rankings.push({
+            name: '歌手榜',
+            tracks: res.list.artists.slice(0, 3),
+            coverImgUrl: this.singerImg
+          })
         })
       })
     },
@@ -100,6 +100,7 @@ export default {
     },
     toPlayList (id) {
       if (!id) {
+        this.$router.push('/singerRanking')
         return
       }
       this.$router.push(`/songListDetail/${id}`)
@@ -158,6 +159,7 @@ export default {
       align-items: center;
       width: 50%;
       margin-bottom: 30px;
+      cursor: pointer;
       img {
         display: block;
         width: 100px;
@@ -192,6 +194,7 @@ export default {
       width: 12.5%;
       padding: 0 10px;
       margin-bottom: 20px;
+      cursor: pointer;
       img {
         width: 100%;
         margin-bottom: 5px;

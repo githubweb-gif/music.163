@@ -401,14 +401,16 @@ export function ranking () {
 
 /**
  * 说明 : 获取歌手榜详细内容
+ * 可选参数
+ * @type : 地区 1: 华语 2: 欧美 3: 韩国 4: 日本
  */
-export function singerRanking () {
+export function singerRanking (data) {
   return request({
     url: '/toplist/artist',
-    method: 'get'
+    method: 'get',
+    params: data
   })
 }
-
 /**
  * 说明 : 所有榜单内容摘要
  */

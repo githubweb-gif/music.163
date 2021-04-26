@@ -99,6 +99,16 @@ export const routes = [
         meta: {
           title: '排行榜'
         }
+      },
+      // 歌手榜
+      {
+        path: 'singerRanking',
+        name: 'singerRanking',
+        hidden: true,
+        component: () => import('@/views/ranking/singerRanking.vue'),
+        meta: {
+          title: '云音乐歌手榜'
+        }
       }
     ]
   },
