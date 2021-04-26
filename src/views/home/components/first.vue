@@ -11,19 +11,21 @@
         </div>
       </div>
       <div class="list">
-        <span class="el-icon-eleme" />
-        <div>
-          <div class="title">每日歌曲推荐</div>
-          <div class="content">根据你的口味生成</div>
-        </div>
+        <router-link class="list" to="/">
+          <span class="el-icon-eleme" />
+          <div>
+            <div class="title">每日歌曲推荐</div>
+            <div class="content">根据你的口味生成</div>
+          </div>
+        </router-link>
       </div>
-      <div class="list">
+      <router-link class="list" to="/ranking">
         <span class="el-icon-eleme" />
-        <div>
+        <div class="div">
           <div class="title">排行榜</div>
           <div class="content">最热音乐榜</div>
         </div>
-      </div>
+      </router-link>
     </div>
     <!-- 推荐歌单 -->
     <div class="song-sheet">
@@ -39,7 +41,7 @@
       </div>
       <div class="lists">
         <div v-for="item in playlist" :key="item.id" class="child">
-          <img :src="item.picUrl" alt="">
+          <img :src="item.picUrl" alt="" />
           <p>{{ item.name }}</p>
         </div>
       </div>

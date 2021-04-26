@@ -2,22 +2,22 @@
   <div ref="allsonglist" class="allsonglist">
     <div class="table">
       <div v-if="all" class="all">
-        <el-popover ref="popover" popper-class="popover-category" placement="bottom-start" width="200" trigger="click">
-          <div class="btn" slot="reference">{{cat}}</div>
-          <div class="content">
-            <el-button :class="cat === all.name ? 'cat' : ''" @click="getCatergroyList(all.name)">{{all.name}}</el-button>
-            <div class="main">
-              <div v-for="(list, index) in categories" :key="index" class="category">
-                <div class="category-name">{{list.category}}</div>
-                <div class="child">
-                  <ul>
-                    <li :class="[cat === item.name ? 'cat' : '']" @click="getCatergroyList(item.name)" v-for="(item, n) in list.child" :key="n">{{item.name}}</li>
-                  </ul>
+          <el-popover ref="popover" popper-class="popover-category" placement="bottom-start" width="200" trigger="click">
+            <div class="btn" slot="reference">{{cat}}</div>
+            <div class="content">
+              <el-button :class="cat === all.name ? 'cat' : ''" @click="getCatergroyList(all.name)">{{all.name}}</el-button>
+              <div class="main">
+                <div v-for="(list, index) in categories" :key="index" class="category">
+                  <div class="category-name">{{list.category}}</div>
+                  <div class="child">
+                    <ul>
+                      <li :class="[cat === item.name ? 'cat' : '']" @click="getCatergroyList(item.name)" v-for="(item, n) in list.child" :key="n">{  {item.name}}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </el-popover>
+          </el-popover>
       </div>
       <ul>
         <li :class="cat === item.name ? 'cat' : ''" @click="getCatergroyList(item.name)" v-for="(item, index) in hot" :key="index">{{item.name}}</li>
@@ -163,12 +163,19 @@ export default {
     font-size: 13px;
     display: flex;
     align-items: center;
+    .all {
+      align-self: flex-start;
+    }
     ul {
       display: flex;
+      flex-wrap: wrap;
+      flex: 1;
       li {
         padding: 0 10px;
         border-right: 1px solid rgb(204, 204, 204);
         cursor: pointer;
+        white-space: nowrap;
+        margin-bottom: 10px;
       }
     }
   }

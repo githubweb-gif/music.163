@@ -1,5 +1,12 @@
 <template>
   <div class="footer">
+    <div class="cover">
+      <img
+        v-if="currentSong.album"
+        :src="currentSong.album.album.blurPicUrl"
+        alt=""
+      />
+    </div>
     <div class="key">
       <span
         class="iconfont icon-shangyishou-yuanshijituantubiao"
@@ -19,13 +26,6 @@
         class="iconfont icon-xiayishou-yuanshijituantubiao"
         @click="preOrNext(1)"
       />
-    </div>
-    <div class="cover">
-      <img
-        v-if="currentSong.album"
-        :src="currentSong.album.album.blurPicUrl"
-        alt=""
-      >
     </div>
     <div class="bar">
       <div class="name-time">
@@ -198,49 +198,28 @@ export default {
           this.$store.commit('SET_PLAYING', true)
         })
       }
-
-      // this.musicList.forEach((ele, index) => {
-      //   if (ele.id === this.currentSong.id) {
-      //     if (i < 0) {
-      //       if (index + i === -1) {
-      //         this.preOrNext(this.musicList.length - 1)
-      //         return
-      //       }
-      //     } else {
-      //       if (index + i === this.musicList.length) {
-      //         this.preOrNext(-this.musicList.length + 1)
-      //         return
-      //       }
-      //     }
-      //     setMusciInfo(this.musicList[index + i]).then((data) => {
-      //       if (!data.url) {
-      //         if (i < 0) {
-      //           this.preOrNext(i - 1)
-      //         } else {
-      //           this.preOrNext(i + 1)
-      //         }
-      //         return
-      //       }
-      //       this.$store.dispatch('SET_HISTORY', data)
-      //       this.$store.commit('SET_PLAYING', true)
-      //     })
-      //     return
-      //   }
-      // })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: 550px) {
+  .bar {
+    display: none !important;
+  }
+  .key {
+    flex: 1;
+  }
+}
 .footer {
   display: flex;
   align-items: center;
-  // justify-content: space-between;
   position: relative;
+  justify-content: space-between;
   .key {
     display: flex;
-    margin: 0 50px;
+    margin: 0 20px;
     span {
       font-size: 30px;
       color: #c20c0c;
@@ -250,20 +229,26 @@ export default {
     }
   }
   .cover {
+    border: 1px solid rgb(228, 228, 228);
+    margin: 1px;
     img {
-      width: 35px;
-      height: 35px;
+      width: 58px;
+      height: 58px;
     }
   }
   .bar {
     flex: 1;
     align-self: center;
-    margin-left: 10px;
+    margin-right: 20px;
     .name-time {
       display: flex;
       margin-bottom: 5px;
-      font-size: 14px;
+      font-size: 13px;
       justify-content: space-between;
+      .name {
+        white-space: nowrap;
+        margin-right: 10px;
+      }
       .time {
         font-size: 10px;
         align-self: flex-end;
@@ -272,8 +257,8 @@ export default {
   }
   .function {
     display: flex;
-    margin-right: 30px;
     position: relative;
+    margin-right: 20px;
     div {
       margin: 0 10px;
       font-size: 18px;

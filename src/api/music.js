@@ -387,3 +387,34 @@ export function addOrDelLike (data) {
     params: data
   })
 }
+
+/**
+ * 说明 : 获取所有排行榜(不包含歌手榜)
+ * @no 开发中没有使用此接口,使用rankingDtail
+ */
+export function ranking () {
+  return request({
+    url: '/toplist',
+    method: 'get'
+  })
+}
+
+/**
+ * 说明 : 获取歌手榜详细内容
+ */
+export function singerRanking () {
+  return request({
+    url: '/toplist/artist',
+    method: 'get'
+  })
+}
+
+/**
+ * 说明 : 所有榜单内容摘要
+ */
+export function rankingDtail () {
+  return request({
+    url: '/toplist/detail',
+    method: 'get'
+  })
+}

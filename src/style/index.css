@@ -18,6 +18,10 @@ html {
   border-color: rgb(189, 189, 189) !important;
 }
 
+ol, ul {
+  list-style: none;
+}
+
 h1,
 h2,
 h3,
@@ -127,10 +131,6 @@ a {
 
 .el-tabs__header {
   margin: 0 !important;
-}
-
-ul {
-  list-style: none;
 }
 
 .songlist-detail-list .el-dialog__wrapper .el-dialog__header {

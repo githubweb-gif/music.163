@@ -138,13 +138,15 @@ header {
   color: rgb(146, 146, 146);
   li {
     margin-bottom: 7px;
+    display: flex;
+    line-height: 25px;
     .title {
       color: rgb(58, 58, 58);
     }
     .items {
+      flex: 1;
       span {
         font-size: 12px;
-        line-height: 25px;
         cursor: pointer;
       }
       span::after {
