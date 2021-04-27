@@ -1,5 +1,5 @@
 <template>
-  <div class="singerDetail" id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading">
+  <div class="singerDetail scroll-list" id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading">
     <header-component :detail="detail">
     </header-component>
     <el-tabs v-model="activeName" @tab-click="handleClick">

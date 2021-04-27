@@ -1,18 +1,6 @@
 import request from '@/untils/request'
 
 /**
- * 搜索歌曲
- * @keywords 关键词
- */
-export function searchMusic (data) {
-  return request({
-    url: '/search',
-    method: 'get',
-    params: data
-  })
-}
-
-/**
  * 获取歌曲url
  * @id 歌曲id
  */

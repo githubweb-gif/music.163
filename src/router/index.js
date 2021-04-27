@@ -10,6 +10,17 @@ export const routes = [
     redirect: '/home',
     children: [
       {
+        path: 'search',
+        name: 'search',
+        hidden: false,
+        component: () => import('@/views/search/index.vue'),
+        meta: {
+          title: '搜索',
+          icon: 'el-icon-search',
+          keepAlive: false
+        }
+      },
+      {
         path: 'home',
         name: 'home',
         hidden: false,
@@ -28,28 +39,6 @@ export const routes = [
         meta: {
           title: 'MV',
           icon: 'el-icon-s-goods'
-        }
-      },
-      {
-        path: 'LocalMusic',
-        name: 'LocalMusic',
-        hidden: false,
-        component: () => import('@/views/FM/index.vue'),
-        meta: {
-          title: '本地音乐',
-          class: 'MyMusic',
-          icon: 'el-icon-paperclip'
-        }
-      },
-      {
-        path: 'DownloadManagement',
-        name: 'DownloadManagement',
-        hidden: false,
-        component: () => import('@/views/FM/index.vue'),
-        meta: {
-          title: '下载管理',
-          class: 'MyMusic',
-          icon: 'el-icon-headset'
         }
       },
       {

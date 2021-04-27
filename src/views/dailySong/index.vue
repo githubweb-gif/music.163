@@ -1,5 +1,5 @@
 <template>
-  <div class="dailySong">
+  <div class="dailySong scroll-list">
     <header>
       <div class="date">27</div>
       <div class="right">

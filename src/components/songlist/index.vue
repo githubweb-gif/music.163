@@ -1,5 +1,5 @@
 <template>
-  <div id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading" class="songlistDetail">
+  <div id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading" class="scroll-list songlistDetail">
     <header-component :description="description" :name="name" :cover-img-url="coverImgUrl" >
       <template v-slot:creator>
         <div class="creator">
