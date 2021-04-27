@@ -1,17 +1,21 @@
 <template>
   <div class="searchResult">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs ref="tabs" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         v-for="item in tabs"
         :key="item.type"
         :label="item.value"
         :name="item.type"
       >
+        <div class="content">
+          <component
+            :keyWord="keyWord"
+            :songs="songs"
+            :is="item.component"
+          ></component>
+        </div>
       </el-tab-pane>
     </el-tabs>
-    <div class="content scroll-list">
-      <component :songs="songs" :is="component"></component>
-    </div>
   </div>
 </template>
 
@@ -29,12 +33,15 @@ export default {
       default: () => {
         return []
       }
+    },
+    keyWord: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       activeName: '1',
-      component: 'playList',
       tabs: [
         { type: '1', value: '单曲', component: 'playList' },
         { type: '100', value: '歌手', component: 'singerList' },
@@ -46,22 +53,25 @@ export default {
     }
   },
   created () {},
+  watch: {
+    keyWord () {
+      this.activeName = '1'
+    }
+  },
+  mounted () {
+    console.log(this.$refs.tabs.$el.querySelector('.el-tabs__content').classList.add('scroll-list'))
+  },
   methods: {
     handleClick (value) {
-      this.component = this.tabs[+value.index].component || 'playList'
+      this.$bus.$emit('search-tab', value.name)
     }
   }
 }
 </script>
 <style lang='scss' scoped>
-.searchResult {
+.el-tabs {
   display: flex;
+  height: 100%;
   flex-direction: column;
-}
-
-.content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 </style>

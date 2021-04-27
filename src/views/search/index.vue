@@ -7,13 +7,18 @@
         v-model="keyWord"
         suffix-icon="el-icon-search"
       ></el-input>
-      <div v-if="suggestList && suggestList.length > 0" id="suggest">
-        <div @click="confrim(item.keyword)" class="item" v-for="(item, index) in suggestList" :key="index">
+      <div v-show="showSuggest" id="suggest">
+        <div
+          @click="confrim(item.keyword)"
+          class="item"
+          v-for="(item, index) in suggestList"
+          :key="index"
+        >
           {{ item.keyword }}
         </div>
       </div>
     </div>
-    <div v-if="showResult" class="hot-history">
+    <div v-if="!valid" class="hot-history">
       <div class="hot">
         <div class="title">热门搜索</div>
         <div class="content">
@@ -37,7 +42,12 @@
         </div>
       </div>
     </div>
-    <search-result :songs="songs" v-else class="result"></search-result>
+    <search-result
+      :keyWord="valid"
+      :songs="songs"
+      v-else
+      class="result"
+    ></search-result>
   </div>
 </template>
 
@@ -54,9 +64,11 @@ export default {
     return {
       hotKeyWords: [],
       keyWord: '',
+      valid: '',
       keyWords: [],
-      showResult: false,
       suggestList: [],
+      showSuggest: false,
+      // 单曲
       songs: []
     }
   },
@@ -65,30 +77,58 @@ export default {
     const keys = getSearchHistory() || []
     this.keyWords = keys
   },
+  watch: {
+    keyWord (val) {
+      if (!val) {
+        this.showSuggest = false
+        this.valid = ''
+      }
+    }
+  },
   methods: {
+    // 获取 热门搜索
     gethotKeyWords () {
       hotKeyWords().then((data) => {
         this.hotKeyWords = data.result.hots
       })
     },
+    // 关键词搜索
     search () {
-      searchMusic({ keywords: this.keyWord, type: '1', limit: 100 }).then((data) => {
-        console.log(data)
+      const type = '1'
+      this.showSuggest = false
+      if (this.valid === this.keyWord) {
+        return
+      }
+      this.songs = []
+      this.valid = this.keyWord
+      searchMusic({ keywords: this.keyWord, type, limit: 100 }).then((data) => {
         setSearchHistory(this.keyWord)
-        this.filterMusic(data.result.songs)
+        console.log(type)
+        console.log(data)
+        if (data.code === 200) {
+          if (type === '1') {
+            this.filterMusic(data.result.songs)
+          }
+        }
       })
     },
+    // 搜索建议
     suggest: _.debounce(function () {
       searchSuggest({ type: 'mobile', keywords: this.keyWord }).then((data) => {
         console.log(data)
+        if (data.code !== 200) {
+          return
+        }
         this.suggestList = data.result.allMatch
+        this.showSuggest = true
       })
     }, 500),
+    // 搜索建议点击
     confrim (value) {
       this.keyWord = value
-      this.suggestList = []
       this.search()
     },
+    // 过滤单曲
     filterMusic (data) {
       data.forEach((x, index) => {
         const singername = []
@@ -122,18 +162,18 @@ export default {
   margin-bottom: 15px;
   position: relative;
   #suggest {
-      position: absolute;
-      width: 100%;
-      z-index: 100;
-      top: 40px;
-      background-color: #fff;
-      border-right: 1px solid #C0C4CC;
-      border-left: 1px solid #C0C4CC;
-      .item {
-          padding: 12px 0 12px 15px;
-          border-bottom: 1px solid #C0C4CC;
-          cursor: pointer;
-      }
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    top: 40px;
+    background-color: #fff;
+    border-right: 1px solid #c0c4cc;
+    border-left: 1px solid #c0c4cc;
+    .item {
+      padding: 12px 0 12px 15px;
+      border-bottom: 1px solid #c0c4cc;
+      cursor: pointer;
+    }
   }
 }
 .result {

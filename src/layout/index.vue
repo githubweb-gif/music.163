@@ -4,10 +4,10 @@
     <div class="container">
       <side-bar class="side" />
       <div class="main">
-        <keep-alive v-if="$route.meta.keepAlive" >
-          <router-view />
+        <keep-alive >
+          <router-view v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
-          <router-view v-else />
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
         <transition name="fade-transform">
           <user-info v-if="isUserRight && loginStatus" class="right-side" />
         </transition>

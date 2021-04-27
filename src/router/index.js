@@ -17,7 +17,7 @@ export const routes = [
         meta: {
           title: '搜索',
           icon: 'el-icon-search',
-          keepAlive: false
+          keepAlive: true
         }
       },
       {
@@ -58,7 +58,8 @@ export const routes = [
         hidden: true,
         component: () => import('@/components/songlist/index.vue'),
         meta: {
-          title: '歌单详细内容'
+          title: '歌单详细内容',
+          keepAlive: false
         }
       },
       {
@@ -70,6 +71,7 @@ export const routes = [
           title: '专辑详细内容'
         }
       },
+      // 歌手详情
       {
         path: 'singerDetail/:id',
         name: 'singerDetail',
