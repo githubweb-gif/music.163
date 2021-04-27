@@ -25,7 +25,7 @@ export default {
     // window.requestAnimationFrame = window.webkitRequestAnimationFrame
     this.$nextTick(() => {
       if (this.songs) {
-        const element = document.querySelector('#to-top') || document.querySelector('.home-main')
+        const element = document.querySelector('#to-top') || document.querySelector('.home-main') || document.querySelector('.dailySong')
         element.onscroll = () => {
           this.onVirtualScroll()
         }
@@ -122,7 +122,7 @@ export default {
       this.refreshVirtualItems(newItems, replaceItemsIndex)
     },
     refreshRenderData () {
-      const head = document.querySelector('#to-top') || document.querySelector('.home-main')
+      const head = document.querySelector('#to-top') || document.querySelector('.home-main') || document.querySelector('.dailySong')
       const scrollTop = (head ? head.scrollTop : 0) - this.headHeight
       const [minItemHeight, maxItemHeight] = this.calDomItemsHeight(this.itemHeight, this.remainHeight, this.viewPortHeight, this.renderItemsHeight, scrollTop)
       this.updateRenderData(this.buildRenderData(minItemHeight, maxItemHeight))

@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="list">
-        <router-link class="list" to="/">
+        <router-link class="list" to="/dailySong">
           <span class="el-icon-eleme" />
           <div>
             <div class="title">每日歌曲推荐</div>

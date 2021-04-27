@@ -411,12 +411,23 @@ export function singerRanking (data) {
     params: data
   })
 }
+
 /**
  * 说明 : 所有榜单内容摘要
  */
 export function rankingDtail () {
   return request({
     url: '/toplist/detail',
+    method: 'get'
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 可获得每日推荐歌曲 ( 需要登录 )
+ */
+export function dailySong () {
+  return request({
+    url: '/recommend/songs',
     method: 'get'
   })
 }

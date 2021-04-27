@@ -109,6 +109,16 @@ export const routes = [
         meta: {
           title: '云音乐歌手榜'
         }
+      },
+      // 每日歌曲推荐
+      {
+        path: 'dailySong',
+        name: 'dailySong',
+        hidden: true,
+        component: () => import('@/views/dailySong/index.vue'),
+        meta: {
+          title: '每日歌曲推荐'
+        }
       }
     ]
   },
