@@ -55,7 +55,7 @@ export default {
 li:nth-child(odd) {
   background-color: rgb(243, 243, 243);
 }
-li {
+li a {
   display: flex;
   align-items: center;
   padding: 10px 10px;

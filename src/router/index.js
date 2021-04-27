@@ -8,6 +8,9 @@ export const routes = [
     path: '/',
     component: () => import('@/layout/index.vue'),
     redirect: '/home',
+    meta: {
+      keepAlive: true
+    },
     children: [
       {
         path: 'search',

@@ -22,10 +22,18 @@
 <script>
 import playList from '@/components/playList/list.vue'
 import singerList from './singerList.vue'
+import albumList from './albumList.vue'
+import mvList from './mvList.vue'
+import songList from './songList.vue'
+import userList from './userList.vue'
 export default {
   components: {
     playList,
-    singerList
+    singerList,
+    albumList,
+    mvList,
+    songList,
+    userList
   },
   props: {
     songs: {
@@ -45,10 +53,10 @@ export default {
       tabs: [
         { type: '1', value: '单曲', component: 'playList' },
         { type: '100', value: '歌手', component: 'singerList' },
-        { type: '10', value: '专辑' },
-        { type: '1004', value: 'MV' },
-        { type: '1000', value: '歌单' },
-        { type: '1002', value: '用户' }
+        { type: '10', value: '专辑', component: 'albumList' },
+        { type: '1004', value: 'MV', component: 'mvList' },
+        { type: '1000', value: '歌单', component: 'songList' },
+        { type: '1002', value: '用户', component: 'userList' }
       ]
     }
   },
