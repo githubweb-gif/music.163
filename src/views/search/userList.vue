@@ -2,7 +2,7 @@
   <div class="singerList">
     <ul>
       <li v-for="(item, index) in userData" :key="index">
-        <router-link :to="`/singerDetail/${item.id}`">
+        <router-link :to="`/userDetail/${item.userId}`">
           <div class="avatar">
             <img :src="`${item.avatarUrl}?param=50y50`" alt="" />
           </div>
@@ -90,6 +90,7 @@ li a {
           font-size: 13px;
           color: rgb(153, 153, 153);
           display: inline-block;
+          max-width: 60%;
           padding: 10px;
           background-color: #fff;
           border-radius: 5px;

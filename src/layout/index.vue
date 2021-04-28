@@ -5,7 +5,7 @@
       <side-bar class="side" />
       <div class="main">
         <keep-alive >
-          <router-view v-if="$route.meta.keepAlive"></router-view>
+          <router-view :class="$route.meta.margin ? 'autoMargin' : ''" v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"></router-view>
         <transition name="fade-transform">
@@ -14,6 +14,7 @@
         <transition name="fade-transform">
           <music-list v-show="isMusicList" class="right-side" />
         </transition>
+        <zoom @scroll="zoom"></zoom>
       </div>
     </div>
     <footer-bar class="footer" />
@@ -32,6 +33,7 @@ import footerBar from './components/footer/footer.vue'
 // import setMusciInfo from '@/untils/setMusciInfo'
 import toLogin from '@/views/login/index.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import zoom from '@/components/scroll/index.vue'
 export default {
   components: {
     headerBar,
@@ -39,28 +41,20 @@ export default {
     footerBar,
     musicList,
     toLogin,
-    userInfo
+    userInfo,
+    zoom
   },
   data () {
     return {}
   },
   computed: {
     ...mapState({
-      isMusicList: (state) => state.music.isMusicList,
-      isUserRight: (state) => state.user.isUserRight,
-      loginStatus: (state) => state.user.loginStatus
+      isMusicList: state => state.music.isMusicList,
+      isUserRight: state => state.user.isUserRight,
+      loginStatus: state => state.user.loginStatus
     })
   },
   created () {
-    // searchMusic({ keywords: '张学友' }).then(async(res) => {
-    //   // 设置播放队列
-    //   const playlist = res.result.songs
-    //   setMusciInfo(res.result.songs[1]).then((data) => {
-    //     const musicInfo = data
-    //     this.setHistory(musicInfo)
-    //   })
-    //   this.setPlaylist(playlist)
-    // })
   },
   methods: {
     rightSideShow (value) {
@@ -70,6 +64,10 @@ export default {
       if (this.isUserRight) {
         this.setUserRight(false)
       }
+    },
+    zoom (value) {
+      console.log(value)
+      this.$bus.$emit('zoom', value)
     },
     ...mapActions({
       setHistory: 'SET_HISTORY',
@@ -121,7 +119,7 @@ export default {
     padding: 15px 20px;
   }
   .right-side {
-    z-index: 1000;
+    z-index: 100;
   }
 }
 

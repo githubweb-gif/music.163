@@ -1,17 +1,17 @@
 <template>
-  <div ref="allsonglist" class="allsonglist">
+  <div ref="box" class="allsonglist">
     <div class="table">
       <div v-if="all" class="all">
           <el-popover ref="popover" popper-class="popover-category" placement="bottom-start" width="200" trigger="click">
             <div class="btn" slot="reference">{{cat}}</div>
             <div class="content">
-              <el-button :class="cat === all.name ? 'cat' : ''" @click="getCatergroyList(all.name)">{{all.name}}</el-button>
+              <el-button :class="cat === all.name ? 'cat' : ''" @click="getData(all.name)">{{all.name}}</el-button>
               <div class="main">
                 <div v-for="(list, index) in categories" :key="index" class="category">
                   <div class="category-name">{{list.category}}</div>
                   <div class="child">
                     <ul>
-                      <li :class="[cat === item.name ? 'cat' : '']" @click="getCatergroyList(item.name)" v-for="(item, n) in list.child" :key="n">{  {item.name}}</li>
+                      <li :class="[cat === item.name ? 'cat' : '']" @click="getData(item.name)" v-for="(item, n) in list.child" :key="n">{  {item.name}}</li>
                     </ul>
                   </div>
                 </div>
@@ -20,12 +20,12 @@
           </el-popover>
       </div>
       <ul>
-        <li :class="cat === item.name ? 'cat' : ''" @click="getCatergroyList(item.name)" v-for="(item, index) in hot" :key="index">{{item.name}}</li>
+        <li :class="cat === item.name ? 'cat' : ''" @click="cat = item.name" v-for="(item, index) in hot" :key="index">{{item.name}}</li>
       </ul>
     </div>
     <div class="playList">
       <ul>
-        <li @click="toplayListDetail(list.id)" :style="index > 0 &&  imgWidth > 0? `max-width: ${imgWidth}px` : ''" v-for="(list, index) in lists" :key="index">
+        <li @click="toplayListDetail(list.id)" :style="{width: imgWidth}" v-for="(list, index) in lists" :key="index">
           <img :ref="index === 0 ? 'imgFirst' : '' " v-lazy="list.coverImgUrl" alt="">
           <div class="name">{{list.name}}</div>
           <div class="creator">by {{list.creator.nickname}}</div>
@@ -33,17 +33,14 @@
         </li>
       </ul>
     </div>
-    <scroll @scroll="onScroll"></scroll>
   </div>
 </template>
 
 <script>
 import { songLists, catergroyList } from '@/api/music'
-import scroll from '@/components/scroll/index.vue'
+import mixins from './mixins'
 export default {
-  components: {
-    scroll
-  },
+  mixins: [mixins],
   data () {
     return {
       hot: [],
@@ -51,19 +48,21 @@ export default {
       categories: [],
       lists: [],
       cat: '全部歌单',
-      imgWidth: 0,
+      imgWidth: '16.6%',
       bol: true,
       offset: 0
     }
   },
   watch: {
-    hot (val) {
-      if (val && val.length > 0) {
-        this.getCatergroyList('全部')
+    cat (val) {
+      if (val) {
+        this.lists = []
+        this.getData(val)
       }
     }
   },
   created () {
+    this.getData('全部')
     songLists().then((data) => {
       const categories = data.categories
       const keys = Object.keys(categories)
@@ -89,30 +88,10 @@ export default {
         .slice(0, 8)
     })
   },
-  mounted () {
-    const homeMain = document.querySelector('.home-main')
-    homeMain.addEventListener('scroll', e => {
-      if (this.$refs.popover) {
-        this.$refs.popover.doClose()
-      }
-      if (!this.bol) {
-        return
-      }
-      const target = e.target
-      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-        this.offset += 50
-        this.bol = false
-        this.getCatergroyList(this.cat)
-      }
-    })
-  },
   methods: {
     // 获取对应类型的歌单
-    getCatergroyList (cat) {
-      if (cat && cat !== this.cat) {
-        this.lists = []
-      }
-      this.cat = cat
+    getData (cat) {
+      console.log(cat)
       catergroyList({
         order: 'hot',
         cat,
@@ -123,22 +102,11 @@ export default {
           return
         }
         this.lists.push(...data.playlists)
+        console.log()
         this.bol = true
-        if (!this.imgWidth) {
-          this.$nextTick(() => {
-            this.onScroll()
-          })
-        }
       })
       if (this.$refs.popover) {
         this.$refs.popover.doClose()
-      }
-    },
-    // 监听滚动
-    onScroll () {
-      const img = this.$refs.imgFirst
-      if (img) {
-        this.imgWidth = Math.ceil(img[0].offsetWidth)
       }
     },
     toplayListDetail (id) {
@@ -159,6 +127,7 @@ export default {
 .allsonglist {
   overflow: hidden;
   position: relative;
+  width: 100%;
   .table {
     font-size: 13px;
     display: flex;
@@ -243,9 +212,8 @@ export default {
     font-size: 13px;
     li {
       position: relative;
-      min-width: 120px;
-      flex: 1;
-      margin-right: 20px;
+      width: 16.6%;
+      padding-right: 20px;
       margin-bottom: 20px;
       img {
         width: 100%;

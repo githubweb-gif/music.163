@@ -20,7 +20,8 @@ export const routes = [
         meta: {
           title: '搜索',
           icon: 'el-icon-search',
-          keepAlive: true
+          keepAlive: true,
+          margin: false
         }
       },
       {
@@ -31,7 +32,8 @@ export const routes = [
         meta: {
           title: '发现音乐',
           icon: 'el-icon-user-solid',
-          keepAlive: true
+          keepAlive: true,
+          margin: true
         }
       },
       {
@@ -41,7 +43,8 @@ export const routes = [
         component: () => import('@/views/video/index.vue'),
         meta: {
           title: 'MV',
-          icon: 'el-icon-s-goods'
+          icon: 'el-icon-s-goods',
+          margin: true
         }
       },
       {
@@ -52,7 +55,8 @@ export const routes = [
         meta: {
           title: '最近播放',
           class: 'MyMusic',
-          icon: 'el-icon-headset'
+          icon: 'el-icon-headset',
+          margin: false
         }
       },
       {
@@ -62,7 +66,8 @@ export const routes = [
         component: () => import('@/components/songlist/index.vue'),
         meta: {
           title: '歌单详细内容',
-          keepAlive: false
+          keepAlive: false,
+          margin: false
         }
       },
       {
@@ -71,7 +76,8 @@ export const routes = [
         hidden: true,
         component: () => import('@/components/album/index.vue'),
         meta: {
-          title: '专辑详细内容'
+          title: '专辑详细内容',
+          margin: false
         }
       },
       // 歌手详情
@@ -81,7 +87,8 @@ export const routes = [
         hidden: true,
         component: () => import('@/components/singerDetail/index.vue'),
         meta: {
-          title: '歌手详细内容'
+          title: '歌手详细内容',
+          margin: false
         }
       },
       // 排行榜
@@ -91,7 +98,8 @@ export const routes = [
         hidden: true,
         component: () => import('@/views/ranking/index.vue'),
         meta: {
-          title: '排行榜'
+          title: '排行榜',
+          margin: true
         }
       },
       // 歌手榜
@@ -101,7 +109,8 @@ export const routes = [
         hidden: true,
         component: () => import('@/views/ranking/singerRanking.vue'),
         meta: {
-          title: '云音乐歌手榜'
+          title: '云音乐歌手榜',
+          margin: false
         }
       },
       // 每日歌曲推荐
@@ -111,7 +120,19 @@ export const routes = [
         hidden: true,
         component: () => import('@/views/dailySong/index.vue'),
         meta: {
-          title: '每日歌曲推荐'
+          title: '每日歌曲推荐',
+          margin: false
+        }
+      },
+      // 用户详情
+      {
+        path: 'userDetail/:id',
+        name: 'userDetail',
+        hidden: true,
+        component: () => import('@/components/userInfo/index.vue'),
+        meta: {
+          title: '个人主页',
+          margin: false
         }
       }
     ]

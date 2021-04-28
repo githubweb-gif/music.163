@@ -1,13 +1,13 @@
 <template>
-  <div class="newList">
+  <div ref="box" class="newList">
     <div class="month">
-      <div v-for="(item, index) in renderData" :key="index">
+      <div v-for="(item, index) in allData" :key="index">
         <div ref="title" class="title">
           <span> {{item.time | time}}</span>
           <span class="year" v-if="item.year"> / {{item.year}}</span>
         </div>
         <ul>
-          <li @click="toplayListDetail(x.id)" class="item" v-for="x in item.child" :key="x.id">
+          <li :style="{width: imgWidth}" @click="toplayListDetail(x.id)" class="item" v-for="x in item.child" :key="x.id">
             <img v-lazy="`${x.picUrl}?param=130y130`" :key="item.picUrl" alt="">
             <div class="name">{{x.name}}</div>
             <p>{{x.artist.name}}</p>
@@ -21,7 +21,9 @@
 <script>
 // api
 import { getNewList } from '@/api/music'
+import mixins from './mixins'
 export default {
+  mixins: [mixins],
   filters: {
     time (val) {
       if (typeof val === 'number') {
@@ -35,36 +37,12 @@ export default {
     return {
       // 全部数据
       allData: [],
-      // 渲染需要的数据
-      renderData: [],
-      // 分页
-      page: 0,
-      // 每页数据
-      pageSize: 40,
-      // 节流
-      bol: true,
-      // 保存每页数据
-      history: [],
-      // 总页数
-      total: 0
+      imgWidth: '16.6%',
+      noOffset: true
     }
   },
   created () {
     this.getData()
-  },
-  mounted () {
-    const homeMain = document.querySelector('.home-main')
-    homeMain.addEventListener('scroll', (e) => {
-      if (!this.bol) {
-        return
-      }
-      const target = e.target
-      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-        this.page++
-        this.bol = false
-        this.getFilterData()
-      }
-    })
   },
   methods: {
     getData () {
@@ -73,33 +51,15 @@ export default {
           x.weekTime = 'weekTime'
           return true
         })
-        this.allData.push(...res.weekData)
         const sort = res.monthData.sort((a, b) => {
           return a.publishTime - b.publishTime > 0 ? -1 : 1
         })
-        this.allData.push(...sort)
-        this.total = Math.ceil(this.allData.length / this.pageSize)
-        this.getFilterData()
+        this.getFilterData(res.weekData, sort)
       })
     },
-    // page++
-    getFilterData (state) {
+    getFilterData (weekData, monthData) {
       const data = {}
-      const next = this.page + 1
-      if (this.page > (this.total - 1)) {
-        return
-      }
-      const sliceData = this.allData.slice(
-        this.page * this.pageSize,
-        next * this.pageSize
-      )
-      this.history.push(...sliceData)
-      const weekData = this.history.filter((x) => {
-        if (x.weekTime) {
-          return true
-        }
-      })
-      this.history.forEach((x) => {
+      monthData.forEach((x) => {
         const date = new Date(x.publishTime)
         const year = date.getFullYear()
         const month = date.getMonth()
@@ -115,15 +75,13 @@ export default {
           data[ym].child.push(x)
         }
       })
-      this.renderData = []
-      this.renderData.push({
+      this.allData.push({
         time: '本周新碟',
         child: weekData
       })
       for (const i in data) {
-        this.renderData.push(data[i])
+        this.allData.push(data[i])
       }
-      this.bol = true
     },
     toplayListDetail (id) {
       this.$router.push(`/albumDetail/${id}`)
@@ -133,24 +91,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media only screen and (max-width: 1300px) {
-  .item {
-    width: 20% !important;
-  }
+.newList {
+  width: 100%;
 }
-
-@media only screen and (max-width: 900px) {
-  .item {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  .item {
-    width: 33% !important;
-  }
-}
-
 ul {
   width: 100%;
   display: flex;
@@ -164,7 +107,6 @@ ul {
   }
 }
 .item {
-  width: 10%;
   margin-bottom: 15px;
   padding-right: 10px;
   img {

@@ -66,8 +66,8 @@ export default {
   padding-bottom: 5px;
 }
 .home-main {
-  padding: 0 1%;
   overflow-y: auto;
-  margin-top: 25px;
+  max-width: 1100px;
+  margin: 25px auto 0;
 }
 </style>

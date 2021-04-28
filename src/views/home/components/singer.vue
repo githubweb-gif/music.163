@@ -1,5 +1,5 @@
 <template>
-  <div class="singer">
+  <div ref="box" class="singer">
     <header>
       <ul>
         <li>
@@ -23,7 +23,7 @@
       </ul>
     </header>
     <main>
-      <div @click="toSingerDetail(item.id)" v-for="item in artists" :key="item.id" class="item">
+      <div :style="{width: imgWidth}" @click="toSingerDetail(item.id)" v-for="item in artists" :key="item.id" class="item">
         <img v-lazy="`${item.picUrl}?param=130y130`" alt="">
         <div class="name"></div>
         {{item.name}}
@@ -34,11 +34,13 @@
 
 <script>
 import { getSinger } from '@/api/music'
+import mixins from './mixins'
 export default {
+  mixins: [mixins],
   data () {
     return {
       options: {
-        limit: 30,
+        limit: 50,
         offset: 0,
         type: -1,
         area: -1,
@@ -59,7 +61,8 @@ export default {
         { type: '乐队', value: 3 }
       ],
       artists: [],
-      bol: true
+      bol: true,
+      imgWidth: '16.6%'
     }
   },
   computed: {
@@ -73,20 +76,6 @@ export default {
   },
   created () {
     this.getData()
-  },
-  mounted () {
-    const homeMain = document.querySelector('.home-main')
-    homeMain.addEventListener('scroll', (e) => {
-      if (!this.bol) {
-        return
-      }
-      const target = e.target
-      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-        this.options.offset += 30
-        this.bol = false
-        this.getData()
-      }
-    })
   },
   methods: {
     getData () {
@@ -116,23 +105,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media only screen and (max-width: 1300px) {
-  main .item {
-    width: 14% !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  main .item {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  main .item {
-    width: 33% !important;
-  }
-}
 header {
   font-size: 13px;
   color: rgb(146, 146, 146);
@@ -169,7 +141,6 @@ main {
   display: flex;
   flex-wrap: wrap;
   .item {
-    width: 10%;
     padding-right: 10px;
     margin-bottom: 20px;
     font-size: 13px;

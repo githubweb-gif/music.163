@@ -18,13 +18,16 @@
         </div>
       </div>
     </div>
-    <div v-if="!valid" class="hot-history">
+    <div @click="showSuggest = false" v-if="!valid" class="hot-history">
       <div class="hot">
         <div class="title">热门搜索</div>
         <div class="content">
-          <span v-for="(item, index) in hotKeyWords" :key="index">{{
-            item.first
-          }}</span>
+          <span
+            @click="confrim(item.first)"
+            v-for="(item, index) in hotKeyWords"
+            :key="index"
+            >{{ item.first }}</span
+          >
         </div>
       </div>
       <div class="history">
@@ -43,6 +46,7 @@
       </div>
     </div>
     <search-result
+      @click.native="showSuggest = false"
       :keyWord="valid"
       :songs="songs"
       v-else
