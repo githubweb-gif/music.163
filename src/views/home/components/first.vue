@@ -1,5 +1,5 @@
 <template>
-  <div class="first">
+  <div ref="box" class="first">
     <swiper :images="banners" />
     <!-- 私人FM， 每日歌曲推荐，排行榜 -->
     <div class="recommend">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="lists">
-        <div v-for="item in playlist" :key="item.id" class="child">
+        <div :style="setStyle(index)"  v-for="(item, index) in playlist" :key="item.id" class="child">
           <img :src="item.picUrl" alt="" />
           <p>{{ item.name }}</p>
         </div>
@@ -62,12 +62,49 @@ export default {
     return {
       banners: null,
       // 推荐歌单
-      playlist: null
+      playlist: null,
+      imgWidth: '20%'
     }
   },
   computed: {},
   created () {
     this.initData()
+  },
+  mounted () {
+    const box = this.$refs.box
+    const boxWidth = box.offsetWidth
+    console.log(boxWidth)
+    switch (true) {
+      // 0可能是刚渲染宽度为0
+      case boxWidth > 930 || boxWidth === 0:
+        this.imgWidth = '20%'
+        break
+      case boxWidth <= 930 && boxWidth > 720 :
+        this.imgWidth = '25%'
+        break
+      case boxWidth <= 720 && boxWidth > 510:
+        this.imgWidth = '33.3%'
+        break
+      case boxWidth <= 510:
+        this.imgWidth = '50%'
+    }
+    this.$bus.$on('zoom', (boxWidth) => {
+      console.log(boxWidth)
+      switch (true) {
+      // 0可能是刚渲染宽度为0
+        case boxWidth > 930 || boxWidth === 0:
+          this.imgWidth = '20%'
+          break
+        case boxWidth <= 930 && boxWidth > 720 :
+          this.imgWidth = '25%'
+          break
+        case boxWidth <= 720 && boxWidth > 510:
+          this.imgWidth = '33.3%'
+          break
+        case boxWidth <= 510:
+          this.imgWidth = '50%'
+      }
+    })
   },
   methods: {
     initData () {
@@ -83,59 +120,30 @@ export default {
       personalized({ limit: 10 }).then((res) => {
         this.playlist = res.result
       })
+    },
+    setStyle (index) {
+      if (this.imgWidth === '33.3%' && index === 9) {
+        return {
+          width: this.imgWidth,
+          display: 'none'
+        }
+      } else if (this.imgWidth === '25%' && (index === 9 || index === 8)) {
+        return {
+          width: this.imgWidth,
+          display: 'none'
+        }
+      }
+      return {
+        width: this.imgWidth
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@media only screen and (max-width: 1000px) {
-  .lists {
-    .child {
-      flex: 1 1 25% !important;
-    }
-    .child:nth-of-type(9) {
-      display: none;
-    }
-    .child:nth-of-type(10) {
-      display: none;
-    }
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .lists {
-    .child {
-      flex: 1 1 33% !important;
-    }
-    .child:nth-of-type(9) {
-      display: block;
-    }
-  }
-  .recommend {
-    .list {
-      flex-direction: column;
-      align-items: center;
-      .content {
-        display: none;
-      }
-      .title {
-        font-size: 12px !important;
-      }
-    }
-    .list > div {
-      margin-top: 10px;
-    }
-  }
-}
-
-@media only screen and (max-width: 500px) {
-  .lists {
-    .child {
-      flex: 1 1 50% !important;
-      display: block !important;
-    }
-  }
+.first {
+  width: 100%;
 }
 .recommend {
   display: flex;
@@ -186,8 +194,6 @@ export default {
     align-items: center;
     width: 100%;
     .child {
-      box-sizing: border-box;
-      flex: 1 1 20%;
       padding-right: 10px;
       overflow: hidden;
       margin-bottom: 30px;
