@@ -1,7 +1,7 @@
 <template>
-  <div class='singerMv'>
+  <div ref="box" class='singerMv'>
     <ul>
-      <li @click="toMV(item.id)" class="item" v-for="item in mvs" :key="item.id">
+      <li :style="{width: imgWidth}" @click="toMV(item.id)" class="item" v-for="item in mvs" :key="item.id">
         <img v-lazy="`${item.imgurl}?param=130y130`" alt="">
         <div class="name">{{item.name}}</div>
         <div class="time">{{item.publishTime}}</div>
@@ -13,7 +13,9 @@
 
 <script>
 import { singerMv } from '@/api/music'
+import resize from '@/components/imgSize/index'
 export default {
+  mixins: [resize],
   props: {
     id: {
       type: String,
@@ -24,7 +26,8 @@ export default {
     return {
       mvs: [],
       bol: true,
-      offset: 0
+      offset: 0,
+      imgWidth: '12.5%'
     }
   },
   watch: {
@@ -37,20 +40,6 @@ export default {
   },
   created () {
     this.getData()
-  },
-  mounted () {
-    const singerDetail = document.querySelector('.singerDetail')
-    singerDetail.addEventListener('scroll', (e) => {
-      if (!this.bol) {
-        return
-      }
-      const target = e.target
-      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-        this.offset += 30
-        this.bol = false
-        this.getData()
-      }
-    })
   },
   methods: {
     getData () {
@@ -69,23 +58,6 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-@media only screen and (max-width: 1300px) {
-  li {
-    width: 14% !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  li {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  li {
-    width: 33% !important;
-  }
-}
 .singerMv {
   margin-top: 20px;
 }
@@ -93,7 +65,6 @@ ul {
   display: flex;
   flex-wrap: wrap;
   li {
-    width: 10%;
     padding-right: 10px;
     margin-bottom: 10px;
     position: relative;

@@ -1,7 +1,7 @@
 <template>
-  <div class='singerAblum'>
+  <div ref="box" class='singerAblum'>
       <ul>
-          <li @click="toAlbum(item.id)" v-for="item in albums" :key="item.id">
+          <li :style="{width: imgWidth}" @click="toAlbum(item.id)" v-for="item in albums" :key="item.id">
               <img v-lazy="`${item.picUrl}?param=130y130`" alt="">
               <p>{{item.name}}</p>
               <span class="title">{{item.publishTime | time}}</span>
@@ -12,7 +12,9 @@
 
 <script>
 import { singerAblum } from '@/api/music'
+import resize from '@/components/imgSize/index'
 export default {
+  mixins: [resize],
   props: {
     id: {
       type: String,
@@ -38,7 +40,8 @@ export default {
     return {
       albums: [],
       bol: true,
-      offset: 0
+      offset: 0,
+      imgWidth: '12.5%'
     }
   },
   watch: {
@@ -52,24 +55,9 @@ export default {
   created () {
     this.getData()
   },
-  mounted () {
-    const singerDetail = document.querySelector('.singerDetail')
-    singerDetail.addEventListener('scroll', (e) => {
-      if (!this.bol) {
-        return
-      }
-      const target = e.target
-      if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-        this.offset += 30
-        this.bol = false
-        this.getData()
-      }
-    })
-  },
   methods: {
     getData () {
       singerAblum({ id: this.id, limit: 30, offset: this.offset }).then(data => {
-        console.log(data)
         if (data.hotAlbums.length === 0) {
           return
         }
@@ -84,29 +72,11 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-@media only screen and (max-width: 1300px) {
-  li {
-    width: 14% !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
- li {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
- li {
-    width: 33% !important;
-  }
-}
 ul {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
     li {
-        width: 10%;
         margin-bottom: 20px;
         padding-right: 10px;
         img {

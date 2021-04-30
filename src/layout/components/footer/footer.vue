@@ -60,6 +60,8 @@
         <span v-if="list">{{ list.length }}</span>
       </div>
     </div>
+    <!-- 播放界面 -->
+    <play-interface></play-interface>
   </div>
 </template>
 
@@ -67,9 +69,12 @@
 import progressBar from './components/progressBar'
 import { GET_HISTORY } from '@/untils/cache'
 import setMusciInfo from '@/untils/setMusciInfo'
+// 播放界面
+import playInterface from '@/components/playInterface/index.vue'
 export default {
   components: {
-    progressBar
+    progressBar,
+    playInterface
   },
   data () {
     return {
@@ -78,6 +83,7 @@ export default {
       time: 0,
       // 用于判断是点击进度条还是拖动进度条，默认是拖动
       isclick: false,
+      // 当前时间
       currentTime: 0
     }
   },
@@ -137,6 +143,7 @@ export default {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.play()
+        this.$store.commit('SET_PLAYING', true)
       })
     },
     // 暂停
@@ -144,15 +151,19 @@ export default {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         audio.pause()
+        this.$store.commit('SET_PLAYING', false)
       })
     },
     audioReady (e) {
       this.icon = 'icon-bofang'
     },
     // 处理播放错误
-    audioError (e) {},
+    audioError (e) {
+
+    },
     updateTime (e) {
       this.currentTime = e.target.currentTime
+      this.$store.commit('SET_CURRENTTIME', e.target.currentTime)
     },
     audioEnd (e) {
       // 播放完毕自动播放下一首

@@ -67,7 +67,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$refs.tabs.$el.querySelector('.el-tabs__content').classList.add('scroll-list'))
+    this.$refs.tabs.$el.querySelector('.el-tabs__content').classList.add('scroll-list')
   },
   methods: {
     handleClick (value) {

@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import { Loading } from 'element-ui';
 
 const service = axios.create({
   baseURL: 'http://localhost:3000',
@@ -8,11 +9,18 @@ const service = axios.create({
 
 const date = new Date()
 
+// let reqCount = 0
+
 service.interceptors.request.use(config => {
+  console.log(config)
   if (config.method.toLocaleLowerCase() === 'post') {
     // POST请求url必须添加时间戳,使每次请求url不一样,不然请求会被缓存timestamp
     config.data.timestamp = date.getTime()
   }
+  // const target = config.
+  // Loading.service({
+
+  // })
   return config
 },
 error => {

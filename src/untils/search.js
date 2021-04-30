@@ -2,7 +2,6 @@ const key = 'searchKey'
 
 // 添加或修改搜索历史
 export function setSearchHistory (value) {
-  console.log(value)
   const keyWords = JSON.parse(window.sessionStorage.getItem(key)) || []
   keyWords.push(value)
   window.sessionStorage.setItem(key, JSON.stringify(keyWords))

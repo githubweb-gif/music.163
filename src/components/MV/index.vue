@@ -55,12 +55,10 @@ export default {
     getData () {
       // url地址
       mvUrl({ id: this.id }).then((res) => {
-        console.log(res)
         this.url = res.data.url
       })
       // mv详情
       mvDetail({ mvid: this.id }).then((res) => {
-        console.log(res)
         this.detail.desc = res.data.desc
         this.detail.publishTime = res.data.publishTime
         this.name = res.data.name

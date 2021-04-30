@@ -65,7 +65,6 @@ export default {
     isShow: {
       immediate: true,
       handler (val) {
-        console.log(val)
         this.$nextTick(() => {
           if (val) {
             this.$refs.container.style.height = '500px'
@@ -88,7 +87,6 @@ export default {
     getData () {
       // 相似url
       simi({ mvid: this.id }).then((res) => {
-        console.log(res)
         this.simiMvs = res.mvs
       })
     },
@@ -103,7 +101,6 @@ export default {
     },
     showTitle () {
       const style = document.defaultView.getComputedStyle(this.$refs.desc, null)
-      console.log(style.maxHeight)
       if (style.maxHeight === '100px') {
         this.$refs.desc.style.maxHeight = '1000px'
         this.icon1 = 'el-icon-arrow-down'

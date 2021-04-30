@@ -19,6 +19,11 @@ export default {
   },
   created () {
   },
+  watch: {
+    $route () {
+      this.resize()
+    }
+  },
   methods: {
     // 监听滚动
     onScroll () {
@@ -28,23 +33,26 @@ export default {
       shrink.scrollLeft = this.maxWidth * 1000
       this.width = this.$refs.scroll.offsetWidth
       this.$emit('scroll', this.width)
+    },
+    resize () {
+      this.width = this.$refs.scroll.offsetWidth
+      this.$emit('scroll', this.width)
+      const expand = this.$refs.expand
+      const shrink = this.$refs.shrink
+      const expandChild = this.$refs.expandChild
+      const shrinkChild = this.$refs.shrinkChild
+      this.maxWidth = expand.offsetWidth * 1000
+      expandChild.style.width = this.maxWidth + 'px'
+      expandChild.style.height = '10px'
+      shrinkChild.style.height = '10px'
+      expand.scrollLeft = this.maxWidth
+      shrink.scrollLeft = this.maxWidth
+      expand.addEventListener('scroll', this.onScroll)
+      shrink.addEventListener('scroll', this.onScroll)
     }
   },
   mounted () {
-    this.width = this.$refs.scroll.offsetWidth
-    this.$emit('scroll', this.width)
-    const expand = this.$refs.expand
-    const shrink = this.$refs.shrink
-    const expandChild = this.$refs.expandChild
-    const shrinkChild = this.$refs.shrinkChild
-    this.maxWidth = expand.offsetWidth * 1000
-    expandChild.style.width = this.maxWidth + 'px'
-    expandChild.style.height = '10px'
-    shrinkChild.style.height = '10px'
-    expand.scrollLeft = this.maxWidth
-    shrink.scrollLeft = this.maxWidth
-    expand.addEventListener('scroll', this.onScroll)
-    shrink.addEventListener('scroll', this.onScroll)
+    this.resize()
   }
 }
 </script>

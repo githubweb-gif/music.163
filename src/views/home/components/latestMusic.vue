@@ -2,17 +2,39 @@
   <div class="latestMusic">
     <div class="title">
       <div class="left">
-        <span @click="getData(0)" :class="['newMusic', {selected : value===0}]">新歌速递</span>
-        <span @click="getData(1)" :class="['newList', {selected : value===1}]">新碟上架</span>
+        <span
+          @click="getData(0)"
+          :class="['newMusic', { selected: value === 0 }]"
+          >新歌速递</span
+        >
+        <span
+          @click="getData(1)"
+          :class="['newList', { selected: value === 1 }]"
+          >新碟上架</span
+        >
       </div>
       <div v-show="value === 0" class="right">
-        <span :class="type === 7? 'selected' : ''" @click="getNewMusic(7)">华语</span>
-        <span :class="type === 96? 'selected' : ''" @click="getNewMusic(96)">欧美</span>
-        <span :class="type === 8? 'selected' : ''" @click="getNewMusic(8)">日本</span>
+        <span :class="type === 7 ? 'selected' : ''" @click="getNewMusic(7)"
+          >华语</span
+        >
+        <span :class="type === 96 ? 'selected' : ''" @click="getNewMusic(96)"
+          >欧美</span
+        >
+        <span :class="type === 8 ? 'selected' : ''" @click="getNewMusic(8)"
+          >日本</span
+        >
       </div>
     </div>
-    <new-music v-show="value === 0" v-if="musics" :view-port-height="800" :songs="musics" />
-    <new-list v-show="value === 1" />
+    <transition name="fade" mode="out-in">
+      <new-music
+        v-if="musics && value === 0"
+        :view-port-height="800"
+        :songs="musics"
+      />
+    </transition>
+    <transition name="fade" mode="out-in">
+      <new-list v-if="value === 1" />
+    </transition>
   </div>
 </template>
 
@@ -47,8 +69,6 @@ export default {
         if (this.musics && this.musics.length === 0) {
           this.getNewMusic()
         }
-      } else if (val === 1) {
-        this.getNewList()
       }
     },
     getNewMusic (type = 7) {
@@ -76,8 +96,7 @@ export default {
           })
         })
       })
-    },
-    getNewList () {}
+    }
   }
 }
 </script>

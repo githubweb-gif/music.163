@@ -1,7 +1,7 @@
 <template>
-  <div class="mvList">
+  <div ref="box" class="mvList">
     <ul>
-      <li v-for="(item, index) in mvData" :key="index">
+      <li :style="{width: imgWidth}" v-for="(item, index) in mvData" :key="index">
         <router-link :to="`/MvDetail/${item.id}`">
           <div class="cover">
             <img :src="`${item.cover}?param=200y100`" alt="" />
@@ -11,6 +11,7 @@
           <div class="name">{{ item.name }}</div>
           <div class="singername">{{ item.artistName }}</div>
         </router-link>
+        {{imgWidth}}
       </li>
     </ul>
   </div>
@@ -18,7 +19,9 @@
 
 <script>
 import { searchMusic } from '@/api/search'
+import resize from './resize'
 export default {
+  mixins: [resize],
   props: {
     keyWord: {
       type: String,
@@ -35,18 +38,9 @@ export default {
       this.mvData = []
     }
   },
-  created () {},
-  mounted () {
-    this.$bus.$on('search-tab', (value) => {
-      if (value === '1004' && this.mvData.length === 0) {
-        this.getData()
-      }
-    })
-  },
   methods: {
     getData (type = '1004') {
       searchMusic({ keywords: this.keyWord, type, limit: 100 }).then((data) => {
-        console.log(data)
         if (data.code === 200) {
           this.mvData = data.result.mvs
         }
@@ -56,31 +50,8 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-@media only screen and (max-width: 1300px) {
-  li {
-    width: 20% !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  li {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  li {
-    width: 33% !important;
-  }
-}
-
-@media only screen and (max-width: 500px) {
-  li {
-    width: 50% !important;
-  }
-}
-
 .mvList {
+  width: 100%;
     margin-top: 20px;
 }
 ul {
@@ -88,11 +59,11 @@ ul {
   flex-wrap: wrap;
 }
 li {
-  width: 14%;
   padding-right: 15px;
   margin-bottom: 15px;
 }
 li a {
+  width: 100%;
   display: block;
   cursor: pointer;
   .cover {

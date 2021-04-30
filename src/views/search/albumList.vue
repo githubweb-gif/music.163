@@ -44,7 +44,6 @@ export default {
   methods: {
     getData (type = '10') {
       searchMusic({ keywords: this.keyWord, type, limit: 100 }).then((data) => {
-        console.log(data)
         if (data.code === 200) {
           this.ablumData = data.result.albums
         }

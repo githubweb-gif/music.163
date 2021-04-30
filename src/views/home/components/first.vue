@@ -66,17 +66,16 @@ export default {
       imgWidth: '20%'
     }
   },
-  computed: {},
   created () {
     this.initData()
   },
   mounted () {
     const box = this.$refs.box
-    const boxWidth = box.offsetWidth
-    console.log(boxWidth)
+    const boxWidth = box.offsetWidth || box.parentNode.offsetWidth
+    console.log(box.parentNode.offsetWidth)
     switch (true) {
       // 0可能是刚渲染宽度为0
-      case boxWidth > 930 || boxWidth === 0:
+      case boxWidth > 930:
         this.imgWidth = '20%'
         break
       case boxWidth <= 930 && boxWidth > 720 :
@@ -144,6 +143,7 @@ export default {
 <style lang="scss" scoped>
 .first {
   width: 100%;
+  height: 100%;
 }
 .recommend {
   display: flex;

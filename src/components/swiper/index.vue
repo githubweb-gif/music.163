@@ -31,7 +31,7 @@ export default {
   },
   data () {
     return {
-      height: 0,
+      height: 200,
       card: 'card'
     }
   },
@@ -48,7 +48,6 @@ export default {
   methods: {
     scroll (value) {
       if (this.$refs.image) {
-        console.log(this.$refs.image[0].offsetHeight)
         this.height = this.$refs.image[0].offsetHeight
       }
     }

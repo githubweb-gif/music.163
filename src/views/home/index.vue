@@ -7,7 +7,9 @@
       <el-tab-pane label="最新音乐" name="latestMusic"></el-tab-pane>
       <el-tab-pane label="歌手" name="singer"></el-tab-pane>
     </el-tabs>
-    <component class="home-main scroll-list" :is="componentName" />
+    <transition name="fade" mode="out-in">
+      <component class="home-main scroll-list" :is="componentName" />
+    </transition>
   </div>
 </template>
 

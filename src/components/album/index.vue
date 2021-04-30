@@ -72,7 +72,6 @@ export default {
       }
     },
     albumDetails (data) {
-      console.log(data)
       // 用来区分歌单是否是自己拥有的
       this.$store.commit('SET_USERID', '')
       this.name = data.album.name

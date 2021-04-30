@@ -13,3 +13,30 @@
   opacity: 0;
   transform: translateX(100%);
 }
+
+
+/* home页过渡效果 */
+.fade-leave-active,
+.fade-enter-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/* tab变化时 */
+.fade-tab-leave-active,
+.fade-tab-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-tab-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-tab-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

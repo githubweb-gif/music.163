@@ -1,29 +1,22 @@
 export default {
   mounted () {
     const box = this.$refs.box
-    const boxWidth = box.offsetWidth || box.parentNode.offsetWidth
+    const boxWidth = box.offsetWidth
     this.resize(boxWidth)
     this.$bus.$on('zoom', (boxWidth) => {
       this.resize(boxWidth)
     })
     if (!this.noOffset) {
-      const homeMain = document.querySelector('.home-main')
-      homeMain.addEventListener('scroll', e => {
-        if (this.$refs.popover) {
-          this.$refs.popover.doClose()
-        }
+      const detail = document.querySelector('.detail')
+      detail.addEventListener('scroll', (e) => {
         if (!this.bol) {
           return
         }
         const target = e.target
         if (Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight) {
-          if (this.offset || this.offset === 0) {
-            this.offset += 50
-          } else if (this.options.offset || this.options.offset === 0) {
-            this.options.offset += 50
-          }
+          this.offset += 30
           this.bol = false
-          this.getData(this.cat)
+          this.getData()
         }
       })
     }
@@ -31,16 +24,22 @@ export default {
   methods: {
     resize (boxWidth) {
       switch (true) {
-        case boxWidth > 990 || boxWidth === 0:
+        case boxWidth > 998:
+          this.imgWidth = '12.5%'
+          break
+        case boxWidth <= 998 && boxWidth > 840 :
+          this.imgWidth = '14.2%'
+          break
+        case boxWidth <= 856 && boxWidth > 714:
           this.imgWidth = '16.6%'
           break
-        case boxWidth <= 990 && boxWidth > 840 :
+        case boxWidth <= 714 && boxWidth > 572:
           this.imgWidth = '20%'
           break
-        case boxWidth <= 840 && boxWidth > 690:
+        case boxWidth <= 572 && boxWidth > 430:
           this.imgWidth = '25%'
           break
-        case boxWidth <= 690:
+        case boxWidth <= 430:
           this.imgWidth = '33.3%'
       }
     }

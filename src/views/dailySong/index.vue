@@ -29,7 +29,6 @@ export default {
   methods: {
     getData () {
       dailySong().then(res => {
-        console.log(res)
         this.filterMusic(res.data.dailySongs)
       })
     },

@@ -107,8 +107,6 @@ export default {
       this.valid = this.keyWord
       searchMusic({ keywords: this.keyWord, type, limit: 100 }).then((data) => {
         setSearchHistory(this.keyWord)
-        console.log(type)
-        console.log(data)
         if (data.code === 200) {
           if (type === '1') {
             this.filterMusic(data.result.songs)
@@ -119,7 +117,6 @@ export default {
     // 搜索建议
     suggest: _.debounce(function () {
       searchSuggest({ type: 'mobile', keywords: this.keyWord }).then((data) => {
-        console.log(data)
         if (data.code !== 200) {
           return
         }

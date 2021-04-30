@@ -1,5 +1,5 @@
 <template>
-  <div class="singerDetail scroll-list" id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading">
+  <div class="singerDetail detail scroll-list" id="to-top" v-loading="fullscreenLoading" element-loading-background="rgb(255, 255, 255)" element-loading-spinner="el-icon-loading">
     <header-component :detail="detail">
     </header-component>
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -109,11 +109,9 @@ export default {
       })
       singerDetail({ id: this.id }).then(res => {
         const { data } = res
-        console.log(res)
         for (const i in this.detail) {
           this.detail[i] = data.artist[i]
         }
-        console.log(this.detail)
       })
     },
     handleClick (value) {

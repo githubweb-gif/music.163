@@ -72,9 +72,7 @@ export default {
   },
   methods: {
     getData (type = 1) {
-      console.log(type)
       singerRanking({ type }).then((data) => {
-        console.log(data.list.artists)
         this.lists = data.list.artists
       })
     },

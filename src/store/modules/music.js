@@ -19,6 +19,8 @@ const state = {
     // 歌曲专辑信息(包含歌曲封面)
     album: null
   },
+  // 当前播放时间
+  currentTime: 0,
   // 播放状态
   playing: false,
   // 侧边栏是否显示
@@ -76,6 +78,9 @@ const mutations = {
   },
   SET_USERID (state, id) {
     state.userId = id
+  },
+  SET_CURRENTTIME (state, currentTime) {
+    state.currentTime = currentTime
   }
 }
 const actions = {

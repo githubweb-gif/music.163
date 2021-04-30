@@ -81,7 +81,6 @@ export default {
       }
     },
     playlistDetails (data) {
-      console.log(data)
       const userId = data.playlist.creator.userId || ''
       this.$store.commit('SET_USERID', userId)
       this.ids = []

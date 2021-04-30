@@ -227,10 +227,8 @@ export default {
   },
   methods: {
     getData () {
-      console.log(this.id)
       getComment({ id: this.id, limit: 10, timestamp: Date.now() }).then(
         (data) => {
-          console.log(data)
           this.comments = data.comments
           this.hotComments = data.hotComments || []
           this.total = data.total
@@ -238,7 +236,6 @@ export default {
       )
     },
     toPagination (value) {
-      console.log(this.page)
       getComment({
         id: this.id,
         timestamp: Date.now(),
@@ -267,7 +264,6 @@ export default {
         content: this.value
       })
         .then((res) => {
-          console.log(res)
           if (res.code === 200) {
             this.comments.unshift(res.comment)
           }
@@ -298,7 +294,6 @@ export default {
         content: this.value,
         commentId: this.commentId
       }).then((res) => {
-        console.log(res)
         this.value = ''
         this.commentId = ''
         this.validValue = 1
@@ -326,7 +321,6 @@ export default {
         t,
         type: 1
       }).then(res => {
-        console.log(res)
         if (res.code === 200) {
           if (type === 'hot') {
             this.hotComments[index].liked = !this.hotComments[index].liked

@@ -4,22 +4,33 @@
     <div class="container">
       <side-bar class="side" />
       <div class="main">
-        <keep-alive >
-          <router-view :class="$route.meta.margin ? 'autoMargin' : ''" v-if="$route.meta.keepAlive"></router-view>
+        <zoom @scroll="zoom"></zoom>
+        <keep-alive>
+          <transition name="fade" mode="out-in">
+            <router-view
+              :class="$route.meta.margin ? 'autoMargin' : ''"
+              v-if="$route.meta.keepAlive"
+            ></router-view>
+          </transition>
         </keep-alive>
+        <transition name="fade" mode="out-in">
         <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </transition>
         <transition name="fade-transform">
           <user-info v-if="isUserRight && loginStatus" class="right-side" />
         </transition>
         <transition name="fade-transform">
           <music-list v-show="isMusicList" class="right-side" />
         </transition>
-        <zoom @scroll="zoom"></zoom>
       </div>
     </div>
     <footer-bar class="footer" />
     <to-login class="login" />
-    <div v-show="isMusicList || isUserRight" class="shadow" @click="rightSideShow(false)" />
+    <div
+      v-show="isMusicList || isUserRight"
+      class="shadow"
+      @click="rightSideShow(false)"
+    />
   </div>
 </template>
 
@@ -49,13 +60,12 @@ export default {
   },
   computed: {
     ...mapState({
-      isMusicList: state => state.music.isMusicList,
-      isUserRight: state => state.user.isUserRight,
-      loginStatus: state => state.user.loginStatus
+      isMusicList: (state) => state.music.isMusicList,
+      isUserRight: (state) => state.user.isUserRight,
+      loginStatus: (state) => state.user.loginStatus
     })
   },
-  created () {
-  },
+  created () {},
   methods: {
     rightSideShow (value) {
       if (this.isMusicList) {

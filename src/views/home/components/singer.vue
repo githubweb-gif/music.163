@@ -80,7 +80,6 @@ export default {
   methods: {
     getData () {
       getSinger(this.options).then((data) => {
-        console.log(data)
         // 获取完毕
         if (data.artists.length === 0) {
           return

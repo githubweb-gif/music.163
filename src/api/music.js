@@ -419,3 +419,16 @@ export function dailySong () {
     method: 'get'
   })
 }
+
+/**
+ * 说明 : 调用此接口 , 获取歌词
+ * 必选参数
+ * @id 歌词id
+ */
+export function lyric (data) {
+  return request({
+    url: '/lyric',
+    method: 'get',
+    params: data
+  })
+}

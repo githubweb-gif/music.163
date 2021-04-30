@@ -82,7 +82,6 @@ export default {
       rankingDtail().then((res) => {
         this.rankings = res.list
         singerRanking().then((res) => {
-          console.log('-----------------')
           this.rankings.push({
             name: '歌手榜',
             tracks: res.list.artists.slice(0, 3),

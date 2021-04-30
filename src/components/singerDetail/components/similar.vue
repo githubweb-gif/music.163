@@ -1,6 +1,6 @@
 <template>
-  <div class='similar'>
-    <div @click="toSingerDetail(item.id)" v-for="item in singers" :key="item.id" class="item">
+  <div ref="box" class='similar'>
+    <div :style="{width: imgWidth}" @click="toSingerDetail(item.id)" v-for="item in singers" :key="item.id" class="item">
       <img v-lazy="`${item.picUrl}?param=130y130`" alt="">
       <div class="name"></div>
       {{item.name}}
@@ -10,7 +10,9 @@
 
 <script>
 import { similarSinger } from '@/api/music'
+import resize from '@/components/imgSize/index'
 export default {
+  mixins: [resize],
   props: {
     id: {
       type: String,
@@ -19,7 +21,9 @@ export default {
   },
   data () {
     return {
-      singers: []
+      singers: [],
+      imgWidth: '12.5%',
+      noOffset: true
     }
   },
   watch: {
@@ -33,7 +37,6 @@ export default {
   methods: {
     getData () {
       similarSinger({ id: this.id }).then((res) => {
-        console.log(res)
         this.singers = res.artists
       })
     },
@@ -44,23 +47,6 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-@media only screen and (max-width: 1300px) {
-  .item {
-    width: 14% !important;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  .item {
-    width: 25% !important;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  .item {
-    width: 33% !important;
-  }
-}
 .similar {
   display: flex;
   flex-wrap: wrap;
