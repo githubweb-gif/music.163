@@ -1,5 +1,5 @@
 <template>
-  <div v-if="id" class="play-interface">
+  <div ref="interface" v-if="id" class="play-interface">
     <div class="content">
       <div class="music-info">
         <div class="film">
@@ -58,6 +58,9 @@
         </div>
       </div>
     </div>
+    <div @click="showOrhide" class="show-hide">
+      <span class="el-icon-bottom-right"></span>
+    </div>
   </div>
 </template>
 
@@ -94,6 +97,9 @@ export default {
   },
   watch: {
     currentTime () {
+      if (!this.lyric) {
+        return
+      }
       const timeStamp = this.currentTime * 1000
       this.activeIndex = this.lyric.findIndex((item, index) => {
         return item.time < timeStamp && this.lyric[index + 1]
@@ -104,6 +110,10 @@ export default {
       this.currentRow = this.activeIndex
     },
     currentRow () {
+      if (!this.lyricDom) {
+        this.lyricDom = this.$refs.lyric
+        return
+      }
       this.lyricDom.scrollTo({
         top: this.lyricMove - 160,
         behavior: 'smooth'
@@ -120,20 +130,20 @@ export default {
     this.lyricDom = this.$refs.lyric
   },
   methods: {
-    ff () {
-      console.log(this.$refs.magnetic)
-      this.$refs.magnetic.classList.add('playing')
-    },
     getLyric () {
       if (!this.id) {
         return
       }
       lyric({ id: this.id }).then((data) => {
-        this.lyric = this.filterLyric(data.lrc.lyric)
-        this.chineseLyric = data.tlyric.lyric
+        const text = data.lrc ? data.lrc.lyric : ''
+        this.lyric = this.filterLyric(text)
+        // this.chineseLyric = data.tlyric.lyric
       })
     },
     filterLyric (data) {
+      if (!data) {
+        return
+      }
       const arr = []
       // 先按行分割
       const lyric = data.split('\n')
@@ -158,6 +168,14 @@ export default {
         return a.time - b.time > 0 ? 1 : -1
       })
       return arr
+    },
+    showOrhide () {
+      if (this.$refs.interface.offsetWidth !== 0) {
+        this.$refs.interface.style.cssText = 'width: 0; height:0;'
+        return
+      }
+      this.$refs.interface.style.cssText =
+        'width: 100vw; height: calc(100vh - 60px);'
     }
   }
 }
@@ -176,6 +194,24 @@ export default {
 .light {
   color: rgb(255, 94, 0);
 }
+.show-hide {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 58px;
+  height: 58px;
+  background-color: red;
+  opacity: 0;
+  margin: 1px;
+  z-index: 9000;
+  span {
+    display: block;
+    font-size: 40px;
+  }
+}
+.show-hide:hover {
+  opacity: .5;
+}
 @keyframes example {
   0% {
     transform: rotate(0);
@@ -188,12 +224,15 @@ export default {
 .play-interface {
   // display: none;
   position: fixed;
-  top: 0;
+  padding-top: 30px;
   bottom: 60px;
   left: 0;
-  right: 0;
-  z-index: 9999;
+  z-index: 3000;
   background-color: #fff;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
 }
 .content {
   max-width: 1000px;

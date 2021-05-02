@@ -161,7 +161,7 @@ export default {
   background-color: rgb(246, 246, 247);
   position: relative;
   border-right: 1px solid #bebeca;
-  z-index: 9999;
+  z-index: 1000;
   .menu-icon {
     width: 100%;
     padding: 10px 0 10px 10px;

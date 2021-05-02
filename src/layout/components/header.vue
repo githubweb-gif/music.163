@@ -9,6 +9,8 @@
     display: flex;
     align-items: stretch;
     color: #ffffff;
+    position: relative;
+    z-index: 9999;
     .name {
         display: flex;
         align-items: center;

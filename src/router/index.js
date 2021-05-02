@@ -44,6 +44,7 @@ export const routes = [
         meta: {
           title: 'MV',
           icon: 'el-icon-s-goods',
+          keepAlive: true,
           margin: true
         }
       },
@@ -56,7 +57,8 @@ export const routes = [
           title: '最近播放',
           class: 'MyMusic',
           icon: 'el-icon-headset',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       },
       {
@@ -66,7 +68,7 @@ export const routes = [
         component: () => import('@/components/songlist/index.vue'),
         meta: {
           title: '歌单详细内容',
-          keepAlive: false,
+          keepAlive: true,
           margin: false
         }
       },
@@ -77,7 +79,8 @@ export const routes = [
         component: () => import('@/components/album/index.vue'),
         meta: {
           title: '专辑详细内容',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       },
       // 歌手详情
@@ -88,7 +91,8 @@ export const routes = [
         component: () => import('@/components/singerDetail/index.vue'),
         meta: {
           title: '歌手详细内容',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       },
       // 排行榜
@@ -99,7 +103,8 @@ export const routes = [
         component: () => import('@/views/ranking/index.vue'),
         meta: {
           title: '排行榜',
-          margin: true
+          margin: true,
+          keepAlive: true
         }
       },
       // 歌手榜
@@ -110,7 +115,8 @@ export const routes = [
         component: () => import('@/views/ranking/singerRanking.vue'),
         meta: {
           title: '云音乐歌手榜',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       },
       // 每日歌曲推荐
@@ -121,7 +127,8 @@ export const routes = [
         component: () => import('@/views/dailySong/index.vue'),
         meta: {
           title: '每日歌曲推荐',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       },
       // 用户详情
@@ -132,7 +139,8 @@ export const routes = [
         component: () => import('@/components/userInfo/index.vue'),
         meta: {
           title: '个人主页',
-          margin: false
+          margin: false,
+          keepAlive: true
         }
       }
     ]
