@@ -80,11 +80,11 @@ Vue.filter('commentTime', (value) => {
   }
   const time = new Date(value)
   const now = new Date()
-  const cz = now.getTime() - time.getTime()
+  // const cz = now.getTime() - time.getTime()
   switch (true) {
-    case cz <= 60 * 1000 * 60 * 24:
+    case time.getFullYear() === now.getFullYear() && time.getMonth() === now.getMonth() && time.getDate() === now.getDate():
       return `${time.getHours()}:${time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()}`
-    case cz <= 60 * 1000 * 60 * 24 * 2:
+    case time.getFullYear() === now.getFullYear() && time.getMonth() === now.getMonth() && time.getDate() === now.getDate() - 1:
       return '昨天'
     case now.getFullYear() === time.getFullYear():
       return `${time.getMonth() + 1}月${time.getDate()}日`

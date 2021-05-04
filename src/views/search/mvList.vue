@@ -11,7 +11,6 @@
           <div class="name">{{ item.name }}</div>
           <div class="singername">{{ item.artistName }}</div>
         </router-link>
-        {{imgWidth}}
       </li>
     </ul>
   </div>

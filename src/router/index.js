@@ -40,7 +40,7 @@ export const routes = [
         path: 'MV',
         name: 'MV',
         hidden: false,
-        component: () => import('@/views/video/index.vue'),
+        component: () => import('@/views/MV/index.vue'),
         meta: {
           title: 'MV',
           icon: 'el-icon-s-goods',
@@ -130,19 +130,19 @@ export const routes = [
           margin: false,
           keepAlive: true
         }
-      },
-      // 用户详情
-      {
-        path: 'userDetail/:id',
-        name: 'userDetail',
-        hidden: true,
-        component: () => import('@/components/userInfo/index.vue'),
-        meta: {
-          title: '个人主页',
-          margin: false,
-          keepAlive: true
-        }
       }
+      // 用户详情
+      // {
+      //   path: 'userDetail/:id',
+      //   name: 'userDetail',
+      //   hidden: true,
+      //   component: () => import('@/components/userInfo/index.vue'),
+      //   meta: {
+      //     title: '个人主页',
+      //     margin: false,
+      //     keepAlive: true
+      //   }
+      // }
     ]
   },
   {

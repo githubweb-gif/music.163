@@ -1,13 +1,21 @@
 export default {
   mounted () {
     const box = this.$refs.box
-    const boxWidth = box.offsetWidth
+    const main = document.querySelector('#main')
+    if (!main || !box) {
+      return
+    }
+    const boxWidth = box.offsetWidth || main.offsetWidth
+    console.log(box.parentNode.offsetWidth)
     this.resize(boxWidth)
     this.$bus.$on('zoom', (boxWidth) => {
       this.resize(boxWidth)
     })
     if (!this.noOffset) {
       const detail = document.querySelector('.detail')
+      if (!detail) {
+        return
+      }
       detail.addEventListener('scroll', (e) => {
         if (!this.bol) {
           return

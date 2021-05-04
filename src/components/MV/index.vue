@@ -11,7 +11,7 @@
             <video controls :src="url"></video>
           </div>
           <side-component class="right" :isShow="false" width="100%" :detail="detail"></side-component>
-          <comment :id="id"></comment>
+          <comment :type="1" :id="id.toString()"></comment>
         </div>
         <side-component  class="mid" :isShow="true" width="350px" :detail="detail"></side-component>
       </div>

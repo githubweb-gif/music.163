@@ -329,13 +329,31 @@ export function simi (data) {
  * 说明 : 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该 mv 的所有评论 ( 不需要 登录 )
  * 必选参数 :
  * @id : mvid
- * 可选参数 : limit: 取出评论数量 , 默认为 20
+ * 可选参数 :
+ * @limit : 取出评论数量 , 默认为 20
  * @offset : 偏移数量 , 用于分页
  * @before : 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
  */
-export function getComment (data) {
+export function getMvComment (data) {
   return request({
     url: '/comment/mv',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该 mv 的所有评论 ( 不需要 登录 )
+ * 必选参数 :
+ * @id : 音乐id
+ * 可选参数 :
+ * @limit : 取出评论数量 , 默认为 20
+ * @offset : 偏移数量 , 用于分页
+ * @before : 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
+ */
+export function getMusicComment (data) {
+  return request({
+    url: '/comment/music',
     method: 'get',
     params: data
   })
@@ -428,6 +446,49 @@ export function dailySong () {
 export function lyric (data) {
   return request({
     url: '/lyric',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 可获取网易出品 mv
+ * 可选参数 :
+ * @limit : 取出数量 , 默认为 30
+ * @offset : 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
+ */
+export function wangyiMv (data) {
+  return request({
+    url: '/mv/exclusive/rcmd',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 可获取最新 mv
+ * 可选参数 :
+ * @area : 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+ * @limit : 取出数量 , 默认为 30
+ */
+export function upToDateMV (data) {
+  return request({
+    url: '/mv/first',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 说明 : 调用此接口 , 可获取 mv 排行
+ * 可选参数 :
+ * @area : 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
+ * @limit : 取出数量 , 默认为 30
+ * @offset : 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
+ */
+export function leaderboardMv (data) {
+  return request({
+    url: '/top/mv',
     method: 'get',
     params: data
   })

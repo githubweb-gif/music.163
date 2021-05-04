@@ -57,6 +57,7 @@
           </div>
         </div>
       </div>
+      <comment :id="id.toString()" :type="0"></comment>
     </div>
     <div @click="showOrhide" class="show-hide">
       <span class="el-icon-bottom-right"></span>
@@ -66,7 +67,11 @@
 
 <script>
 import { lyric } from '@/api/music'
+import comment from '@/components/comment.vue'
 export default {
+  components: {
+    comment
+  },
   data () {
     return {
       img: require('../../assets/img/coverall.png'),
@@ -210,7 +215,7 @@ export default {
   }
 }
 .show-hide:hover {
-  opacity: .5;
+  opacity: 0.5;
 }
 @keyframes example {
   0% {
@@ -231,15 +236,13 @@ export default {
   background-color: #fff;
   width: 0;
   height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: all 0.3s ease-in-out;
 }
 .content {
   max-width: 1000px;
   margin: 0 auto;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   .music-info {
     display: flex;
     .film {

@@ -3,7 +3,7 @@
     <header-bar class="header" />
     <div class="container">
       <side-bar class="side" />
-      <div class="main">
+      <div id="main">
         <zoom @scroll="zoom"></zoom>
         <keep-alive>
           <transition name="fade" mode="out-in">
@@ -93,7 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 @media only screen and (max-width: 700px) {
-  .main {
+  #main {
     margin-left: 40px;
   }
 }
@@ -122,7 +122,7 @@ export default {
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  .main {
+  #main {
     flex: 1;
     position: relative;
     overflow: hidden;

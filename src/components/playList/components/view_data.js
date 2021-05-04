@@ -26,6 +26,9 @@ export default {
     this.$nextTick(() => {
       if (this.songs) {
         const element = document.querySelector('.scroll-list')
+        if (!element) {
+          return
+        }
         element.onscroll = () => {
           this.onVirtualScroll()
         }

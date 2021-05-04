@@ -25,15 +25,13 @@ import singerList from './singerList.vue'
 import albumList from './albumList.vue'
 import mvList from './mvList.vue'
 import songList from './songList.vue'
-import userList from './userList.vue'
 export default {
   components: {
     playList,
     singerList,
     albumList,
     mvList,
-    songList,
-    userList
+    songList
   },
   props: {
     songs: {
@@ -55,8 +53,7 @@ export default {
         { type: '100', value: '歌手', component: 'singerList' },
         { type: '10', value: '专辑', component: 'albumList' },
         { type: '1004', value: 'MV', component: 'mvList' },
-        { type: '1000', value: '歌单', component: 'songList' },
-        { type: '1002', value: '用户', component: 'userList' }
+        { type: '1000', value: '歌单', component: 'songList' }
       ]
     }
   },

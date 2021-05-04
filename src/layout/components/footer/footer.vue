@@ -159,7 +159,15 @@ export default {
     },
     // 处理播放错误
     audioError (e) {
-
+      if (!this.currentSong || this.currentSong.length === 0) {
+        return
+      }
+      setMusciInfo(this.currentSong).then((res) => {
+        // 更新播放记录
+        this.$store.dispatch('SET_HISTORY', res)
+        // 再播放
+        this.$store.commit('SET_PLAYING', true)
+      })
     },
     updateTime (e) {
       this.currentTime = e.target.currentTime

@@ -87,16 +87,12 @@
 </template>
 
 <script>
-import { getMvComment, getMusicComment, sendOrdelComment, addOrDelLike } from '@/api/music'
+import { getMvComment, sendOrdelComment, addOrDelLike } from '@/api/music'
 export default {
   props: {
     id: {
       type: String,
       default: ''
-    },
-    type: {
-      type: Number,
-      default: 0
     }
   },
   data () {
@@ -231,33 +227,28 @@ export default {
   },
   methods: {
     getData () {
-      if (this.type === 1) {
-        this.getMvData().then(
-          (data) => {
-            this.comments = data.comments
-            this.hotComments = data.hotComments || []
-            this.total = data.total
-          }
-        )
-      } else if (this.type === 0) {
-        this.getMusicData().then(
-          (data) => {
-            console.log(data)
-            this.comments = data.comments
-            this.hotComments = data.hotComments || []
-            this.total = data.total
-          }
-        )
-      } else {
-        this.$router.push('/')
-      }
+      getMvComment({ id: this.id, limit: 10, timestamp: Date.now() }).then(
+        (data) => {
+          this.comments = data.comments || []
+          this.hotComments = data.hotComments || []
+          this.total = data.total || 0
+        }
+      )
     },
-    toPagination () {
-      this.getData()
-      this.$nextTick(() => {
-        this.title.scrollIntoView(true, {
-          behavior: 'smooth',
-          block: 'start'
+    toPagination (value) {
+      getMvComment({
+        id: this.id,
+        timestamp: Date.now(),
+        limit: 10,
+        offset: 10 * (this.page - 1)
+      }).then((data) => {
+        this.hotComments = []
+        this.comments = data.comments
+        this.$nextTick(() => {
+          this.title.scrollIntoView(true, {
+            behavior: 'smooth',
+            block: 'start'
+          })
         })
       })
     },
@@ -268,7 +259,7 @@ export default {
       }
       sendOrdelComment({
         t: 1,
-        type: this.type,
+        type: 1,
         id: this.id,
         content: this.value
       })
@@ -298,7 +289,7 @@ export default {
     replyComment () {
       sendOrdelComment({
         t: 2,
-        type: this.type,
+        type: 1,
         id: this.id,
         content: this.value,
         commentId: this.commentId
@@ -328,35 +319,15 @@ export default {
         id: this.id,
         cid: id,
         t,
-        type: this.type
+        type: 1
       }).then(res => {
         if (res.code === 200) {
           if (type === 'hot') {
             this.hotComments[index].liked = !this.hotComments[index].liked
           } else if (type === 'new') {
-            this.comments[index].liked = !this.comments[index].liked
+            this.hotComments[index].liked = !this.comments[index].liked
           }
         }
-      })
-    },
-    getMvData () {
-      return new Promise((resolve, reject) => {
-        getMvComment({ id: this.id, offset: 10 * (this.page - 1), limit: 10, timestamp: Date.now() }).then(data => {
-          resolve(data)
-        }).catch(err => {
-          console.log(err)
-          reject(err)
-        })
-      })
-    },
-    getMusicData () {
-      return new Promise((resolve, reject) => {
-        getMusicComment({ id: this.id, limit: 10, offset: 10 * (this.page - 1), timestamp: Date.now() }).then(data => {
-          resolve(data)
-        }).catch(err => {
-          console.log(err)
-          reject(err)
-        })
       })
     }
   }
@@ -371,7 +342,6 @@ export default {
   padding: 10px;
   background-color: rgb(236, 236, 236);
   position: relative;
-  margin-top: 15px;
   .send {
     position: absolute;
     bottom: 10px;
