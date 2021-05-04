@@ -3,7 +3,7 @@
     <header-bar class="header" />
     <div class="container">
       <side-bar class="side" />
-      <div id="main">
+      <div ref="main" id="main">
         <zoom @scroll="zoom"></zoom>
         <keep-alive>
           <transition name="fade" mode="out-in">
@@ -65,7 +65,10 @@ export default {
       loginStatus: (state) => state.user.loginStatus
     })
   },
-  created () {},
+  mounted () {
+    const main = this.$refs.main
+    this.$store.commit('SET_RESIZE', main)
+  },
   methods: {
     rightSideShow (value) {
       if (this.isMusicList) {

@@ -7,7 +7,7 @@
           <span>网易出品</span>
         </div>
         <div class="right">
-          <span>更多</span>
+          <span @click="toAll({ type: '网易出品', order: '最新' })">更多</span>
           <span class=""></span>
         </div>
       </h4>
@@ -31,11 +31,18 @@
         </div>
         <div class="middle">
           <ol>
-            <li :class="area === item ? 'selected':''" :key="index" @click="upToDateMV(item)" v-for="(item, index) in areas">{{ item }}</li>
+            <li
+              :class="area === item ? 'selected' : ''"
+              :key="index"
+              @click="upToDateMV(item)"
+              v-for="(item, index) in areas"
+            >
+              {{ item }}
+            </li>
           </ol>
         </div>
         <div class="right">
-          <span>更多</span>
+          <span @click="toAll({ area, order: '最新' })">更多</span>
           <span class=""></span>
         </div>
       </h4>
@@ -43,7 +50,7 @@
         <ul>
           <li @click="toMV(item.id)" v-for="item in upToDate" :key="item.id">
             <div class="cover">
-                <img :src="`${item.cover}?param=350y200`" alt="">
+              <img :src="`${item.cover}?param=350y200`" alt="" />
             </div>
             <p>{{ item.name }}</p>
             <div class="artistName">{{ item | artistName }}</div>
@@ -97,6 +104,9 @@ export default {
       upToDateMV({ limit: 12, area: this.area }).then((res) => {
         this.upToDate = res.data
       })
+    },
+    toAll (data) {
+      this.$emit('all', data)
     }
   }
 }
@@ -155,6 +165,6 @@ ul {
   }
 }
 .selected {
-    color: red;
+  color: red;
 }
 </style>

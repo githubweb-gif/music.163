@@ -10,7 +10,9 @@ const state = {
   // 右侧边栏是否显示
   isUserRight: false,
   // 用户歌单
-  songLists: null
+  songLists: null,
+  // layout main元素
+  resize: null
 }
 
 const mutations = {
@@ -34,6 +36,9 @@ const mutations = {
   },
   SET_SONGLISTS (state, value) {
     state.songLists = value
+  },
+  SET_RESIZE (state, val) {
+    state.resize = val
   }
 }
 

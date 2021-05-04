@@ -12,7 +12,7 @@
       ></el-tab-pane>
     </el-tabs>
     <div ref="component" class="component">
-      <components :scroll="scroll" class="tab" :is="component"></components>
+      <components :selected="position" @all="changeAll" :scroll="scroll" class="tab" :is="component"></components>
     </div>
   </div>
 </template>
@@ -20,10 +20,12 @@
 <script>
 import featured from './featured.vue'
 import leaderboard from './leaderboard.vue'
+import allMv from './all.vue'
 export default {
   components: {
     featured,
-    leaderboard
+    leaderboard,
+    allMv
   },
   data () {
     return {
@@ -32,9 +34,10 @@ export default {
       tabs: [
         { label: '精选', name: 'featured' },
         { label: '排行榜', name: 'leaderboard' },
-        { label: '全部', name: '3' }
+        { label: '全部', name: 'allMv' }
       ],
-      scroll: null
+      scroll: null,
+      position: null
     }
   },
   computed: {
@@ -44,7 +47,13 @@ export default {
   },
   methods: {
     handleClick (val) {
+      this.position = null
       this.component = val.name
+    },
+    changeAll (data) {
+      this.activeName = 'allMv'
+      this.component = 'allMv'
+      this.position = data
     }
   },
   mounted () {
