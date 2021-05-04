@@ -138,7 +138,6 @@ export default {
 
 .footer {
   height: 60px;
-  overflow: hidden;
   border-top: 1px solid #c6c3c3;
 }
 

@@ -85,7 +85,7 @@ export default {
   .bar {
     width: 100%;
     height: 2px;
-    background-color: greenyellow;
+    background-color: rgb(201, 201, 201);
     position: relative;
     .radio {
       position: absolute;
@@ -97,7 +97,7 @@ export default {
       border-radius: 50%;
       background-color: #fff;
       z-index: 9999;
-      border: 1px solid red;
+      border: 1px solid rgb(165, 165, 165);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -114,7 +114,7 @@ export default {
     .schedule {
       height: 100%;
       width: 0;
-      background-color: blue;
+      background-color: rgb(194, 12, 12);
     }
   }
 }

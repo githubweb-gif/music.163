@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="cover">
       <img
-        v-if="currentSong.album"
+        v-if="currentSong.album && currentSong.album.album"
         :src="currentSong.album.album.blurPicUrl"
         alt=""
       />
@@ -52,7 +52,15 @@
     <div class="function">
       <div class="iconfont icon-lujing" />
       <div class="iconfont icon-xunhuan1" />
-      <div class="iconfont icon-yinliang" />
+      <el-popover
+        placement="bottom"
+        width="240"
+        trigger="click"
+        offset="50"
+      >
+        <volume-bar @volume="volume"></volume-bar>
+        <div slot="reference" class="iconfont icon-yinliang"></div>
+      </el-popover>
       <div
         class="iconfont menu icon-24gf-playlistMusic5"
         @click.stop="isMusicList"
@@ -69,12 +77,14 @@
 import progressBar from './components/progressBar'
 import { GET_HISTORY } from '@/untils/cache'
 import setMusciInfo from '@/untils/setMusciInfo'
+import volumeBar from './components/volume.vue'
 // 播放界面
 import playInterface from '@/components/playInterface/index.vue'
 export default {
   components: {
     progressBar,
-    playInterface
+    playInterface,
+    volumeBar
   },
   data () {
     return {
@@ -214,6 +224,10 @@ export default {
           this.$store.commit('SET_PLAYING', true)
         })
       }
+    },
+    // 音量
+    volume (val) {
+      this.$refs.audio.volume = val
     }
   }
 }
@@ -275,6 +289,9 @@ export default {
     display: flex;
     position: relative;
     margin-right: 20px;
+    .iconfont {
+      position: relative;
+    }
     div {
       margin: 0 10px;
       font-size: 18px;
