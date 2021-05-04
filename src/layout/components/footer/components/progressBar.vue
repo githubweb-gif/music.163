@@ -1,11 +1,9 @@
 <template>
-  <div class="progress-bar" @click="jumpbar($event)">
-    <el-progress
-      ref="progress"
-      color="#c20c0c"
-      :show-text="false"
-      :percentage="percentage"
-    />
+  <div @mousedown="jumpbar($event)" class="progress-bar">
+    <div ref="bar" class="bar">
+      <div :style="{left: percentage + '%'}" ref="radio" @mousedown.stop="change($event)" class="radio"></div>
+      <div :style="{width: percentage + '%'}" ref="schedule" class="schedule"></div>
+    </div>
   </div>
 </template>
 
@@ -21,7 +19,9 @@ export default {
     return {
       percentage: 0,
       // 拖动
-      drag: false
+      drag: false,
+      radio: null,
+      bar: null
     }
   },
   watch: {
@@ -37,69 +37,42 @@ export default {
     }
   },
   mounted () {
-    this.createbar()
+    this.radio = this.$refs.radio
+    this.bar = this.$refs.bar
   },
   methods: {
-    createbar () {
-      const progressOuter = this.$refs.progress.$el.querySelector(
-        '.el-progress-bar__outer'
-      )
-      const progress = this.$refs.progress.$el.querySelector(
-        '.el-progress-bar__inner'
-      )
-      progress.style.transition = 'none'
-      let left = 0
-      const bar = document.createElement('div')
-      bar.className = 'circular'
-
-      const _this = this
-
-      bar.addEventListener('mousedown', function (e) {
-        clearMouse()
-        _this.drag = true
-        const X = e.clientX - this.offsetLeft
-
-        document.onmousemove = function (e) {
-          left = e.clientX - X
-          if (left < 0) {
-            left = 0
-          } else if (left > progressOuter.offsetWidth) {
-            left = progressOuter.offsetWidth
-          }
-
-          const bizhi = (left / progressOuter.offsetWidth) * 100
-          _this.percentage = bizhi
-
-          // 防止选择内容--当拖动鼠标过快时候，弹起鼠标，bar也会移动，修复bug
-          window.getSelection
-            ? window.getSelection().removeAllRanges()
-            : document.selection.empty()
-        }
-      })
-
-      function clearMouse () {
-        document.onmouseup = function (e) {
-          const bizhi = left / progressOuter.offsetWidth
-          _this.drag = false
-
-          _this.$emit('percentageChange', bizhi)
-
-          document.onmousemove = null
-          document.onmouseup = null
-        }
-      }
-      progress.appendChild(bar)
-    },
     // 点击进度条
     jumpbar (e) {
-      const progress = this.$refs.progress.$el
-      const { left } = progress.getBoundingClientRect()
-      let bizhi = (e.clientX - left) / progress.offsetWidth
-      if (bizhi > 1) {
-        bizhi = 1
+      const left = e.offsetX
+      this.percentage = left / this.bar.offsetWidth * 100
+      this.$emit('percentageChange', this.percentage / 100)
+    },
+    // 拖拽进度条
+    change (e) {
+      const x = e.clientX - this.radio.offsetLeft
+      document.onmousemove = (e) => {
+        this.drag = true
+        let left = e.clientX - x
+        if (left < 0) {
+          left = 0
+        } else if (left >= this.bar.offsetWidth) {
+          left = this.bar.offsetWidth
+        }
+        this.radio.style.left = left + 'px'
+        this.$refs.schedule.style.width = left + 'px'
+        this.percentage = left / this.bar.offsetWidth * 100
+        // 防止选择内容--当拖动鼠标过快时候，弹起鼠标，bar也会移动，修复bug
+        // 下面时禁止选择文字
+        window.getSelection
+          ? window.getSelection().removeAllRanges()
+          : document.selection.empty()
       }
-      this.percentage = bizhi * 100
-      this.$emit('percentageChange', bizhi)
+      document.onmouseup = (e) => {
+        document.onmousemove = null
+        document.onmouseup = null
+        this.$emit('percentageChange', this.percentage / 100)
+        this.drag = false
+      }
     }
   }
 }
@@ -108,5 +81,41 @@ export default {
 <style lang="scss" scoped>
 .progress-bar {
   padding: 8px 0;
+  position: relative;
+  .bar {
+    width: 100%;
+    height: 2px;
+    background-color: greenyellow;
+    position: relative;
+    .radio {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #fff;
+      z-index: 9999;
+      border: 1px solid red;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .radio::after {
+      content: "";
+      display: block;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background-color: red;
+    }
+    .schedule {
+      height: 100%;
+      width: 0;
+      background-color: blue;
+    }
+  }
 }
 </style>

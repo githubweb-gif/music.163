@@ -13,7 +13,7 @@
           <div class="content">
             <el-button
               :class="cat === all.name ? 'cat' : ''"
-              @click="getData(all.name)"
+              @click="cat = all.name"
               >{{ all.name }}</el-button
             >
             <div class="main">
@@ -27,7 +27,7 @@
                   <ul>
                     <li
                       :class="[cat === item.name ? 'cat' : '']"
-                      @click="getData(item.name)"
+                      @click="cat = item.name"
                       v-for="(item, n) in list.child"
                       :key="n"
                     >
@@ -52,8 +52,7 @@
       </ul>
     </div>
     <div class="playList">
-      <transition name="fade">
-        <ul v-if="show && lists.length > 0">
+        <ul v-if="lists.length > 0">
           <li
             @click="toplayListDetail(list.id)"
             :style="{ width: imgWidth }"
@@ -70,7 +69,6 @@
             <div class="after"></div>
           </li>
         </ul>
-      </transition>
     </div>
   </div>
 </template>
@@ -89,15 +87,14 @@ export default {
       cat: '全部歌单',
       imgWidth: '16.6%',
       bol: true,
-      offset: 0,
-      show: false
+      offset: 0
     }
   },
   watch: {
     cat (val) {
       if (val) {
         this.lists = []
-        this.getData(val)
+        this.getData()
       }
     }
   },
@@ -130,11 +127,11 @@ export default {
   },
   methods: {
     // 获取对应类型的歌单
-    getData (cat) {
-      this.show = false
+    getData () {
+      console.log(this.offset)
       catergroyList({
         order: 'hot',
-        cat,
+        cat: this.cat,
         offset: this.offset
       }).then((data) => {
         if (data.playlists.length === 0) {
@@ -142,7 +139,6 @@ export default {
         }
         this.lists.push(...data.playlists)
         this.bol = true
-        this.show = true
       })
       if (this.$refs.popover) {
         this.$refs.popover.doClose()

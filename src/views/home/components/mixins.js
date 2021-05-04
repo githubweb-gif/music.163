@@ -8,6 +8,7 @@ export default {
     })
     if (!this.noOffset) {
       const homeMain = document.querySelector('.home-main')
+      console.log(homeMain)
       homeMain.addEventListener('scroll', e => {
         if (this.$refs.popover) {
           this.$refs.popover.doClose()

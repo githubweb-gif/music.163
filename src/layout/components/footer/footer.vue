@@ -159,9 +159,6 @@ export default {
     },
     // 处理播放错误
     audioError (e) {
-      if (!this.currentSong || this.currentSong.length === 0) {
-        return
-      }
       setMusciInfo(this.currentSong).then((res) => {
         // 更新播放记录
         this.$store.dispatch('SET_HISTORY', res)
