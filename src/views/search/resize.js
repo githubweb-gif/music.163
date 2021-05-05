@@ -4,10 +4,24 @@ export default {
       imgWidth: '16.6%'
     }
   },
+  computed: {
+    main () {
+      return this.$store.state.user.resize
+    }
+  },
+  watch: {
+    main: {
+      handler (val) {
+        if (!val) {
+          return
+        }
+        const boxWidth = this.main.offsetWidth
+        this.resize(boxWidth)
+      },
+      immediate: true
+    }
+  },
   mounted () {
-    const box = this.$refs.box
-    const boxWidth = box.offsetWidth
-    this.resize(boxWidth)
     this.$bus.$on('zoom', (boxWidth) => {
       this.resize(boxWidth)
     })

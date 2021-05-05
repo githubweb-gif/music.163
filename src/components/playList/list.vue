@@ -18,7 +18,7 @@
 <script>
 // components
 import musicItem from './components/index.vue'
-import setMusciInfo from '@/untils/setMusciInfo'
+import setMusciInfo from '@/utils/setMusciInfo'
 export default {
   components: {
     musicItem

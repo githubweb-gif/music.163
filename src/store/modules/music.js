@@ -1,5 +1,5 @@
-import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/untils/cache'
-import norepeat from '@/untils/norepeat.js'
+import { SET_PLAYLIST_LOCAL, SET_HISTORY, GET_PLAYLIST_LOCAL, setSonglistIdLocal, getSonglistIdLocal } from '@/utils/cache'
+import norepeat from '@/utils/norepeat.js'
 import { songListDetail, albumDetail } from '@/api/music'
 const state = {
   // 播放队列
@@ -19,20 +19,20 @@ const state = {
     // 歌曲专辑信息(包含歌曲封面)
     album: null
   },
-  // 当前播放时间
+  // 当前播放时间,用来传递给播放界面，用于歌词播放
   currentTime: 0,
   // 播放状态
   playing: false,
-  // 侧边栏是否显示
+  // 右侧边栏是否显示
   isMusicList: false,
   // 歌单id用来记录那个歌单播放歌曲了
   songListId: getSonglistIdLocal() || '',
   // 歌单内容详情
   playlistDetails: null,
-  // 歌单拥有者id
-  userId: '',
   // 专辑内容详情
-  albumDetails: null
+  albumDetails: null,
+  // 歌单拥有者id
+  userId: ''
 }
 
 const mutations = {

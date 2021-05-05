@@ -39,25 +39,6 @@
 <script>
 import { leaderboardMv } from '@/api/music'
 export default {
-  filters: {
-    artistName (value) {
-      if (value && value.artists && value.artists.length > 0) {
-        let str = ''
-        value.artists.forEach((e) => {
-          str += e.name + '/'
-        })
-        return str.slice(0, str.length - 1)
-      }
-      return ''
-    },
-    index (value) {
-      if (value < 10) {
-        return `0${value}`
-      } else {
-        return value
-      }
-    }
-  },
   props: {
     scroll: {
       type: Object,

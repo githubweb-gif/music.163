@@ -10,16 +10,16 @@
         <img ref="image" :src="item.imageUrl" alt="" />
       </el-carousel-item>
     </el-carousel>
-    <scroll @scroll="scroll"></scroll>
+    <zoom @sizeChange="sizeChange"></zoom>
   </div>
 </template>
 
 <script>
-import scroll from '@/components/scroll/index.vue'
+import zoom from '@/components/zoom/index.vue'
 export default {
   name: 'carrousel',
   components: {
-    scroll
+    zoom
   },
   props: {
     images: {
@@ -40,13 +40,13 @@ export default {
     images () {
       this.$nextTick(() => {
         setTimeout(() => {
-          this.scroll()
+          this.sizeChange()
         }, 100)
       })
     }
   },
   methods: {
-    scroll (value) {
+    sizeChange () {
       if (this.$refs.image) {
         this.height = this.$refs.image[0].offsetHeight
       }

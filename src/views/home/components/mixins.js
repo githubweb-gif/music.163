@@ -1,8 +1,22 @@
 export default {
+  computed: {
+    main () {
+      return this.$store.state.user.resize
+    }
+  },
+  watch: {
+    main: {
+      handler (val) {
+        if (!val) {
+          return
+        }
+        const boxWidth = this.main.offsetWidth
+        this.resize(boxWidth)
+      },
+      immediate: true
+    }
+  },
   mounted () {
-    const box = this.$refs.box
-    const boxWidth = box.offsetWidth || box.parentNode.offsetWidth
-    this.resize(boxWidth)
     this.$bus.$on('zoom', (boxWidth) => {
       this.resize(boxWidth)
     })

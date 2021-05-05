@@ -49,18 +49,6 @@
 <script>
 import { allMv } from '@/api/music'
 export default {
-  filters: {
-    artistName (value) {
-      if (value && value.artists && value.artists.length > 0) {
-        let str = ''
-        value.artists.forEach((e) => {
-          str += e.name + '/'
-        })
-        return str.slice(0, str.length - 1)
-      }
-      return ''
-    }
-  },
   props: {
     scroll: {
       type: Object,
@@ -123,12 +111,24 @@ export default {
         }
       },
       immediate: true
+    },
+    main: {
+      handler (value) {
+        if (!value) {
+          return
+        }
+        const boxWidth = this.main.offsetWidth
+        this.resize(boxWidth)
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    main () {
+      return this.$store.state.user.resize
     }
   },
   mounted () {
-    const boxWidth = this.$store.state.user.resize.offsetWidth
-    console.log(boxWidth)
-    this.resize(boxWidth)
     this.$bus.$on('zoom', (boxWidth) => {
       this.resize(boxWidth)
     })

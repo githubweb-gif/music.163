@@ -64,18 +64,6 @@
 <script>
 import { upToDateMV, wangyiMv } from '@/api/music'
 export default {
-  filters: {
-    artistName (value) {
-      if (value && value.artists && value.artists.length > 0) {
-        let str = ''
-        value.artists.forEach((e) => {
-          str += e.name + '/'
-        })
-        return str.slice(0, str.length - 1)
-      }
-      return ''
-    }
-  },
   data () {
     return {
       wangyi: [],

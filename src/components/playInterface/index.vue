@@ -14,7 +14,7 @@
           <div :class="playing ? 'infinite' : ''" class="pan">
             <img class="pan-img" src="../../assets/img/disc_pan.png" />
             <div class="background">
-              <img :src="musicInfo.album.album.picUrl" alt="" />
+              <img :src="musicInfo.album.picUrl" alt="" />
             </div>
           </div>
           <div class="options">
@@ -35,7 +35,7 @@
           <div class="detail">
             <span class="ablum"
               >专辑：<span class="content">
-                {{ musicInfo.album.album.name }}
+                {{ musicInfo.album.name }}
               </span>
             </span>
             <span class="singername"
@@ -87,7 +87,6 @@ export default {
   },
   computed: {
     musicInfo () {
-      console.log(this.$store.getters.musicInfo)
       return this.$store.getters.musicInfo
     },
     id () {

@@ -19,17 +19,6 @@ import { allSongDetail } from '@/api/music'
 import headerComponent from '../playList/header.vue'
 import songList from '../playList/list.vue'
 export default {
-  filters: {
-    filterTime (value) {
-      const date = new Date(Number(value))
-      const year = date.getFullYear()
-      let month = date.getMonth() + 1
-      month = month < 10 ? '0' + month : month
-      let dd = date.getDate()
-      dd = dd < 10 ? '0' + dd : dd
-      return `${year}-${month}-${dd}`
-    }
-  },
   components: {
     headerComponent,
     songList

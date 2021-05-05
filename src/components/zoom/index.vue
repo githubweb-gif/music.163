@@ -32,11 +32,11 @@ export default {
       expand.scrollLeft = this.maxWidth * 1000
       shrink.scrollLeft = this.maxWidth * 1000
       this.width = this.$refs.scroll.offsetWidth
-      this.$emit('scroll', this.width)
+      this.$emit('sizeChange', this.width)
     },
     resize () {
       this.width = this.$refs.scroll.offsetWidth
-      this.$emit('scroll', this.width)
+      this.$emit('sizeChange', this.width)
       const expand = this.$refs.expand
       const shrink = this.$refs.shrink
       const expandChild = this.$refs.expandChild

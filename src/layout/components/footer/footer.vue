@@ -2,8 +2,7 @@
   <div class="footer">
     <div class="cover">
       <img
-        v-if="currentSong.album && currentSong.album.album"
-        :src="currentSong.album.album.blurPicUrl"
+        :src="currentSong.album.blurPicUrl || ''"
         alt=""
       />
     </div>
@@ -50,7 +49,8 @@
       />
     </div>
     <div class="function">
-      <div class="iconfont icon-lujing" />
+      <div class="iconfont icon-lujing">
+      </div>
       <div class="iconfont icon-xunhuan1" />
       <el-popover
         placement="bottom"
@@ -75,8 +75,8 @@
 
 <script>
 import progressBar from './components/progressBar'
-import { GET_HISTORY } from '@/untils/cache'
-import setMusciInfo from '@/untils/setMusciInfo'
+import { GET_HISTORY } from '@/utils/cache'
+import setMusciInfo from '@/utils/setMusciInfo'
 import volumeBar from './components/volume.vue'
 // 播放界面
 import playInterface from '@/components/playInterface/index.vue'
@@ -169,7 +169,10 @@ export default {
     },
     // 处理播放错误
     audioError (e) {
-      setMusciInfo(this.currentSong).then((res) => {
+      if (!this.currentSong.id) {
+        return
+      }
+      setMusciInfo(this.currentSong, true).then((res) => {
         // 更新播放记录
         this.$store.dispatch('SET_HISTORY', res)
         // 再播放

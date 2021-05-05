@@ -4,7 +4,7 @@
     <div class="container">
       <side-bar class="side" />
       <div ref="main" id="main">
-        <zoom @scroll="zoom"></zoom>
+        <zoom @sizeChange="zoom"></zoom>
         <keep-alive>
           <transition name="fade" mode="out-in">
             <router-view
@@ -16,9 +16,11 @@
         <transition name="fade" mode="out-in">
         <router-view v-if="!$route.meta.keepAlive"></router-view>
         </transition>
+        <!-- 右边侧边栏用户信息 -->
         <transition name="fade-transform">
           <user-info v-if="isUserRight && loginStatus" class="right-side" />
         </transition>
+        <!-- 右边侧边播放列表 -->
         <transition name="fade-transform">
           <music-list v-show="isMusicList" class="right-side" />
         </transition>
@@ -26,10 +28,11 @@
     </div>
     <footer-bar class="footer" />
     <to-login class="login" />
+    <!-- 右边侧边栏的阴影盒子 -->
     <div
       v-show="isMusicList || isUserRight"
       class="shadow"
-      @click="rightSideShow(false)"
+      @click="rightSideShow"
     />
   </div>
 </template>
@@ -40,11 +43,9 @@ import userInfo from '@/components/userInfo'
 import headerBar from './components/header.vue'
 import sideBar from './components/sideBar.vue'
 import footerBar from './components/footer/footer.vue'
-// import { searchMusic } from '@/api/music'
-// import setMusciInfo from '@/untils/setMusciInfo'
 import toLogin from '@/views/login/index.vue'
-import { mapState, mapActions, mapMutations } from 'vuex'
-import zoom from '@/components/scroll/index.vue'
+import { mapState, mapMutations } from 'vuex'
+import zoom from '@/components/zoom/index.vue'
 export default {
   components: {
     headerBar,
@@ -70,7 +71,7 @@ export default {
     this.$store.commit('SET_RESIZE', main)
   },
   methods: {
-    rightSideShow (value) {
+    rightSideShow () {
       if (this.isMusicList) {
         this.setIsMusicList(false)
       }
@@ -79,13 +80,8 @@ export default {
       }
     },
     zoom (value) {
-      console.log(value)
       this.$bus.$emit('zoom', value)
     },
-    ...mapActions({
-      setHistory: 'SET_HISTORY',
-      setPlaylist: 'SET_PLAYLIST'
-    }),
     ...mapMutations({
       setIsMusicList: 'SET_ISMUSICLIST',
       setUserRight: 'SET_IS_USER_Right'
@@ -146,14 +142,5 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 100;
-}
-
-.shadow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
 }
 </style>

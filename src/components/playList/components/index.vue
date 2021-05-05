@@ -59,7 +59,7 @@
 import { addOrdel } from '@/api/music'
 
 import views from './view_data'
-import setMusciInfo from '@/untils/setMusciInfo'
+import setMusciInfo from '@/utils/setMusciInfo'
 import dialogComponent from './dialog.vue'
 import favorites from './favorites.vue'
 import chooseComponent from '../choose.vue'

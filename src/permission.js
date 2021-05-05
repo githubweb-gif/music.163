@@ -1,6 +1,6 @@
 import store from './store'
 import router from './router'
-import { getAuth } from './untils/auth'
+import { getAuth } from './utils/auth'
 
 router.beforeEach((to, from, next) => {
   const status = store.state.user.loginStatus

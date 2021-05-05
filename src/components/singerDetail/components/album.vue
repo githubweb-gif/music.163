@@ -4,7 +4,7 @@
           <li :style="{width: imgWidth}" @click="toAlbum(item.id)" v-for="item in albums" :key="item.id">
               <img v-lazy="`${item.picUrl}?param=130y130`" alt="">
               <p>{{item.name}}</p>
-              <span class="title">{{item.publishTime | time}}</span>
+              <span class="title">{{item.publishTime | filterTime}}</span>
           </li>
       </ul>
   </div>
@@ -19,21 +19,6 @@ export default {
     id: {
       type: String,
       default: ''
-    }
-  },
-  filters: {
-    time (val) {
-      if (val) {
-        const date = new Date(val)
-        const year = date.getFullYear()
-        let month = date.getMonth() + 1
-        month = month < 10 ? '0' + month : month
-        // 几日
-        let d = date.getDate()
-        d = d < 10 ? '0' + d : d
-        return `${year}-${month}-${d}`
-      }
-      return ''
     }
   },
   data () {

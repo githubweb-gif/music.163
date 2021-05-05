@@ -57,7 +57,7 @@
 
 <script>
 import { hotKeyWords, searchMusic, searchSuggest } from '@/api/search'
-import { setSearchHistory, getSearchHistory } from '@/untils/search'
+import { setSearchHistory, getSearchHistory } from '@/utils/search'
 import searchResult from './searchResult.vue'
 import _ from 'lodash'
 export default {

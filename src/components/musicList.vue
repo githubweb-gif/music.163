@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import setMusciInfo from '@/untils/setMusciInfo'
-import { GET_HISTORY } from '@/untils/cache'
+import setMusciInfo from '@/utils/setMusciInfo'
+import { GET_HISTORY } from '@/utils/cache'
 export default {
   data () {
     return {

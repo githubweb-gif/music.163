@@ -1,4 +1,4 @@
-import request from '@/untils/request'
+import request from '@/utils/request'
 
 /**
  * 说明 : 登录后调用此接口 , 传入用户 id, 可以获取用户详情

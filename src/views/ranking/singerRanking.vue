@@ -21,7 +21,7 @@
           v-for="(item, index) in lists"
           :key="index"
         >
-          <div class="index">{{ index | index }}</div>
+          <div class="index">{{ index + 1 | index }}</div>
           <div class="icon" :class="setClass(item, index)"></div>
           <div class="avatar">
             <img :src="`${item.picUrl}?param=130y130`" alt="" />
@@ -37,19 +37,6 @@
 <script>
 import { singerRanking } from '@/api/music'
 export default {
-  filters: {
-    index (value) {
-      value++
-      if (!value && value !== 0) {
-        return
-      }
-      if (value < 10) {
-        return `0${value}`
-      } else {
-        return value
-      }
-    }
-  },
   data () {
     return {
       lists: [],

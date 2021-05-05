@@ -66,43 +66,29 @@ export default {
       imgWidth: '20%'
     }
   },
+  computed: {
+    main () {
+      return this.$store.state.user.resize
+    }
+  },
+  watch: {
+    main: {
+      handler (val) {
+        if (!val) {
+          return
+        }
+        const boxWidth = this.main.offsetWidth
+        this.resize(boxWidth)
+      },
+      immediate: true
+    }
+  },
   created () {
     this.initData()
   },
   mounted () {
-    const box = this.$refs.box
-    const boxWidth = box.offsetWidth || box.parentNode.offsetWidth
-    console.log(box.parentNode.offsetWidth)
-    switch (true) {
-      // 0可能是刚渲染宽度为0
-      case boxWidth > 930:
-        this.imgWidth = '20%'
-        break
-      case boxWidth <= 930 && boxWidth > 720 :
-        this.imgWidth = '25%'
-        break
-      case boxWidth <= 720 && boxWidth > 510:
-        this.imgWidth = '33.3%'
-        break
-      case boxWidth <= 510:
-        this.imgWidth = '50%'
-    }
     this.$bus.$on('zoom', (boxWidth) => {
-      console.log(boxWidth)
-      switch (true) {
-      // 0可能是刚渲染宽度为0
-        case boxWidth > 930 || boxWidth === 0:
-          this.imgWidth = '20%'
-          break
-        case boxWidth <= 930 && boxWidth > 720 :
-          this.imgWidth = '25%'
-          break
-        case boxWidth <= 720 && boxWidth > 510:
-          this.imgWidth = '33.3%'
-          break
-        case boxWidth <= 510:
-          this.imgWidth = '50%'
-      }
+      this.resize(boxWidth)
     })
   },
   methods: {
@@ -134,6 +120,21 @@ export default {
       }
       return {
         width: this.imgWidth
+      }
+    },
+    resize (boxWidth) {
+      switch (true) {
+        case boxWidth > 930:
+          this.imgWidth = '20%'
+          break
+        case boxWidth <= 930 && boxWidth > 720 :
+          this.imgWidth = '25%'
+          break
+        case boxWidth <= 720 && boxWidth > 510:
+          this.imgWidth = '33.3%'
+          break
+        case boxWidth <= 510:
+          this.imgWidth = '50%'
       }
     }
   }
