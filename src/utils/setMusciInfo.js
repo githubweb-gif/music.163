@@ -10,9 +10,10 @@ export default async function setMusciInfo (data, millisecond) {
     id: ''
   }
   const albumInfo = await getAlbum({ id: data.album.id })
-  for (const i in albumInfo) {
-    album[i] = albumInfo[i] || ''
+  for (const i in album) {
+    album[i] = albumInfo.album[i] || ''
   }
+  console.log(album)
   // 获取歌名
   const name = data.name
   // 获取歌手名
@@ -29,7 +30,6 @@ export default async function setMusciInfo (data, millisecond) {
 
   // url
   const urlInfo = await getMusic({ id: data.id })
-  console.log(urlInfo)
   const musicInfo = {
     id,
     name,

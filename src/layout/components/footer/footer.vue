@@ -1,8 +1,9 @@
 <template>
   <div class="footer">
+    <!-- {{currentSong}} -->
     <div class="cover">
       <img
-        :src="currentSong.album.blurPicUrl || ''"
+        :src="currentSong.album ? currentSong.album.picUrl : ''"
         alt=""
       />
     </div>
@@ -69,7 +70,7 @@
       </div>
     </div>
     <!-- 播放界面 -->
-    <play-interface></play-interface>
+    <play-interface v-if="currentSong.name"></play-interface>
   </div>
 </template>
 
@@ -108,7 +109,7 @@ export default {
       if (this.$store.getters.musicInfo.name) {
         return this.$store.getters.musicInfo
       } else {
-        const data = GET_HISTORY() || []
+        const data = GET_HISTORY() || this.$store.getters.musicInfo
         this.$store.commit('SET_MUSICINFO', data)
         return data
       }
@@ -138,6 +139,9 @@ export default {
           isPlaying ? audio.play() : audio.pause()
         }
       })
+    },
+    currentSong (val) {
+      console.log(val)
     }
   },
   methods: {

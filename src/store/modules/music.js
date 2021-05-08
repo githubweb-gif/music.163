@@ -50,6 +50,7 @@ const mutations = {
     state.playing = flag
   },
   SET_MUSICINFO (state, data) {
+    console.log(data)
     for (const i in state.musicInfo) {
       if (data[i]) {
         state.musicInfo[i] = data[i]
@@ -57,6 +58,7 @@ const mutations = {
         state.musicInfo[i] = null
       }
     }
+    console.log(state.musicInfo)
   },
   SET_ISMUSICLIST (state, bol) {
     if (!bol) {
